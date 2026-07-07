@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8765", "--directory", "docs"],
       "port": 8765
+    },
+    {
+      "name": "app-test",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "/private/tmp/claude-501/-Users-terauchiayana-Claude-Code-------/7a31c949-f438-484f-b7c3-d5fb9d15ac1c/scratchpad/test-docs"],
+      "port": 8766
     }
   ]
 }

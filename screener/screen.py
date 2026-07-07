@@ -16,6 +16,7 @@ import datetime
 import io
 import json
 import math
+import os
 import sys
 import threading
 import time
@@ -126,6 +127,60 @@ def _row(df, names):
     return None
 
 
+def _row_by_year(df, names):
+    """_rowと同じだが {決算年: 値} (古→新) で返す"""
+    if df is None or df.empty:
+        return {}
+    for n in names:
+        if n in df.index:
+            s = df.loc[n].dropna()
+            if len(s) == 0:
+                continue
+            s = s[::-1]
+            return {int(ts.year): _num(v) for ts, v in s.items() if _num(v) is not None}
+    return {}
+
+
+def _round_opt(v, nd=1):
+    return round(v, nd) if v is not None else None
+
+
+def price_history_monthly(t):
+    """月次終値の10年推移 {start: 'YYYY-MM', closes: [...]}"""
+    try:
+        h = t.history(period="10y", interval="1mo", auto_adjust=False)
+    except Exception:
+        return None
+    if h is None or h.empty or "Close" not in h:
+        return None
+    closes = h["Close"].dropna()
+    if len(closes) < 6:
+        return None
+    return {
+        "start": closes.index[0].strftime("%Y-%m"),
+        "closes": [int(round(v)) for v in closes.values],
+    }
+
+
+def yield_history(divs, ph):
+    """暦年ごとの配当利回り推移(%) = 年間配当 ÷ その年の平均株価"""
+    if not divs or not ph:
+        return []
+    y0, m0 = map(int, ph["start"].split("-"))
+    by_year = {}
+    for i, c in enumerate(ph["closes"]):
+        y = y0 + (m0 - 1 + i) // 12
+        by_year.setdefault(y, []).append(c)
+    out = []
+    for year, dps in divs:
+        closes = by_year.get(year)
+        if closes and dps:
+            avg = sum(closes) / len(closes)
+            if avg > 0:
+                out.append({"year": year, "value": round(dps / avg * 100, 2)})
+    return out
+
+
 def trend_status(values, allow_flat=0.95):
     """値の並び(古→新)が上昇トレンドか。ok/warn/ng"""
     if not values:
@@ -203,17 +258,23 @@ def yearly_dividends(div):
 
 def quick_yield_estimate(code):
     """一次スクリーニング用: infoだけ取得して概算利回り(%)を返す。
-    配当が確認できない銘柄は None。"""
-    try:
-        info = yf.Ticker(f"{code}.T").info or {}
-    except Exception:
-        return None, {}
+    戻り値: (status, yield, info)
+      status: "ok"=取得成功 / "error"=通信失敗(レート制限等・次回再試行)"""
+    info = None
+    for attempt in range(2):
+        try:
+            info = yf.Ticker(f"{code}.T").info
+            break
+        except Exception:
+            time.sleep(3 * (attempt + 1))
+    if not info or "regularMarketPrice" not in info and "currentPrice" not in info:
+        return "error", None, {}
     price = _num(info.get("currentPrice")) or _num(info.get("regularMarketPrice"))
     dps = _num(info.get("dividendRate")) or _num(info.get("trailingAnnualDividendRate"))
     if not price or not dps:
-        return None, info
+        return "ok", None, info
     y = dps / price * 100
-    return (y if 0 < y <= 25 else None), info
+    return "ok", (y if 0 < y <= 25 else None), info
 
 
 def eval_stock(code, meta, model_codes, info=None):
@@ -256,6 +317,39 @@ def eval_stock(code, meta, model_codes, info=None):
     cur_liab = _row(bs, ["Current Liabilities"])
     cash = _row(bs, ["Cash And Cash Equivalents", "Cash Cash Equivalents And Short Term Investments"])
     op_cf = _row(cf, ["Operating Cash Flow", "Cash Flow From Continuing Operating Activities"])
+
+    # 年次の時系列 (第112回スタイルの銘柄分析グラフ用)
+    rev_y = _row_by_year(inc, ["Total Revenue", "Operating Revenue"])
+    opin_y = _row_by_year(inc, ["Operating Income", "Total Operating Income As Reported"])
+    eps_y = _row_by_year(inc, ["Diluted EPS", "Basic EPS"])
+    ni_y = _row_by_year(inc, ["Net Income", "Net Income Common Stockholders"])
+    ta_y = _row_by_year(bs, ["Total Assets"])
+    eq_y = _row_by_year(bs, ["Stockholders Equity", "Common Stock Equity", "Total Equity Gross Minority Interest"])
+    opcf_y = _row_by_year(cf, ["Operating Cash Flow", "Cash Flow From Continuing Operating Activities"])
+    fy_years = sorted(set(rev_y) | set(eps_y) | set(eq_y) | set(opcf_y))
+    series = {
+        "years": fy_years,
+        "revenue_oku": [_round_opt(rev_y.get(y) / 1e8) if rev_y.get(y) is not None else None for y in fy_years],
+        "op_margin": [_round_opt(opin_y[y] / rev_y[y] * 100)
+                      if opin_y.get(y) is not None and rev_y.get(y) else None for y in fy_years],
+        "eps": [_round_opt(eps_y.get(y)) for y in fy_years],
+        "equity_ratio": [_round_opt(eq_y[y] / ta_y[y] * 100)
+                         if eq_y.get(y) is not None and ta_y.get(y) else None for y in fy_years],
+        "roe": [_round_opt(ni_y[y] / eq_y[y] * 100)
+                if ni_y.get(y) is not None and eq_y.get(y) else None for y in fy_years],
+        "op_cf_oku": [_round_opt(opcf_y.get(y) / 1e8) if opcf_y.get(y) is not None else None for y in fy_years],
+    }
+
+    # 営業CFの連続黒字年数 (取得できる範囲内)
+    op_cf_streak = 0
+    for v in reversed([opcf_y[y] for y in sorted(opcf_y)]):
+        if v is not None and v > 0:
+            op_cf_streak += 1
+        else:
+            break
+    op_cf_years_available = len(opcf_y)
+
+    ph = price_history_monthly(t)
 
     div_series = fix_split_glitch(get_dividends(t), info)
     divs = yearly_dividends(div_series)
@@ -302,6 +396,16 @@ def eval_stock(code, meta, model_codes, info=None):
         payout = pr * 100 if pr < 5 else pr
 
     pbr = _num(info.get("priceToBook"))
+    per = _num(info.get("trailingPE"))
+    roe = None
+    if ni_y and eq_y:
+        last_y = max(eq_y)
+        if ni_y.get(last_y) is not None and eq_y.get(last_y):
+            roe = ni_y[last_y] / eq_y[last_y] * 100
+    if roe is None:
+        r = _num(info.get("returnOnEquity"))
+        if r is not None:
+            roe = r * 100 if abs(r) < 3 else r
 
     # --- 判定 ---
     TH = THRESHOLDS
@@ -410,6 +514,8 @@ def eval_stock(code, meta, model_codes, info=None):
 
     return {
         "code": code,
+        "v": 2,
+        "checked_at": datetime.date.today().isoformat(),
         "name": name,
         "sector": sector,
         "market": market,
@@ -417,11 +523,18 @@ def eval_stock(code, meta, model_codes, info=None):
         "price": price,
         "yield": round(div_yield, 2) if div_yield is not None else None,
         "pbr": round(pbr, 2) if pbr is not None else None,
+        "per": round(per, 1) if per is not None else None,
+        "roe": round(roe, 1) if roe is not None else None,
         "payout": round(payout, 1) if payout is not None else None,
         "score": score,
         "in_model_pf": code in model_codes,
         "checks": checks,
         "dividend_history": div_history,
+        "price_history": ph,
+        "yield_history": yield_history(divs, ph),
+        "series": series,
+        "op_cf_streak": op_cf_streak,
+        "op_cf_years_available": op_cf_years_available,
         "na_count": len(checks) - len(evaluable),
     }
 
@@ -439,6 +552,7 @@ def main():
     ap.add_argument("--standard", action="store_true", help="スタンダードも含める")
     ap.add_argument("--min-yield", type=float, default=None, help="この利回り未満は詳細分析を省略(%)")
     ap.add_argument("--limit", type=int, default=None, help="銘柄数上限(テスト用)")
+    ap.add_argument("--refresh", action="store_true", help="キャッシュを使わず全銘柄を再分析")
     ap.add_argument("--out", default=str(DOCS / "data.json"))
     args = ap.parse_args()
 
@@ -466,50 +580,123 @@ def main():
     always_keep = set(args.tickers) | (model_codes if args.model_pf else set())
     infos = {}
 
-    # --- 一次スクリーニング: 概算利回りで足切り (並列) ---
+    # --- 一次スクリーニング: 概算利回りで足切り (並列・キャッシュつき) ---
+    # レート制限で失敗した銘柄は "error" としてキャッシュに残し、次回の実行で
+    # 再試行する。これにより、何度か実行すれば全銘柄をカバーできる。
     if args.min_yield is not None and len(codes) > 50:
-        print(f"一次スクリーニング: {len(codes)}銘柄の利回りを概算チェック...")
-        kept = []
+        cache_file = CACHE / "phase1_cache.json"
+        p1cache = {}
+        if cache_file.exists():
+            try:
+                p1cache = json.loads(cache_file.read_text())
+            except Exception:
+                p1cache = {}
+        fresh_limit = time.time() - 3 * 86400  # 3日以内のキャッシュは再利用
+
+        todo = []
+        for c in codes:
+            ent = p1cache.get(c)
+            if ent and ent.get("status") == "ok" and ent.get("ts", 0) > fresh_limit:
+                continue  # キャッシュ利用
+            todo.append(c)
+
+        print(f"一次スクリーニング: {len(codes)}銘柄中 {len(todo)}銘柄を取得"
+              f"（{len(codes) - len(todo)}銘柄はキャッシュ利用）...")
         done = [0]
+        errors_p1 = [0]
         lock = threading.Lock()
 
         def phase1(code):
-            y, info = quick_yield_estimate(code)
+            status, y, info = quick_yield_estimate(code)
+            time.sleep(0.2)
             with lock:
                 done[0] += 1
+                p1cache[code] = {"status": status, "y": y, "ts": time.time()}
+                if status == "error":
+                    errors_p1[0] += 1
                 if done[0] % 100 == 0:
-                    print(f"  ... {done[0]}/{len(codes)} 済 (候補 {len(kept)})")
-            if code in always_keep or (y is not None and y >= args.min_yield):
+                    print(f"  ... {done[0]}/{len(todo)} 済 (取得失敗 {errors_p1[0]})",
+                          flush=True)
+                    cache_file.write_text(json.dumps(p1cache))
+            if status == "ok" and y is not None and y >= args.min_yield:
                 return code, info
             return None
 
-        with ThreadPoolExecutor(max_workers=6) as ex:
-            for fut in as_completed([ex.submit(phase1, c) for c in codes]):
+        with ThreadPoolExecutor(max_workers=4) as ex:
+            for fut in as_completed([ex.submit(phase1, c) for c in todo]):
                 r = fut.result()
                 if r:
-                    kept.append(r[0])
                     infos[r[0]] = r[1]
-        # 元の順序を維持
-        kept_set = set(kept)
+        cache_file.write_text(json.dumps(p1cache))
+
+        kept_set = set()
+        unresolved = 0
+        for c in codes:
+            ent = p1cache.get(c, {})
+            if c in always_keep:
+                kept_set.add(c)
+            elif ent.get("status") == "ok":
+                if ent.get("y") is not None and ent["y"] >= args.min_yield:
+                    kept_set.add(c)
+            else:
+                unresolved += 1  # 取得失敗→今回は見送り(次回再試行)
         codes = [c for c in codes if c in kept_set]
-        print(f"一次通過: {len(codes)}銘柄（利回り{args.min_yield}%以上）\n")
+        print(f"一次通過: {len(codes)}銘柄（利回り{args.min_yield}%以上）")
+        if unresolved:
+            print(f"⚠️ {unresolved}銘柄はレート制限等で未取得。もう一度実行すると"
+                  f"続きから取得します。")
+        print()
+
+    # --- 差分更新: 3日以内に分析済みの銘柄は前回の結果を再利用 ---
+    results = []
+    prev_path = Path(args.out)
+    if prev_path.exists() and not args.refresh:
+        try:
+            prev = {s["code"]: s for s in json.loads(prev_path.read_text())["stocks"]}
+        except Exception:
+            prev = {}
+        cutoff = (datetime.date.today() - datetime.timedelta(days=3)).isoformat()
+        reused = []
+        rest = []
+        for c in codes:
+            p = prev.get(c)
+            # v2形式(グラフ用時系列つき)で3日以内に分析済みのものだけ再利用
+            if p and p.get("v") == 2 and p.get("checked_at", "") >= cutoff:
+                p["in_model_pf"] = c in model_codes
+                reused.append(p)
+            else:
+                rest.append(c)
+        if reused:
+            print(f"{len(reused)}銘柄は3日以内に分析済みのため前回結果を再利用")
+            results.extend(reused)
+        codes = rest
 
     print(f"{len(codes)}銘柄を詳細分析します...")
-    results = []
     errors = []
     lock = threading.Lock()
     done = [0]
 
-    def phase2(code):
-        return code, eval_stock(code, meta, model_codes, info=infos.get(code))
+    p2_workers = int(os.environ.get("SCREEN_WORKERS", "4"))
+    p2_sleep = float(os.environ.get("SCREEN_SLEEP", "0.3"))
 
-    with ThreadPoolExecutor(max_workers=4) as ex:
+    def phase2(code):
+        r = eval_stock(code, meta, model_codes, info=infos.get(code))
+        time.sleep(p2_sleep)
+        return code, r
+
+    with ThreadPoolExecutor(max_workers=p2_workers) as ex:
         futs = [ex.submit(phase2, c) for c in codes]
         for fut in as_completed(futs):
             try:
                 code, r = fut.result()
                 with lock:
                     done[0] += 1
+                    # レート制限等でほぼ何も取れていない場合は「未分析」扱い
+                    # (結果に含めず、次回の実行で再試行される)
+                    if r["price"] is None and r["yield"] is None:
+                        errors.append({"code": code, "error": "データ取得失敗"})
+                        print(f"  [{done[0]}/{len(codes)}] {code}: 取得失敗(次回再試行)")
+                        continue
                     # 詳細分析後の正確な利回りで最終足切り
                     if (args.min_yield is not None and code not in always_keep
                             and (r["yield"] is None or r["yield"] < args.min_yield)):

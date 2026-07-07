@@ -184,12 +184,33 @@ main { max-width: 960px; margin: 0 auto; padding: 12px 12px 40px; }
 .detail-table .crit-name { font-weight: 600; }
 .detail-table .crit-desc { color: var(--gray); font-size: 0.75rem; display: block; }
 
-.div-chart { display: flex; align-items: flex-end; gap: 2px; height: 56px; margin: 6px 0 2px; }
-.div-bar { flex: 1; background: var(--green); opacity: 0.75; border-radius: 2px 2px 0 0; min-height: 2px; }
-.div-chart-label { font-size: 0.72rem; color: var(--gray); margin-bottom: 6px; }
+.stats-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0;
+}
+.stat {
+  background: var(--gray-light); border-radius: 8px; padding: 4px 10px;
+  display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 72px;
+}
+.stat-k { font-size: 0.66rem; color: var(--gray); white-space: nowrap; }
+.stat-v { font-size: 0.9rem; font-weight: 700; }
 
-.ext-links { display: flex; gap: 10px; font-size: 0.82rem; flex-wrap: wrap; margin-top: 4px; }
-.ext-links a { color: var(--green); font-weight: 600; }
+.chart-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 8px 0 4px; }
+@media (min-width: 480px) { .chart-grid { grid-template-columns: 1fr 1fr; } }
+.mini-chart {
+  border: 1px solid var(--border); border-radius: 10px; padding: 6px 8px 2px;
+}
+.mini-chart h4 { margin: 0 0 2px; font-size: 0.72rem; color: #555; font-weight: 600; }
+.mini-svg { width: 100%; height: auto; display: block; }
+.mini-svg .ch-val { font-size: 11px; font-weight: 700; fill: var(--text); }
+.mini-svg .ch-lb { font-size: 9px; fill: var(--gray); }
+.chart-note { font-size: 0.72rem; color: var(--gray); margin: 4px 0 8px; }
+
+.ext-links { display: flex; gap: 8px; font-size: 0.85rem; flex-wrap: wrap; margin-top: 8px; }
+.btn-ext {
+  display: inline-block; background: var(--green); color: #fff !important;
+  border-radius: 8px; padding: 8px 12px; text-decoration: none; font-weight: 600;
+}
+.btn-ext:active { opacity: 0.8; }
 
 .etf-note {
   font-size: 0.8rem;
@@ -227,3 +248,18 @@ footer {
   color: var(--gray);
   padding: 40px 0;
 }
+
+.more-btn {
+  display: block;
+  width: 100%;
+  margin: 14px 0;
+  padding: 12px;
+  border: 1px solid var(--green);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--green);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.more-btn:active { background: var(--green-light); }
