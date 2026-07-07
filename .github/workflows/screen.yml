@@ -1,0 +1,35 @@
+name: 週次スクリーニング更新
+
+on:
+  schedule:
+    # 毎週土曜 朝6時(JST) = 金曜21時(UTC)
+    - cron: "0 21 * * 5"
+  workflow_dispatch: {}   # 手動実行も可能
+
+permissions:
+  contents: write
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: ライブラリをインストール
+        run: pip install yfinance pandas requests xlrd openpyxl
+
+      - name: スクリーニング実行（プライム全銘柄・利回り3%で足切り）
+        run: python screener/screen.py --prime --min-yield 3.0
+
+      - name: 結果をコミット
+        run: |
+          git config user.name "screener-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data.json
+          git diff --cached --quiet || git commit -m "データ更新 $(date +'%Y-%m-%d')"
+          git push

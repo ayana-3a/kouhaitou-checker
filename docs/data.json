@@ -1,0 +1,4466 @@
+{
+ "generated_at": "2026-07-07 10:03",
+ "criteria": [
+  {
+   "id": "yield",
+   "name": "配当利回り",
+   "desc": "税引前3.75%以上（3.5%以上で△）"
+  },
+  {
+   "id": "op_margin",
+   "name": "営業利益率",
+   "desc": "10%以上（ビジネスの競争力）"
+  },
+  {
+   "id": "equity_ratio",
+   "name": "自己資本比率",
+   "desc": "50%以上（財務の安定性）"
+  },
+  {
+   "id": "current_ratio",
+   "name": "流動比率",
+   "desc": "200%以上（短期の資金繰り）"
+  },
+  {
+   "id": "revenue_trend",
+   "name": "売上高の推移",
+   "desc": "長期的に上昇トレンド"
+  },
+  {
+   "id": "eps_trend",
+   "name": "EPSの推移",
+   "desc": "上昇トレンド・赤字なし"
+  },
+  {
+   "id": "dividend_trend",
+   "name": "1株配当の推移",
+   "desc": "非減配・増配傾向"
+  },
+  {
+   "id": "payout",
+   "name": "配当性向",
+   "desc": "30〜50%が理想（80%超は✕）"
+  },
+  {
+   "id": "op_cf",
+   "name": "営業キャッシュフロー",
+   "desc": "黒字・増加傾向"
+  },
+  {
+   "id": "cash",
+   "name": "現金等",
+   "desc": "潤沢で増加傾向"
+  }
+ ],
+ "thresholds": {
+  "yield_ok": 3.75,
+  "yield_warn": 3.5,
+  "op_margin": 10.0,
+  "equity_ratio": 50.0,
+  "current_ratio": 200.0,
+  "payout_low": 30.0,
+  "payout_high": 50.0,
+  "payout_max": 80.0
+ },
+ "model_pf": {
+  "as_of": "2026-07 (第119回)",
+  "portfolio_yield": 4.21,
+  "stocks": [
+   {
+    "code": "9986",
+    "name": "蔵王産業",
+    "sector": "卸売",
+    "weight": 2
+   },
+   {
+    "code": "3076",
+    "name": "あいHD",
+    "sector": "卸売",
+    "weight": 3
+   },
+   {
+    "code": "8130",
+    "name": "サンゲツ",
+    "sector": "卸売",
+    "weight": 2
+   },
+   {
+    "code": "2659",
+    "name": "サンエー",
+    "sector": "小売",
+    "weight": 3
+   },
+   {
+    "code": "3333",
+    "name": "あさひ",
+    "sector": "小売",
+    "weight": 2
+   },
+   {
+    "code": "9989",
+    "name": "サンドラッグ",
+    "sector": "小売",
+    "weight": 2
+   },
+   {
+    "code": "4008",
+    "name": "住友精化",
+    "sector": "化学",
+    "weight": 2
+   },
+   {
+    "code": "4097",
+    "name": "高圧ガス工業",
+    "sector": "化学",
+    "weight": 3
+   },
+   {
+    "code": "4206",
+    "name": "アイカ工業",
+    "sector": "化学",
+    "weight": 2
+   },
+   {
+    "code": "4958",
+    "name": "長谷川香料",
+    "sector": "化学",
+    "weight": 2
+   },
+   {
+    "code": "8309",
+    "name": "三井住友トラストグループ",
+    "sector": "銀行",
+    "weight": 3
+   },
+   {
+    "code": "8725",
+    "name": "MS&ADインシュアランスグループHD",
+    "sector": "保険",
+    "weight": 3
+   },
+   {
+    "code": "6785",
+    "name": "鈴木",
+    "sector": "電気機器",
+    "weight": 2
+   },
+   {
+    "code": "7723",
+    "name": "愛知時計電機",
+    "sector": "精密機器",
+    "weight": 3
+   },
+   {
+    "code": "3231",
+    "name": "野村不動産HD",
+    "sector": "不動産",
+    "weight": 3
+   },
+   {
+    "code": "3003",
+    "name": "ヒューリック",
+    "sector": "不動産",
+    "weight": 3
+   },
+   {
+    "code": "2169",
+    "name": "CDS",
+    "sector": "サービス",
+    "weight": 2
+   },
+   {
+    "code": "9757",
+    "name": "船井総研ホールディングス",
+    "sector": "サービス",
+    "weight": 2
+   },
+   {
+    "code": "9769",
+    "name": "学究社",
+    "sector": "サービス",
+    "weight": 3
+   },
+   {
+    "code": "4290",
+    "name": "プレステージ・インターナショナル",
+    "sector": "サービス",
+    "weight": 2
+   },
+   {
+    "code": "4641",
+    "name": "アルプス技研",
+    "sector": "サービス",
+    "weight": 2
+   },
+   {
+    "code": "3817",
+    "name": "SRAホールディングス",
+    "sector": "情報・通信",
+    "weight": 2
+   },
+   {
+    "code": "3901",
+    "name": "マークラインズ",
+    "sector": "情報・通信",
+    "weight": 2
+   },
+   {
+    "code": "4674",
+    "name": "クレスコ",
+    "sector": "情報・通信",
+    "weight": 2
+   },
+   {
+    "code": "4746",
+    "name": "東計電算",
+    "sector": "情報・通信",
+    "weight": 2
+   },
+   {
+    "code": "2003",
+    "name": "日東富士製粉",
+    "sector": "食料品",
+    "weight": 2
+   },
+   {
+    "code": "1928",
+    "name": "積水ハウス",
+    "sector": "建設",
+    "weight": 3
+   },
+   {
+    "code": "6345",
+    "name": "アイチコーポレーション",
+    "sector": "機械",
+    "weight": 3
+   },
+   {
+    "code": "9364",
+    "name": "上組",
+    "sector": "倉庫・運輸関連",
+    "weight": 3
+   },
+   {
+    "code": "9381",
+    "name": "エーアイテイー",
+    "sector": "倉庫・運輸関連",
+    "weight": 3
+   },
+   {
+    "code": "7989",
+    "name": "立川ブラインド工業",
+    "sector": "金属製品",
+    "weight": 3
+   },
+   {
+    "code": "5982",
+    "name": "マルゼン",
+    "sector": "金属製品",
+    "weight": 2
+   },
+   {
+    "code": "5108",
+    "name": "ブリヂストン",
+    "sector": "ゴム製品",
+    "weight": 2
+   },
+   {
+    "code": "7994",
+    "name": "オカムラ",
+    "sector": "その他製品",
+    "weight": 3
+   },
+   {
+    "code": "4540",
+    "name": "ツムラ",
+    "sector": "医薬品",
+    "weight": 3
+   },
+   {
+    "code": "1343",
+    "name": "NF・J-REIT ETF",
+    "sector": "J-REIT市場",
+    "weight": 14
+   }
+  ]
+ },
+ "stocks": [
+  {
+   "code": "7989",
+   "name": "立川ブラインド工業",
+   "sector": "金属製品",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 2556.0,
+   "yield": 5.48,
+   "pbr": 0.91,
+   "payout": 43.4,
+   "score": 10.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 5.48,
+     "text": "5.48%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 10.3,
+     "text": "10.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 83.2,
+     "text": "83.2%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 476.0,
+     "text": "476%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配9回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 43.4,
+     "text": "43.4%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 10.0
+    },
+    {
+     "year": 2015,
+     "value": 15.0
+    },
+    {
+     "year": 2016,
+     "value": 15.0
+    },
+    {
+     "year": 2017,
+     "value": 15.0
+    },
+    {
+     "year": 2018,
+     "value": 23.0
+    },
+    {
+     "year": 2019,
+     "value": 28.0
+    },
+    {
+     "year": 2020,
+     "value": 29.0
+    },
+    {
+     "year": 2021,
+     "value": 30.0
+    },
+    {
+     "year": 2022,
+     "value": 31.0
+    },
+    {
+     "year": 2023,
+     "value": 36.0
+    },
+    {
+     "year": 2024,
+     "value": 46.0
+    },
+    {
+     "year": 2025,
+     "value": 70.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "3076",
+   "name": "あい　ホールディングス",
+   "sector": "卸売業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 2714.0,
+   "yield": 5.16,
+   "pbr": 1.27,
+   "payout": 40.4,
+   "score": 9.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 5.16,
+     "text": "5.16%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 13.4,
+     "text": "13.4%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 77.7,
+     "text": "77.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 503.0,
+     "text": "503%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配10回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 40.4,
+     "text": "40.4%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 27.0
+    },
+    {
+     "year": 2015,
+     "value": 30.0
+    },
+    {
+     "year": 2016,
+     "value": 33.0
+    },
+    {
+     "year": 2017,
+     "value": 36.0
+    },
+    {
+     "year": 2018,
+     "value": 40.0
+    },
+    {
+     "year": 2019,
+     "value": 42.0
+    },
+    {
+     "year": 2020,
+     "value": 45.0
+    },
+    {
+     "year": 2021,
+     "value": 48.0
+    },
+    {
+     "year": 2022,
+     "value": 70.0
+    },
+    {
+     "year": 2023,
+     "value": 90.0
+    },
+    {
+     "year": 2024,
+     "value": 90.0
+    },
+    {
+     "year": 2025,
+     "value": 110.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4674",
+   "name": "クレスコ",
+   "sector": "情報・通信業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1542.0,
+   "yield": 4.54,
+   "pbr": 1.86,
+   "payout": 49.3,
+   "score": 9.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.54,
+     "text": "4.54%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 10.2,
+     "text": "10.2%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 69.9,
+     "text": "69.9%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 300.0,
+     "text": "300%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 49.3,
+     "text": "49.3%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 8.5
+    },
+    {
+     "year": 2015,
+     "value": 11.0
+    },
+    {
+     "year": 2016,
+     "value": 13.25
+    },
+    {
+     "year": 2017,
+     "value": 14.5
+    },
+    {
+     "year": 2018,
+     "value": 18.75
+    },
+    {
+     "year": 2019,
+     "value": 17.5
+    },
+    {
+     "year": 2020,
+     "value": 18.0
+    },
+    {
+     "year": 2021,
+     "value": 19.0
+    },
+    {
+     "year": 2022,
+     "value": 23.5
+    },
+    {
+     "year": 2023,
+     "value": 26.0
+    },
+    {
+     "year": 2024,
+     "value": 32.5
+    },
+    {
+     "year": 2025,
+     "value": 52.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9364",
+   "name": "上組",
+   "sector": "倉庫・運輸関連業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 5364.0,
+   "yield": 3.91,
+   "pbr": 1.34,
+   "payout": 65.9,
+   "score": 9.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.91,
+     "text": "3.91%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 12.4,
+     "text": "12.4%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 73.5,
+     "text": "73.5%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 235.0,
+     "text": "235%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配9回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 65.9,
+     "text": "65.9%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 22.0
+    },
+    {
+     "year": 2015,
+     "value": 26.0
+    },
+    {
+     "year": 2016,
+     "value": 26.0
+    },
+    {
+     "year": 2017,
+     "value": 32.0
+    },
+    {
+     "year": 2018,
+     "value": 43.0
+    },
+    {
+     "year": 2019,
+     "value": 46.0
+    },
+    {
+     "year": 2020,
+     "value": 46.0
+    },
+    {
+     "year": 2021,
+     "value": 50.0
+    },
+    {
+     "year": 2022,
+     "value": 86.0
+    },
+    {
+     "year": 2023,
+     "value": 95.0
+    },
+    {
+     "year": 2024,
+     "value": 105.0
+    },
+    {
+     "year": 2025,
+     "value": 170.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "3817",
+   "name": "ＳＲＡホールディングス",
+   "sector": "情報・通信業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 4610.0,
+   "yield": 5.21,
+   "pbr": 1.73,
+   "payout": 45.1,
+   "score": 9.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 5.21,
+     "text": "5.21%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 15.5,
+     "text": "15.5%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 64.7,
+     "text": "64.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 256.0,
+     "text": "256%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 45.1,
+     "text": "45.1%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 57.0
+    },
+    {
+     "year": 2015,
+     "value": 63.0
+    },
+    {
+     "year": 2016,
+     "value": 75.0
+    },
+    {
+     "year": 2017,
+     "value": 100.0
+    },
+    {
+     "year": 2018,
+     "value": 110.0
+    },
+    {
+     "year": 2019,
+     "value": 110.0
+    },
+    {
+     "year": 2020,
+     "value": 110.0
+    },
+    {
+     "year": 2021,
+     "value": 110.0
+    },
+    {
+     "year": 2022,
+     "value": 130.0
+    },
+    {
+     "year": 2023,
+     "value": 140.0
+    },
+    {
+     "year": 2024,
+     "value": 200.0
+    },
+    {
+     "year": 2025,
+     "value": 190.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4290",
+   "name": "プレステージ・インターナショナル",
+   "sector": "サービス業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 661.0,
+   "yield": 4.24,
+   "pbr": 1.7,
+   "payout": 55.5,
+   "score": 9.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.24,
+     "text": "4.24%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 12.5,
+     "text": "12.5%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 59.1,
+     "text": "59.1%"
+    },
+    "current_ratio": {
+     "status": "warn",
+     "value": 174.0,
+     "text": "174%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配9回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 55.5,
+     "text": "55.5%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 2.5
+    },
+    {
+     "year": 2015,
+     "value": 3.0
+    },
+    {
+     "year": 2016,
+     "value": 3.75
+    },
+    {
+     "year": 2017,
+     "value": 5.25
+    },
+    {
+     "year": 2018,
+     "value": 6.5
+    },
+    {
+     "year": 2019,
+     "value": 7.0
+    },
+    {
+     "year": 2020,
+     "value": 7.0
+    },
+    {
+     "year": 2021,
+     "value": 7.0
+    },
+    {
+     "year": 2022,
+     "value": 9.5
+    },
+    {
+     "year": 2023,
+     "value": 12.0
+    },
+    {
+     "year": 2024,
+     "value": 18.0
+    },
+    {
+     "year": 2025,
+     "value": 25.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4540",
+   "name": "ツムラ",
+   "sector": "医薬品",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3817.0,
+   "yield": 4.14,
+   "pbr": 0.88,
+   "payout": 39.1,
+   "score": 9.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.14,
+     "text": "4.14%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 18.3,
+     "text": "18.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 54.3,
+     "text": "54.3%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 419.0,
+     "text": "419%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配3回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 39.1,
+     "text": "39.1%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 64.0
+    },
+    {
+     "year": 2015,
+     "value": 64.0
+    },
+    {
+     "year": 2016,
+     "value": 64.0
+    },
+    {
+     "year": 2017,
+     "value": 64.0
+    },
+    {
+     "year": 2018,
+     "value": 64.0
+    },
+    {
+     "year": 2019,
+     "value": 64.0
+    },
+    {
+     "year": 2020,
+     "value": 64.0
+    },
+    {
+     "year": 2021,
+     "value": 64.0
+    },
+    {
+     "year": 2022,
+     "value": 64.0
+    },
+    {
+     "year": 2023,
+     "value": 67.0
+    },
+    {
+     "year": 2024,
+     "value": 118.0
+    },
+    {
+     "year": 2025,
+     "value": 136.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "3901",
+   "name": "マークラインズ",
+   "sector": "情報・通信業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1360.0,
+   "yield": 3.82,
+   "pbr": 2.76,
+   "payout": 44.8,
+   "score": 9.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.82,
+     "text": "3.82%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 37.6,
+     "text": "37.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 74.2,
+     "text": "74.2%"
+    },
+    "current_ratio": {
+     "status": "warn",
+     "value": 194.0,
+     "text": "194%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 44.8,
+     "text": "44.8%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 7.0
+    },
+    {
+     "year": 2015,
+     "value": 8.75
+    },
+    {
+     "year": 2016,
+     "value": 10.5
+    },
+    {
+     "year": 2017,
+     "value": 12.5
+    },
+    {
+     "year": 2018,
+     "value": 15.0
+    },
+    {
+     "year": 2019,
+     "value": 18.0
+    },
+    {
+     "year": 2020,
+     "value": 21.0
+    },
+    {
+     "year": 2021,
+     "value": 23.0
+    },
+    {
+     "year": 2022,
+     "value": 29.0
+    },
+    {
+     "year": 2023,
+     "value": 36.0
+    },
+    {
+     "year": 2024,
+     "value": 48.0
+    },
+    {
+     "year": 2025,
+     "value": 52.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "8130",
+   "name": "サンゲツ",
+   "sector": "卸売業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3030.0,
+   "yield": 5.12,
+   "pbr": 1.47,
+   "payout": 62.2,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 5.12,
+     "text": "5.12%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 9.4,
+     "text": "9.4%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 64.3,
+     "text": "64.3%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 262.0,
+     "text": "262%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 62.2,
+     "text": "62.2%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 37.5
+    },
+    {
+     "year": 2015,
+     "value": 45.0
+    },
+    {
+     "year": 2016,
+     "value": 50.0
+    },
+    {
+     "year": 2017,
+     "value": 55.0
+    },
+    {
+     "year": 2018,
+     "value": 56.0
+    },
+    {
+     "year": 2019,
+     "value": 57.0
+    },
+    {
+     "year": 2020,
+     "value": 58.0
+    },
+    {
+     "year": 2021,
+     "value": 64.0
+    },
+    {
+     "year": 2022,
+     "value": 75.0
+    },
+    {
+     "year": 2023,
+     "value": 130.0
+    },
+    {
+     "year": 2024,
+     "value": 150.0
+    },
+    {
+     "year": 2025,
+     "value": 152.5
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "6345",
+   "name": "アイチ　コーポレーション",
+   "sector": "機械",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1414.0,
+   "yield": 4.6,
+   "pbr": 1.21,
+   "payout": 59.6,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.6,
+     "text": "4.60%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 12.6,
+     "text": "12.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 81.2,
+     "text": "81.2%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 360.0,
+     "text": "360%"
+    },
+    "revenue_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配10回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 59.6,
+     "text": "59.6%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 10.0
+    },
+    {
+     "year": 2015,
+     "value": 11.0
+    },
+    {
+     "year": 2016,
+     "value": 18.0
+    },
+    {
+     "year": 2017,
+     "value": 20.0
+    },
+    {
+     "year": 2018,
+     "value": 22.0
+    },
+    {
+     "year": 2019,
+     "value": 22.0
+    },
+    {
+     "year": 2020,
+     "value": 27.0
+    },
+    {
+     "year": 2021,
+     "value": 29.0
+    },
+    {
+     "year": 2022,
+     "value": 37.0
+    },
+    {
+     "year": 2023,
+     "value": 38.0
+    },
+    {
+     "year": 2024,
+     "value": 41.0
+    },
+    {
+     "year": 2025,
+     "value": 65.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "1928",
+   "name": "積水ハウス",
+   "sector": "建設業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3526.0,
+   "yield": 4.14,
+   "pbr": 1.06,
+   "payout": 36.3,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.14,
+     "text": "4.14%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 8.1,
+     "text": "8.1%"
+    },
+    "equity_ratio": {
+     "status": "warn",
+     "value": 42.7,
+     "text": "42.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 279.0,
+     "text": "279%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 36.3,
+     "text": "36.3%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 48.0
+    },
+    {
+     "year": 2015,
+     "value": 52.0
+    },
+    {
+     "year": 2016,
+     "value": 59.0
+    },
+    {
+     "year": 2017,
+     "value": 69.0
+    },
+    {
+     "year": 2018,
+     "value": 79.0
+    },
+    {
+     "year": 2019,
+     "value": 80.0
+    },
+    {
+     "year": 2020,
+     "value": 86.0
+    },
+    {
+     "year": 2021,
+     "value": 80.0
+    },
+    {
+     "year": 2022,
+     "value": 99.0
+    },
+    {
+     "year": 2023,
+     "value": 117.0
+    },
+    {
+     "year": 2024,
+     "value": 128.0
+    },
+    {
+     "year": 2025,
+     "value": 143.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "7723",
+   "name": "愛知時計電機",
+   "sector": "精密機器",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3050.0,
+   "yield": 3.93,
+   "pbr": 0.89,
+   "payout": 36.2,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.93,
+     "text": "3.93%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 8.0,
+     "text": "8.0%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 74.8,
+     "text": "74.8%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 310.0,
+     "text": "310%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 36.2,
+     "text": "36.2%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 31.67
+    },
+    {
+     "year": 2015,
+     "value": 33.33
+    },
+    {
+     "year": 2016,
+     "value": 33.33
+    },
+    {
+     "year": 2017,
+     "value": 36.67
+    },
+    {
+     "year": 2018,
+     "value": 43.33
+    },
+    {
+     "year": 2019,
+     "value": 40.0
+    },
+    {
+     "year": 2020,
+     "value": 40.0
+    },
+    {
+     "year": 2021,
+     "value": 43.33
+    },
+    {
+     "year": 2022,
+     "value": 47.0
+    },
+    {
+     "year": 2023,
+     "value": 65.0
+    },
+    {
+     "year": 2024,
+     "value": 68.0
+    },
+    {
+     "year": 2025,
+     "value": 85.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4206",
+   "name": "アイカ工業",
+   "sector": "化学",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3734.0,
+   "yield": 3.75,
+   "pbr": 1.24,
+   "payout": 50.0,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "warn",
+     "value": 3.75,
+     "text": "3.75%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 11.6,
+     "text": "11.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 58.4,
+     "text": "58.4%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 213.0,
+     "text": "213%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 50.0,
+     "text": "50.0%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 39.0
+    },
+    {
+     "year": 2015,
+     "value": 44.0
+    },
+    {
+     "year": 2016,
+     "value": 63.0
+    },
+    {
+     "year": 2017,
+     "value": 89.0
+    },
+    {
+     "year": 2018,
+     "value": 97.0
+    },
+    {
+     "year": 2019,
+     "value": 105.0
+    },
+    {
+     "year": 2020,
+     "value": 106.0
+    },
+    {
+     "year": 2021,
+     "value": 107.0
+    },
+    {
+     "year": 2022,
+     "value": 108.0
+    },
+    {
+     "year": 2023,
+     "value": 111.0
+    },
+    {
+     "year": 2024,
+     "value": 116.0
+    },
+    {
+     "year": 2025,
+     "value": 136.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4958",
+   "name": "長谷川香料",
+   "sector": "化学",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3255.0,
+   "yield": 3.07,
+   "pbr": 1.0,
+   "payout": 48.6,
+   "score": 8.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.07,
+     "text": "3.07%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 11.6,
+     "text": "11.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 83.8,
+     "text": "83.8%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 513.0,
+     "text": "513%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配7回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 48.6,
+     "text": "48.6%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 30.0
+    },
+    {
+     "year": 2015,
+     "value": 30.0
+    },
+    {
+     "year": 2016,
+     "value": 32.0
+    },
+    {
+     "year": 2017,
+     "value": 35.0
+    },
+    {
+     "year": 2018,
+     "value": 35.0
+    },
+    {
+     "year": 2019,
+     "value": 35.0
+    },
+    {
+     "year": 2020,
+     "value": 38.0
+    },
+    {
+     "year": 2021,
+     "value": 44.0
+    },
+    {
+     "year": 2022,
+     "value": 61.0
+    },
+    {
+     "year": 2023,
+     "value": 61.0
+    },
+    {
+     "year": 2024,
+     "value": 70.0
+    },
+    {
+     "year": 2025,
+     "value": 74.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4641",
+   "name": "アルプス技研",
+   "sector": "サービス業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 793.0,
+   "yield": 4.83,
+   "pbr": 2.32,
+   "payout": 53.3,
+   "score": 8.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.83,
+     "text": "4.83%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 10.3,
+     "text": "10.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 69.5,
+     "text": "69.5%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 269.0,
+     "text": "269%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配2回あり"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 53.3,
+     "text": "53.3%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 9.09
+    },
+    {
+     "year": 2015,
+     "value": 10.76
+    },
+    {
+     "year": 2016,
+     "value": 14.85
+    },
+    {
+     "year": 2017,
+     "value": 17.58
+    },
+    {
+     "year": 2018,
+     "value": 24.24
+    },
+    {
+     "year": 2019,
+     "value": 23.27
+    },
+    {
+     "year": 2020,
+     "value": 23.33
+    },
+    {
+     "year": 2021,
+     "value": 25.33
+    },
+    {
+     "year": 2022,
+     "value": 28.33
+    },
+    {
+     "year": 2023,
+     "value": 34.33
+    },
+    {
+     "year": 2024,
+     "value": 31.0
+    },
+    {
+     "year": 2025,
+     "value": 36.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "7994",
+   "name": "オカムラ",
+   "sector": "その他製品",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 2284.0,
+   "yield": 4.6,
+   "pbr": 1.06,
+   "payout": 41.0,
+   "score": 8.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.6,
+     "text": "4.60%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 7.3,
+     "text": "7.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 67.6,
+     "text": "67.6%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 286.0,
+     "text": "286%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配2回あり"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 41.0,
+     "text": "41.0%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 18.5
+    },
+    {
+     "year": 2015,
+     "value": 18.5
+    },
+    {
+     "year": 2016,
+     "value": 26.0
+    },
+    {
+     "year": 2017,
+     "value": 24.0
+    },
+    {
+     "year": 2018,
+     "value": 28.0
+    },
+    {
+     "year": 2019,
+     "value": 30.0
+    },
+    {
+     "year": 2020,
+     "value": 28.0
+    },
+    {
+     "year": 2021,
+     "value": 40.0
+    },
+    {
+     "year": 2022,
+     "value": 42.0
+    },
+    {
+     "year": 2023,
+     "value": 76.0
+    },
+    {
+     "year": 2024,
+     "value": 88.0
+    },
+    {
+     "year": 2025,
+     "value": 101.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9757",
+   "name": "船井総研ホールディングス",
+   "sector": "サービス業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1110.0,
+   "yield": 4.32,
+   "pbr": 3.98,
+   "payout": 60.9,
+   "score": 8.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.32,
+     "text": "4.32%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 26.4,
+     "text": "26.4%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 74.7,
+     "text": "74.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 243.0,
+     "text": "243%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 60.9,
+     "text": "60.9%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ng",
+     "value": null,
+     "text": "減少傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 8.89
+    },
+    {
+     "year": 2015,
+     "value": 10.0
+    },
+    {
+     "year": 2016,
+     "value": 12.0
+    },
+    {
+     "year": 2017,
+     "value": 20.0
+    },
+    {
+     "year": 2018,
+     "value": 17.5
+    },
+    {
+     "year": 2019,
+     "value": 20.0
+    },
+    {
+     "year": 2020,
+     "value": 22.5
+    },
+    {
+     "year": 2021,
+     "value": 24.0
+    },
+    {
+     "year": 2022,
+     "value": 27.5
+    },
+    {
+     "year": 2023,
+     "value": 32.5
+    },
+    {
+     "year": 2024,
+     "value": 37.5
+    },
+    {
+     "year": 2025,
+     "value": 42.5
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4746",
+   "name": "東計電算",
+   "sector": "情報・通信業",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 4565.0,
+   "yield": 3.79,
+   "pbr": 1.6,
+   "payout": 58.6,
+   "score": 8.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.79,
+     "text": "3.79%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 30.1,
+     "text": "30.1%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 79.9,
+     "text": "79.9%"
+    },
+    "current_ratio": {
+     "status": "ng",
+     "value": 143.0,
+     "text": "143%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配10回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 58.6,
+     "text": "58.6%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 27.5
+    },
+    {
+     "year": 2015,
+     "value": 32.5
+    },
+    {
+     "year": 2016,
+     "value": 35.0
+    },
+    {
+     "year": 2017,
+     "value": 40.0
+    },
+    {
+     "year": 2018,
+     "value": 45.0
+    },
+    {
+     "year": 2019,
+     "value": 55.0
+    },
+    {
+     "year": 2020,
+     "value": 55.0
+    },
+    {
+     "year": 2021,
+     "value": 80.0
+    },
+    {
+     "year": 2022,
+     "value": 95.0
+    },
+    {
+     "year": 2023,
+     "value": 110.0
+    },
+    {
+     "year": 2024,
+     "value": 125.0
+    },
+    {
+     "year": 2025,
+     "value": 173.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4097",
+   "name": "高圧ガス工業",
+   "sector": "化学",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1130.0,
+   "yield": 3.54,
+   "pbr": 0.74,
+   "payout": 47.4,
+   "score": 8.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "warn",
+     "value": 3.54,
+     "text": "3.54%"
+    },
+    "op_margin": {
+     "status": "ng",
+     "value": 6.0,
+     "text": "6.0%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 68.2,
+     "text": "68.2%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 218.0,
+     "text": "218%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 47.4,
+     "text": "47.4%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 14.0
+    },
+    {
+     "year": 2015,
+     "value": 14.0
+    },
+    {
+     "year": 2016,
+     "value": 14.0
+    },
+    {
+     "year": 2017,
+     "value": 14.0
+    },
+    {
+     "year": 2018,
+     "value": 17.0
+    },
+    {
+     "year": 2019,
+     "value": 16.0
+    },
+    {
+     "year": 2020,
+     "value": 16.0
+    },
+    {
+     "year": 2021,
+     "value": 16.0
+    },
+    {
+     "year": 2022,
+     "value": 16.0
+    },
+    {
+     "year": 2023,
+     "value": 19.0
+    },
+    {
+     "year": 2024,
+     "value": 21.0
+    },
+    {
+     "year": 2025,
+     "value": 30.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9769",
+   "name": "学究社",
+   "sector": "サービス業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 2547.0,
+   "yield": 5.1,
+   "pbr": 3.39,
+   "payout": 60.6,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 5.1,
+     "text": "5.10%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 22.2,
+     "text": "22.2%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 65.0,
+     "text": "65.0%"
+    },
+    "current_ratio": {
+     "status": "ng",
+     "value": 142.0,
+     "text": "142%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 60.6,
+     "text": "60.6%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 40.0
+    },
+    {
+     "year": 2015,
+     "value": 50.0
+    },
+    {
+     "year": 2016,
+     "value": 60.0
+    },
+    {
+     "year": 2017,
+     "value": 90.0
+    },
+    {
+     "year": 2018,
+     "value": 60.0
+    },
+    {
+     "year": 2019,
+     "value": 60.0
+    },
+    {
+     "year": 2020,
+     "value": 65.0
+    },
+    {
+     "year": 2021,
+     "value": 70.0
+    },
+    {
+     "year": 2022,
+     "value": 80.0
+    },
+    {
+     "year": 2023,
+     "value": 87.0
+    },
+    {
+     "year": 2024,
+     "value": 87.0
+    },
+    {
+     "year": 2025,
+     "value": 95.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "1343",
+   "name": "ＮＥＸＴ　ＦＵＮＤＳ　東証ＲＥＩＴ　指数連動型上場投信",
+   "sector": "-",
+   "market": "ETF・ETN",
+   "is_etf": true,
+   "price": 1998.0,
+   "yield": 4.61,
+   "pbr": null,
+   "payout": null,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.61,
+     "text": "4.61%"
+    },
+    "op_margin": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "equity_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "current_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "revenue_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "eps_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "op_cf": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "cash": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 50.1
+    },
+    {
+     "year": 2015,
+     "value": 51.8
+    },
+    {
+     "year": 2016,
+     "value": 54.6
+    },
+    {
+     "year": 2017,
+     "value": 61.5
+    },
+    {
+     "year": 2018,
+     "value": 65.3
+    },
+    {
+     "year": 2019,
+     "value": 68.8
+    },
+    {
+     "year": 2020,
+     "value": 73.2
+    },
+    {
+     "year": 2021,
+     "value": 70.5
+    },
+    {
+     "year": 2022,
+     "value": 71.8
+    },
+    {
+     "year": 2023,
+     "value": 75.0
+    },
+    {
+     "year": 2024,
+     "value": 82.9
+    },
+    {
+     "year": 2025,
+     "value": 87.6
+    }
+   ],
+   "na_count": 8
+  },
+  {
+   "code": "3003",
+   "name": "ヒューリック",
+   "sector": "不動産業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1766.0,
+   "yield": 3.79,
+   "pbr": 1.48,
+   "payout": 41.2,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.79,
+     "text": "3.79%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 25.7,
+     "text": "25.7%"
+    },
+    "equity_ratio": {
+     "status": "ng",
+     "value": 26.1,
+     "text": "26.1%"
+    },
+    "current_ratio": {
+     "status": "ng",
+     "value": 140.0,
+     "text": "140%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 41.2,
+     "text": "41.2%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 10.5
+    },
+    {
+     "year": 2015,
+     "value": 15.5
+    },
+    {
+     "year": 2016,
+     "value": 17.0
+    },
+    {
+     "year": 2017,
+     "value": 21.0
+    },
+    {
+     "year": 2018,
+     "value": 25.5
+    },
+    {
+     "year": 2019,
+     "value": 31.5
+    },
+    {
+     "year": 2020,
+     "value": 34.5
+    },
+    {
+     "year": 2021,
+     "value": 39.0
+    },
+    {
+     "year": 2022,
+     "value": 42.0
+    },
+    {
+     "year": 2023,
+     "value": 50.0
+    },
+    {
+     "year": 2024,
+     "value": 54.0
+    },
+    {
+     "year": 2025,
+     "value": 62.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "6785",
+   "name": "鈴木",
+   "sector": "電気機器",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3440.0,
+   "yield": 3.49,
+   "pbr": 1.58,
+   "payout": 41.0,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.49,
+     "text": "3.49%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 12.9,
+     "text": "12.9%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 67.7,
+     "text": "67.7%"
+    },
+    "current_ratio": {
+     "status": "warn",
+     "value": 199.0,
+     "text": "199%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配2回あり"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 41.0,
+     "text": "41.0%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 13.5
+    },
+    {
+     "year": 2015,
+     "value": 11.0
+    },
+    {
+     "year": 2016,
+     "value": 11.0
+    },
+    {
+     "year": 2017,
+     "value": 11.0
+    },
+    {
+     "year": 2018,
+     "value": 13.0
+    },
+    {
+     "year": 2019,
+     "value": 11.0
+    },
+    {
+     "year": 2020,
+     "value": 11.0
+    },
+    {
+     "year": 2021,
+     "value": 11.0
+    },
+    {
+     "year": 2022,
+     "value": 20.0
+    },
+    {
+     "year": 2023,
+     "value": 30.0
+    },
+    {
+     "year": 2024,
+     "value": 86.0
+    },
+    {
+     "year": 2025,
+     "value": 90.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "2659",
+   "name": "サンエー",
+   "sector": "小売業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3215.0,
+   "yield": 3.42,
+   "pbr": 1.27,
+   "payout": 57.9,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.42,
+     "text": "3.42%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 7.1,
+     "text": "7.1%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 78.7,
+     "text": "78.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 290.0,
+     "text": "290%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 57.9,
+     "text": "57.9%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 14.0
+    },
+    {
+     "year": 2015,
+     "value": 18.0
+    },
+    {
+     "year": 2016,
+     "value": 21.0
+    },
+    {
+     "year": 2017,
+     "value": 23.5
+    },
+    {
+     "year": 2018,
+     "value": 25.0
+    },
+    {
+     "year": 2019,
+     "value": 26.0
+    },
+    {
+     "year": 2020,
+     "value": 26.5
+    },
+    {
+     "year": 2021,
+     "value": 27.5
+    },
+    {
+     "year": 2022,
+     "value": 30.0
+    },
+    {
+     "year": 2023,
+     "value": 37.0
+    },
+    {
+     "year": 2024,
+     "value": 55.0
+    },
+    {
+     "year": 2025,
+     "value": 80.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "5982",
+   "name": "マルゼン",
+   "sector": "金属製品",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 4005.0,
+   "yield": 3.12,
+   "pbr": 1.22,
+   "payout": 38.0,
+   "score": 7.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.12,
+     "text": "3.12%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 9.9,
+     "text": "9.9%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 70.1,
+     "text": "70.1%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 286.0,
+     "text": "286%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配2回あり"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 38.0,
+     "text": "38.0%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 21.0
+    },
+    {
+     "year": 2015,
+     "value": 20.0
+    },
+    {
+     "year": 2016,
+     "value": 22.0
+    },
+    {
+     "year": 2017,
+     "value": 25.0
+    },
+    {
+     "year": 2018,
+     "value": 26.0
+    },
+    {
+     "year": 2019,
+     "value": 29.0
+    },
+    {
+     "year": 2020,
+     "value": 31.0
+    },
+    {
+     "year": 2021,
+     "value": 30.0
+    },
+    {
+     "year": 2022,
+     "value": 60.0
+    },
+    {
+     "year": 2023,
+     "value": 80.0
+    },
+    {
+     "year": 2024,
+     "value": 100.0
+    },
+    {
+     "year": 2025,
+     "value": 125.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "3231",
+   "name": "野村不動産ホールディングス",
+   "sector": "不動産業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 963.8,
+   "yield": 4.57,
+   "pbr": 1.03,
+   "payout": 41.4,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.57,
+     "text": "4.57%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 15.7,
+     "text": "15.7%"
+    },
+    "equity_ratio": {
+     "status": "ng",
+     "value": 27.9,
+     "text": "27.9%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 247.0,
+     "text": "247%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 41.4,
+     "text": "41.4%"
+    },
+    "op_cf": {
+     "status": "ng",
+     "value": null,
+     "text": "赤字の年あり"
+    },
+    "cash": {
+     "status": "ng",
+     "value": null,
+     "text": "減少傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 8.0
+    },
+    {
+     "year": 2015,
+     "value": 10.5
+    },
+    {
+     "year": 2016,
+     "value": 12.0
+    },
+    {
+     "year": 2017,
+     "value": 14.0
+    },
+    {
+     "year": 2018,
+     "value": 14.5
+    },
+    {
+     "year": 2019,
+     "value": 15.5
+    },
+    {
+     "year": 2020,
+     "value": 16.0
+    },
+    {
+     "year": 2021,
+     "value": 16.5
+    },
+    {
+     "year": 2022,
+     "value": 22.0
+    },
+    {
+     "year": 2023,
+     "value": 26.0
+    },
+    {
+     "year": 2024,
+     "value": 31.5
+    },
+    {
+     "year": 2025,
+     "value": 35.5
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9986",
+   "name": "蔵王産業",
+   "sector": "卸売業",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 2474.0,
+   "yield": 4.04,
+   "pbr": 1.2,
+   "payout": 75.6,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.04,
+     "text": "4.04%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 11.6,
+     "text": "11.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 85.9,
+     "text": "85.9%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 1002.0,
+     "text": "1002%"
+    },
+    "revenue_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配4回あり"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 75.6,
+     "text": "75.6%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 47.0
+    },
+    {
+     "year": 2015,
+     "value": 51.0
+    },
+    {
+     "year": 2016,
+     "value": 58.0
+    },
+    {
+     "year": 2017,
+     "value": 55.0
+    },
+    {
+     "year": 2018,
+     "value": 64.0
+    },
+    {
+     "year": 2019,
+     "value": 61.0
+    },
+    {
+     "year": 2020,
+     "value": 53.0
+    },
+    {
+     "year": 2021,
+     "value": 57.0
+    },
+    {
+     "year": 2022,
+     "value": 80.0
+    },
+    {
+     "year": 2023,
+     "value": 125.0
+    },
+    {
+     "year": 2024,
+     "value": 100.0
+    },
+    {
+     "year": 2025,
+     "value": 100.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "2003",
+   "name": "日東富士製粉",
+   "sector": "食料品",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 1760.0,
+   "yield": 3.98,
+   "pbr": 1.28,
+   "payout": 76.8,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.98,
+     "text": "3.98%"
+    },
+    "op_margin": {
+     "status": "ng",
+     "value": 5.3,
+     "text": "5.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 78.5,
+     "text": "78.5%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 352.0,
+     "text": "352%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配2回あり"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 76.8,
+     "text": "76.8%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 12.5
+    },
+    {
+     "year": 2015,
+     "value": 11.25
+    },
+    {
+     "year": 2016,
+     "value": 11.25
+    },
+    {
+     "year": 2017,
+     "value": 14.38
+    },
+    {
+     "year": 2018,
+     "value": 26.75
+    },
+    {
+     "year": 2019,
+     "value": 29.5
+    },
+    {
+     "year": 2020,
+     "value": 28.75
+    },
+    {
+     "year": 2021,
+     "value": 32.5
+    },
+    {
+     "year": 2022,
+     "value": 40.5
+    },
+    {
+     "year": 2023,
+     "value": 43.25
+    },
+    {
+     "year": 2024,
+     "value": 63.0
+    },
+    {
+     "year": 2025,
+     "value": 70.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "3333",
+   "name": "あさひ",
+   "sector": "小売業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1328.0,
+   "yield": 3.77,
+   "pbr": 0.83,
+   "payout": 57.4,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 3.77,
+     "text": "3.77%"
+    },
+    "op_margin": {
+     "status": "ng",
+     "value": 4.8,
+     "text": "4.8%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 71.6,
+     "text": "71.6%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 223.0,
+     "text": "223%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減少傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 57.4,
+     "text": "57.4%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 12.0
+    },
+    {
+     "year": 2015,
+     "value": 12.0
+    },
+    {
+     "year": 2016,
+     "value": 14.0
+    },
+    {
+     "year": 2017,
+     "value": 14.0
+    },
+    {
+     "year": 2018,
+     "value": 14.0
+    },
+    {
+     "year": 2019,
+     "value": 18.0
+    },
+    {
+     "year": 2020,
+     "value": 18.0
+    },
+    {
+     "year": 2021,
+     "value": 18.0
+    },
+    {
+     "year": 2022,
+     "value": 28.0
+    },
+    {
+     "year": 2023,
+     "value": 50.5
+    },
+    {
+     "year": 2024,
+     "value": 47.5
+    },
+    {
+     "year": 2025,
+     "value": 50.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "4008",
+   "name": "住友精化",
+   "sector": "化学",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 1342.0,
+   "yield": 3.58,
+   "pbr": 0.84,
+   "payout": 37.5,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "warn",
+     "value": 3.58,
+     "text": "3.58%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 9.8,
+     "text": "9.8%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 67.8,
+     "text": "67.8%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 251.0,
+     "text": "251%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減少傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 37.5,
+     "text": "37.5%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 17.5
+    },
+    {
+     "year": 2015,
+     "value": 15.0
+    },
+    {
+     "year": 2016,
+     "value": 15.0
+    },
+    {
+     "year": 2017,
+     "value": 17.5
+    },
+    {
+     "year": 2018,
+     "value": 20.0
+    },
+    {
+     "year": 2019,
+     "value": 20.0
+    },
+    {
+     "year": 2020,
+     "value": 20.0
+    },
+    {
+     "year": 2021,
+     "value": 22.0
+    },
+    {
+     "year": 2022,
+     "value": 32.0
+    },
+    {
+     "year": 2023,
+     "value": 40.0
+    },
+    {
+     "year": 2024,
+     "value": 40.0
+    },
+    {
+     "year": 2025,
+     "value": 40.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9989",
+   "name": "サンドラッグ",
+   "sector": "小売業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3844.0,
+   "yield": 3.43,
+   "pbr": 1.57,
+   "payout": 48.8,
+   "score": 7.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.43,
+     "text": "3.43%"
+    },
+    "op_margin": {
+     "status": "ng",
+     "value": 5.6,
+     "text": "5.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 60.1,
+     "text": "60.1%"
+    },
+    "current_ratio": {
+     "status": "warn",
+     "value": 178.0,
+     "text": "178%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配11回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 48.8,
+     "text": "48.8%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 30.0
+    },
+    {
+     "year": 2015,
+     "value": 35.0
+    },
+    {
+     "year": 2016,
+     "value": 45.0
+    },
+    {
+     "year": 2017,
+     "value": 54.5
+    },
+    {
+     "year": 2018,
+     "value": 66.0
+    },
+    {
+     "year": 2019,
+     "value": 67.0
+    },
+    {
+     "year": 2020,
+     "value": 69.0
+    },
+    {
+     "year": 2021,
+     "value": 70.0
+    },
+    {
+     "year": 2022,
+     "value": 86.0
+    },
+    {
+     "year": 2023,
+     "value": 107.0
+    },
+    {
+     "year": 2024,
+     "value": 122.0
+    },
+    {
+     "year": 2025,
+     "value": 130.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "8309",
+   "name": "三井住友トラストグループ",
+   "sector": "銀行業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 6601.0,
+   "yield": 2.8,
+   "pbr": 1.29,
+   "payout": 41.0,
+   "score": 6.9,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 2.8,
+     "text": "2.80%"
+    },
+    "op_margin": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "equity_ratio": {
+     "status": "ng",
+     "value": 4.3,
+     "text": "4.3%"
+    },
+    "current_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配7回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 41.0,
+     "text": "41.0%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 52.5
+    },
+    {
+     "year": 2015,
+     "value": 65.0
+    },
+    {
+     "year": 2016,
+     "value": 65.0
+    },
+    {
+     "year": 2017,
+     "value": 65.0
+    },
+    {
+     "year": 2018,
+     "value": 65.0
+    },
+    {
+     "year": 2019,
+     "value": 75.0
+    },
+    {
+     "year": 2020,
+     "value": 75.0
+    },
+    {
+     "year": 2021,
+     "value": 77.5
+    },
+    {
+     "year": 2022,
+     "value": 95.0
+    },
+    {
+     "year": 2023,
+     "value": 110.0
+    },
+    {
+     "year": 2024,
+     "value": 127.5
+    },
+    {
+     "year": 2025,
+     "value": 162.5
+    }
+   ],
+   "na_count": 2
+  },
+  {
+   "code": "2169",
+   "name": "ＣＤＳ",
+   "sector": "サービス業",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 1707.0,
+   "yield": 4.34,
+   "pbr": 1.32,
+   "payout": 110.6,
+   "score": 6.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.34,
+     "text": "4.34%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 7.8,
+     "text": "7.8%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 83.9,
+     "text": "83.9%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 443.0,
+     "text": "443%"
+    },
+    "revenue_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ng",
+     "value": 110.6,
+     "text": "110.6%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 36.0
+    },
+    {
+     "year": 2015,
+     "value": 36.0
+    },
+    {
+     "year": 2016,
+     "value": 40.0
+    },
+    {
+     "year": 2017,
+     "value": 40.0
+    },
+    {
+     "year": 2018,
+     "value": 44.0
+    },
+    {
+     "year": 2019,
+     "value": 50.0
+    },
+    {
+     "year": 2020,
+     "value": 55.0
+    },
+    {
+     "year": 2021,
+     "value": 56.0
+    },
+    {
+     "year": 2022,
+     "value": 60.0
+    },
+    {
+     "year": 2023,
+     "value": 66.0
+    },
+    {
+     "year": 2024,
+     "value": 78.0
+    },
+    {
+     "year": 2025,
+     "value": 74.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "5108",
+   "name": "ブリヂストン",
+   "sector": "ゴム製品",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3626.0,
+   "yield": 3.59,
+   "pbr": 1.24,
+   "payout": 96.6,
+   "score": 6.5,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "warn",
+     "value": 3.59,
+     "text": "3.59%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 8.6,
+     "text": "8.6%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 63.7,
+     "text": "63.7%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 255.0,
+     "text": "255%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減少傾向"
+    },
+    "dividend_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "減配1回あり・現在は回復"
+    },
+    "payout": {
+     "status": "ng",
+     "value": 96.6,
+     "text": "96.6%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 50.0
+    },
+    {
+     "year": 2015,
+     "value": 65.0
+    },
+    {
+     "year": 2016,
+     "value": 70.0
+    },
+    {
+     "year": 2017,
+     "value": 75.0
+    },
+    {
+     "year": 2018,
+     "value": 80.0
+    },
+    {
+     "year": 2019,
+     "value": 80.0
+    },
+    {
+     "year": 2020,
+     "value": 55.0
+    },
+    {
+     "year": 2021,
+     "value": 85.0
+    },
+    {
+     "year": 2022,
+     "value": 87.5
+    },
+    {
+     "year": 2023,
+     "value": 100.0
+    },
+    {
+     "year": 2024,
+     "value": 105.0
+    },
+    {
+     "year": 2025,
+     "value": 115.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "9381",
+   "name": "エーアイテイー",
+   "sector": "倉庫・運輸関連業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 2367.0,
+   "yield": 4.65,
+   "pbr": 2.71,
+   "payout": 74.0,
+   "score": 6.0,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.65,
+     "text": "4.65%"
+    },
+    "op_margin": {
+     "status": "warn",
+     "value": 7.2,
+     "text": "7.2%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 74.3,
+     "text": "74.3%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 417.0,
+     "text": "417%"
+    },
+    "revenue_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "eps_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "dividend_trend": {
+     "status": "ng",
+     "value": null,
+     "text": "減配3回あり"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 74.0,
+     "text": "74.0%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 20.0
+    },
+    {
+     "year": 2015,
+     "value": 55.0
+    },
+    {
+     "year": 2016,
+     "value": 30.0
+    },
+    {
+     "year": 2017,
+     "value": 31.0
+    },
+    {
+     "year": 2018,
+     "value": 37.0
+    },
+    {
+     "year": 2019,
+     "value": 36.0
+    },
+    {
+     "year": 2020,
+     "value": 36.0
+    },
+    {
+     "year": 2021,
+     "value": 42.0
+    },
+    {
+     "year": 2022,
+     "value": 66.0
+    },
+    {
+     "year": 2023,
+     "value": 90.0
+    },
+    {
+     "year": 2024,
+     "value": 80.0
+    },
+    {
+     "year": 2025,
+     "value": 85.0
+    }
+   ],
+   "na_count": 0
+  },
+  {
+   "code": "8725",
+   "name": "ＭＳ＆ＡＤインシュアランスグループホールディングス",
+   "sector": "保険業",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 4538.0,
+   "yield": 3.09,
+   "pbr": 1.38,
+   "payout": 23.0,
+   "score": 5.6,
+   "in_model_pf": true,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 3.09,
+     "text": "3.09%"
+    },
+    "op_margin": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "equity_ratio": {
+     "status": "ng",
+     "value": 16.7,
+     "text": "16.7%"
+    },
+    "current_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "revenue_trend": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配10回"
+    },
+    "payout": {
+     "status": "warn",
+     "value": 23.0,
+     "text": "23.0%"
+    },
+    "op_cf": {
+     "status": "ok",
+     "value": null,
+     "text": "黒字・増加傾向"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 19.0
+    },
+    {
+     "year": 2015,
+     "value": 23.67
+    },
+    {
+     "year": 2016,
+     "value": 35.0
+    },
+    {
+     "year": 2017,
+     "value": 45.0
+    },
+    {
+     "year": 2018,
+     "value": 45.0
+    },
+    {
+     "year": 2019,
+     "value": 48.33
+    },
+    {
+     "year": 2020,
+     "value": 50.0
+    },
+    {
+     "year": 2021,
+     "value": 52.5
+    },
+    {
+     "year": 2022,
+     "value": 65.83
+    },
+    {
+     "year": 2023,
+     "value": 73.33
+    },
+    {
+     "year": 2024,
+     "value": 122.5
+    },
+    {
+     "year": 2025,
+     "value": 150.0
+    }
+   ],
+   "na_count": 2
+  }
+ ],
+ "errors": []
+}

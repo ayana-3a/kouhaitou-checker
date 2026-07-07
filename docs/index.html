@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>高配当株チェッカー｜学長基準で日本株を採点</title>
+<meta name="description" content="学長流の10項目基準で日本の高配当株を自動採点するツール">
+<meta name="theme-color" content="#1a7a4c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <h1>🦁 高配当株チェッカー</h1>
+    <p class="subtitle">学長流の10項目で日本株を自動採点</p>
+  </div>
+</header>
+
+<main>
+  <section id="status-bar" class="status-bar">
+    <span id="updated-at">読み込み中...</span>
+  </section>
+
+  <section class="controls">
+    <div class="filter-tabs" role="tablist">
+      <button class="tab active" data-filter="all">すべて</button>
+      <button class="tab" data-filter="pass">🌟 基準クリア</button>
+      <button class="tab" data-filter="discover">🔍 発掘候補</button>
+      <button class="tab" data-filter="modelpf">🦁 学長モデルPF</button>
+    </div>
+    <div class="search-sort">
+      <input type="search" id="search" placeholder="銘柄名・コードで検索" autocomplete="off">
+      <select id="sort">
+        <option value="score">スコアが高い順</option>
+        <option value="yield">配当利回りが高い順</option>
+        <option value="code">コード順</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="legend">
+    <details>
+      <summary>📖 見方（はじめての方はここを読んでください）</summary>
+      <div class="legend-body">
+        <p><strong>スコア</strong>は10項目の基準をどれだけ満たすかを10点満点で表したものです。
+        <span class="badge badge-good">8点以上</span>が「学長が好みそうな優良候補」の目安、
+        <span class="badge badge-mid">6〜8点</span>は「一部気になる点あり」、
+        <span class="badge badge-low">6点未満</span>は「要注意」です。</p>
+        <p>各項目のマークの意味：
+          <span class="chip ok">◯ 基準クリア</span>
+          <span class="chip warn">△ おしい・注意</span>
+          <span class="chip ng">✕ 基準未達</span>
+          <span class="chip na">− データなし</span>
+        </p>
+        <p><strong>🦁 学長モデルPF</strong>のバッジは、学長高配当株マガジン（2026年7月・第119回）のモデルポートフォリオに採用されている銘柄です。</p>
+        <p><strong>🔍 発掘候補</strong>タブは、学長モデルPFには入っていないけれど10項目の基準を高い水準（スコア8点以上）で満たしている銘柄、つまり「あなたが新しく発掘した候補」です。</p>
+        <p class="note">⚠️ スコアが高い＝必ず儲かる、ではありません。「詳しく調べる価値のある銘柄」を絞り込むための道具です。買う前に必ず自分でも確認しましょう。</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="results">
+    <div id="count-line" class="count-line"></div>
+    <div id="cards" class="cards"></div>
+  </section>
+
+  <section class="glossary">
+    <h2>📚 10項目の基準（用語解説つき）</h2>
+    <div id="glossary-items"></div>
+  </section>
+</main>
+
+<footer>
+  <p>データ出典：Yahoo! Finance／JPX上場銘柄一覧。表示される数値は取得時点のもので、正確性は保証されません。</p>
+  <p>本アプリは情報整理ツールであり、投資助言ではありません。投資の最終判断はご自身で行ってください。</p>
+</footer>
+
+<script src="app.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
