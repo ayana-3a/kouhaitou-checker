@@ -2,3 +2,4 @@
 screener/cache/
 __pycache__/
 .DS_Store
+screener/edinet_key.txt

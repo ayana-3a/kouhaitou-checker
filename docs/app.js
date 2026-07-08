@@ -152,43 +152,70 @@
 
   function chartsHtml(s) {
     const S = s.series || {};
+    const E = s.edinet || null; // 金融庁EDINET由来の約10年データ (あれば優先)
     const yrs = (S.years || []).map(String);
+    const eyrs = E ? E.years.map(String) : [];
+    const pick = (ef, sf, kind, title, unit) => {
+      if (E && E[ef] && E[ef].some((v) => v != null))
+        return chartBox(title + " 🏛", svgChart(kind, E[ef], eyrs, unit));
+      if (sf && sf.some((v) => v != null))
+        return chartBox(title, svgChart(kind, sf, yrs, unit));
+      return "";
+    };
     const parts = [];
     if (s.price_history)
       parts.push(chartBox("株価の推移（10年・月次）",
         svgChart("line", s.price_history.closes, priceYearLabels(s.price_history), "円")));
-    if (s.dividend_history && s.dividend_history.length >= 3)
+    if (E && E.dividend && E.dividend.some((v) => v != null)) {
+      parts.push(chartBox("1株あたり配当金の推移 🏛",
+        svgChart("bar", E.dividend, eyrs, "円")));
+    } else if (s.dividend_history && s.dividend_history.length >= 3) {
       parts.push(chartBox("1株あたり配当金の推移",
         svgChart("bar", s.dividend_history.map(h => h.value), s.dividend_history.map(h => String(h.year)), "円")));
+    }
     if (s.yield_history && s.yield_history.length >= 3)
       parts.push(chartBox("配当利回りの推移（年平均株価ベース）",
         svgChart("line", s.yield_history.map(h => h.value), s.yield_history.map(h => String(h.year)), "%")));
-    if (S.eps) parts.push(chartBox("EPS（1株あたり純利益）",
-      svgChart("bar", S.eps, yrs, "円")));
-    if (S.revenue_oku) parts.push(chartBox("売上高（億円）",
-      svgChart("bar", S.revenue_oku, yrs, "")));
-    if (S.op_margin) parts.push(chartBox("営業利益率",
-      svgChart("line", S.op_margin, yrs, "%")));
-    if (S.equity_ratio) parts.push(chartBox("自己資本比率",
-      svgChart("line", S.equity_ratio, yrs, "%")));
-    if (S.roe) parts.push(chartBox("ROE（自己資本利益率）",
-      svgChart("line", S.roe, yrs, "%")));
-    if (S.op_cf_oku) parts.push(chartBox("営業キャッシュフロー（億円）",
-      svgChart("bar", S.op_cf_oku, yrs, "")));
-    if (!parts.length) return "";
-    return `<div class="chart-grid">${parts.join("")}</div>
-      <p class="chart-note">※ 売上高・EPS・営業利益率などの推移は、無料データの都合で直近${yrs.length}年分です。
-      10年以上の長期推移は下の「IR BANK」ボタンで確認できます。</p>`;
+    parts.push(pick("eps", S.eps, "bar", "EPS（1株あたり純利益）", "円"));
+    parts.push(pick("payout", null, "line", "配当性向", "%"));
+    parts.push(pick("revenue_oku", S.revenue_oku, "bar", "売上高（億円）", ""));
+    if (S.op_margin && S.op_margin.some((v) => v != null))
+      parts.push(chartBox("営業利益率", svgChart("line", S.op_margin, yrs, "%")));
+    parts.push(pick("ordinary_income_oku", null, "bar", "経常利益（億円）", ""));
+    parts.push(pick("equity_ratio", S.equity_ratio, "line", "自己資本比率", "%"));
+    parts.push(pick("roe", S.roe, "line", "ROE（自己資本利益率）", "%"));
+    parts.push(pick("op_cf_oku", S.op_cf_oku, "bar", "営業キャッシュフロー（億円）", ""));
+    const body = parts.filter(Boolean);
+    if (!body.length) return "";
+    const note = E
+      ? `※ 🏛マークのグラフは金融庁（EDINET）の有価証券報告書データで約${E.years.length}年分を表示しています。営業利益率のみ直近${yrs.length}年分です。`
+      : `※ 売上高・EPS・営業利益率などの推移は、無料データの都合で直近${yrs.length}年分です。10年以上の長期推移は下の「IR BANK」ボタンで確認できます。`;
+    return `<div class="chart-grid">${body.join("")}</div>
+      <p class="chart-note">${note}</p>`;
   }
 
   function statsRowHtml(s) {
+    // 営業CFの連続黒字年数: EDINETの長期データがあればそちらで数える
+    let cfStreak = s.op_cf_streak;
+    let cfYears = s.op_cf_years_available || 0;
+    if (s.edinet && s.edinet.op_cf_oku) {
+      const vals = s.edinet.op_cf_oku.filter((v) => v != null);
+      if (vals.length > cfYears) {
+        cfStreak = 0;
+        for (let i = vals.length - 1; i >= 0; i--) {
+          if (vals[i] > 0) cfStreak++;
+          else break;
+        }
+        cfYears = vals.length;
+      }
+    }
     const items = [
       ["PER", s.per != null ? s.per + "倍" : "−"],
       ["PBR", s.pbr != null ? s.pbr + "倍" : "−"],
       ["ROE", s.roe != null ? s.roe + "%" : "−"],
       ["配当性向", s.payout != null ? s.payout + "%" : "−"],
-      ["営業CF連続黒字", s.op_cf_streak != null
-        ? `${s.op_cf_streak}年${s.op_cf_streak >= (s.op_cf_years_available || 0) && s.op_cf_streak > 0 ? "以上" : ""}`
+      ["営業CF連続黒字", cfStreak != null
+        ? `${cfStreak}年${cfStreak >= cfYears && cfStreak > 0 ? "以上" : ""}`
         : "−"],
     ];
     return `<div class="stats-row">${items
