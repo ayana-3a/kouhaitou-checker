@@ -346,22 +346,69 @@
     }, true);
   }
 
-  fetch("data.json?" + Date.now())
-    .then((r) => {
-      if (!r.ok) throw new Error("data.json not found");
-      return r.json();
-    })
-    .then((data) => {
-      DATA = data;
-      document.getElementById("updated-at").textContent =
-        `データ更新: ${data.generated_at}｜学長モデルPF: ${data.model_pf.as_of}`;
-      setupEvents();
-      renderGlossary();
-      render();
-    })
-    .catch((err) => {
-      document.getElementById("updated-at").textContent =
-        "データがまだありません。screener/screen.py を実行してください。";
-      console.error(err);
-    });
+  function boot() {
+    fetch("data.json?" + Date.now())
+      .then((r) => {
+        if (!r.ok) throw new Error("data.json not found");
+        return r.json();
+      })
+      .then((data) => {
+        DATA = data;
+        document.getElementById("updated-at").textContent =
+          `データ更新: ${data.generated_at}｜学長モデルPF: ${data.model_pf.as_of}`;
+        setupEvents();
+        renderGlossary();
+        render();
+      })
+      .catch((err) => {
+        document.getElementById("updated-at").textContent =
+          "データがまだありません。screener/screen.py を実行してください。";
+        console.error(err);
+      });
+  }
+
+  // ---- PINロック (個人利用のための簡易ロック) ----
+  const PIN_SALT = "kouhaitou:";
+  const PIN_HASH = "5dd97d244c3d9cd62d5f8d526eff75cf4f03b8a7d8399a694edf96db1df76100";
+
+  async function sha256hex(text) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function showLock() {
+    const ov = document.createElement("div");
+    ov.className = "lock-overlay";
+    ov.innerHTML = `
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <h2>このアプリは個人用です</h2>
+        <p>暗証番号（6ケタ）を入力してください</p>
+        <input type="password" inputmode="numeric" maxlength="6" id="pin-input" autocomplete="off">
+        <button id="pin-btn">開く</button>
+        <p id="pin-error" class="pin-error"></p>
+      </div>`;
+    document.body.appendChild(ov);
+    const input = ov.querySelector("#pin-input");
+    const tryUnlock = async () => {
+      const h = await sha256hex(PIN_SALT + input.value.trim());
+      if (h === PIN_HASH) {
+        localStorage.setItem("khc_unlocked", PIN_HASH);
+        ov.remove();
+        boot();
+      } else {
+        ov.querySelector("#pin-error").textContent = "番号がちがいます";
+        input.value = "";
+      }
+    };
+    ov.querySelector("#pin-btn").addEventListener("click", tryUnlock);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") tryUnlock(); });
+    input.focus();
+  }
+
+  if (localStorage.getItem("khc_unlocked") === PIN_HASH) {
+    boot();
+  } else {
+    showLock();
+  }
 })();
