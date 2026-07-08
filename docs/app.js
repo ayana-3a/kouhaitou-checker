@@ -215,9 +215,22 @@
       ${chartsHtml(s)}
       <table class="detail-table">${detailRows}</table>
       <div class="ext-links">
-        <a class="btn-ext" href="https://irbank.net/${esc(s.code)}" target="_blank" rel="noopener">📊 IR BANKで10年分を確認</a>
+        <a class="btn-ext" href="https://irbank.net/${esc(s.code)}/results" target="_blank" rel="noopener">📊 IR BANKで10年分を見る</a>
         <a class="btn-ext" href="https://finance.yahoo.co.jp/quote/${esc(s.code)}.T" target="_blank" rel="noopener">💹 Yahoo!ファイナンス</a>
-      </div>`;
+      </div>
+      <details class="irbank-guide">
+        <summary>❓ IR BANKページのどこを見ればいいの？</summary>
+        <div class="irbank-guide-body">
+          <p>上のボタンを押すと「決算まとめ」ページが開き、<strong>2008年ごろからの長期データの表</strong>が最初から表示されます。スマホでは表を横にスクロールできます。見る場所はこの4つ：</p>
+          <ol>
+            <li><strong>会社業績</strong>の表 → 「売上」「EPS」「営利率（＝営業利益率）」が毎年伸びているか。<br>目安：売上・EPSが右肩上がり、営利率10%以上</li>
+            <li><strong>財務状況</strong>の表 → 「自己資本比率」が50%以上で安定しているか</li>
+            <li><strong>キャッシュ・フローの推移</strong> → 「営業CF」がずっと黒字（プラス）か</li>
+            <li><strong>配当推移</strong>の表 → 「配当」が減っていないか（コロナの2020〜2021年に減配していないかは特に注目）、「配当性向」が高すぎ（80%超）になっていないか</li>
+          </ol>
+          <p>つまり<strong>このアプリの10項目とまったく同じ観点</strong>を、より長い期間で確かめる作業です。アプリのグラフ（直近4〜5年）で気になった銘柄だけ、IR BANKで「昔からそうだったのか」を確認するのが効率的です。</p>
+        </div>
+      </details>`;
   }
 
   function cardHtml(s) {
