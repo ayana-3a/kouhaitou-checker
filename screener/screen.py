@@ -277,7 +277,7 @@ def quick_yield_estimate(code):
     return "ok", (y if 0 < y <= 25 else None), info
 
 
-def eval_stock(code, meta, model_codes, info=None):
+def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset()):
     ticker = f"{code}.T"
     t = yf.Ticker(ticker)
     if info is None:
@@ -528,6 +528,7 @@ def eval_stock(code, meta, model_codes, info=None):
         "payout": round(payout, 1) if payout is not None else None,
         "score": score,
         "in_model_pf": code in model_codes,
+        "pf_held": code in held_codes,
         "checks": checks,
         "dividend_history": div_history,
         "price_history": ph,
@@ -559,12 +560,16 @@ def main():
     meta = jpx_meta()
     model = load_model_pf()
     model_codes = {s["code"] for s in model["stocks"]}
+    # 「保持」銘柄 = 2025年1月以降に一度PF入りしたが現在の新規リストから外れた銘柄
+    # (学長の方針: 除外≠売却。買った分はホールド)
+    held_codes = frozenset(s["code"] for s in model.get("held", []))
 
     codes = []
     if args.tickers:
         codes += [c.strip() for c in args.tickers]
     if args.model_pf:
         codes += [s["code"] for s in model["stocks"]]
+        codes += sorted(held_codes)
     if args.prime:
         codes += prime_universe(meta)
     if args.standard:
@@ -577,7 +582,7 @@ def main():
         print("銘柄が指定されていません。--model-pf / --tickers / --prime を使ってください。")
         sys.exit(1)
 
-    always_keep = set(args.tickers) | (model_codes if args.model_pf else set())
+    always_keep = set(args.tickers) | ((model_codes | held_codes) if args.model_pf else set())
     infos = {}
 
     # --- 一次スクリーニング: 概算利回りで足切り (並列・キャッシュつき) ---
@@ -663,6 +668,7 @@ def main():
             # v2形式(グラフ用時系列つき)で3日以内に分析済みのものだけ再利用
             if p and p.get("v") == 2 and p.get("checked_at", "") >= cutoff:
                 p["in_model_pf"] = c in model_codes
+                p["pf_held"] = c in held_codes
                 reused.append(p)
             else:
                 rest.append(c)
@@ -680,7 +686,7 @@ def main():
     p2_sleep = float(os.environ.get("SCREEN_SLEEP", "0.3"))
 
     def phase2(code):
-        r = eval_stock(code, meta, model_codes, info=infos.get(code))
+        r = eval_stock(code, meta, model_codes, info=infos.get(code), held_codes=held_codes)
         time.sleep(p2_sleep)
         return code, r
 

@@ -273,7 +273,8 @@
         <div>
           <h3 class="stock-name"><span class="stock-code">${esc(s.code)}</span>${esc(s.name)}</h3>
           <span class="sector-chip">${esc(s.sector || "—")}</span>
-          ${s.in_model_pf ? '<span class="pf-badge">🦁 学長モデルPF</span>' : ""}
+          ${s.in_model_pf ? '<span class="pf-badge">🦁 今月の学長PF</span>' : ""}
+          ${s.pf_held ? '<span class="pf-badge pf-held">📦 学長PF（保持）</span>' : ""}
         </div>
         <div class="score-circle ${scoreClass(s.score, s)}">
           ${s.score == null ? "−" : s.score}<small>${dataOk(s) ? "/ 10点" : "参考値"}</small>
@@ -298,8 +299,9 @@
     if (state.filter === "pass")
       list = list.filter((s) => (s.score ?? 0) >= 8 && dataOk(s));
     if (state.filter === "discover")
-      list = list.filter((s) => (s.score ?? 0) >= 8 && dataOk(s) && !s.in_model_pf);
-    if (state.filter === "modelpf") list = list.filter((s) => s.in_model_pf);
+      list = list.filter((s) => (s.score ?? 0) >= 8 && dataOk(s) && !s.in_model_pf && !s.pf_held);
+    if (state.filter === "modelpf")
+      list = list.filter((s) => s.in_model_pf || s.pf_held);
     const q = state.search.trim().toLowerCase();
     if (q) {
       list = list.filter(

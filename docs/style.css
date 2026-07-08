@@ -135,6 +135,10 @@ main { max-width: 960px; margin: 0 auto; padding: 12px 12px 40px; }
   margin-top: 2px;
   font-weight: 700;
 }
+.pf-badge.pf-held {
+  background: #e8eaf6;
+  color: #3f51b5;
+}
 
 .score-circle {
   min-width: 58px;
