@@ -160,7 +160,9 @@ def fetch_doc_csv(docid, key):
         timeout=60,
     )
     time.sleep(SLEEP)
-    if r.status_code != 200 or "zip" not in r.headers.get("content-type", "").lower():
+    # 正常時のcontent-typeは application/octet-stream。
+    # エラー時はJSONが返るので、ZIPとして開けるかどうかで判定する。
+    if r.status_code != 200:
         cache_file.write_text("null")
         return None
     rows = []

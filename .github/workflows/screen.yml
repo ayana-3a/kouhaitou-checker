@@ -23,8 +23,20 @@ jobs:
       - name: ライブラリをインストール
         run: pip install yfinance pandas requests xlrd openpyxl
 
-      - name: スクリーニング実行（プライム全銘柄・利回り3%で足切り）
-        run: python screener/screen.py --prime --min-yield 3.0
+      - name: 取得キャッシュを復元
+        uses: actions/cache@v4
+        with:
+          path: screener/cache
+          key: screener-cache-${{ github.run_id }}
+          restore-keys: screener-cache-
+
+      - name: スクリーニング実行（プライム+スタンダード・利回り3%で足切り）
+        run: python screener/screen.py --prime --standard --model-pf --min-yield 3.0
+
+      - name: EDINET 10年データ付加（発掘候補+モデルPF）
+        env:
+          EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
+        run: python screener/edinet_enrich.py
 
       - name: 結果をコミット
         run: |
