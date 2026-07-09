@@ -139,6 +139,31 @@ main { max-width: 960px; margin: 0 auto; padding: 12px 12px 40px; }
   background: #e8eaf6;
   color: #3f51b5;
 }
+.def-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  background: #e0f2f1;
+  color: #00695c;
+  border-radius: 8px;
+  padding: 0 8px;
+  margin-top: 2px;
+  font-weight: 700;
+}
+.sig-item {
+  background: rgba(255,255,255,0.75);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin: 8px 0;
+}
+.biz-check { font-size: 0.82rem; margin-top: 4px; }
+.biz-check .chip { margin: 1px 2px 1px 0; }
+.biz-verdict { margin-top: 3px; font-size: 0.8rem; }
+.v-ok { color: var(--green); font-weight: 600; }
+.v-warn { color: var(--yellow); font-weight: 600; }
+.v-ng { color: var(--red); font-weight: 700; }
+.lazy-detail { margin-top: 4px; }
+.lazy-detail summary { font-size: 0.8rem; color: var(--green); font-weight: 600; cursor: pointer; }
 
 .score-circle {
   min-width: 58px;

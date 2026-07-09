@@ -31,7 +31,7 @@ jobs:
           restore-keys: screener-cache-
 
       - name: スクリーニング実行（プライム+スタンダード・利回り3%で足切り）
-        run: python screener/screen.py --prime --standard --model-pf --min-yield 3.0
+        run: python screener/screen.py --prime --standard --model-pf --funds --min-yield 3.0
 
       - name: EDINET 10年データ付加（発掘候補+モデルPF）
         env:

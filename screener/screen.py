@@ -291,7 +291,12 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset()):
     name = m.get("name") or info.get("longName") or info.get("shortName") or code
     sector = m.get("sector") or ""
     market = m.get("market") or ""
-    is_etf = "ETF" in market or code in ("1343",)
+    is_etf = "ETF" in market or "REIT" in market or code in ("1343",)
+    # REIT/ETFは33業種が「-」なので、わかりやすいセクター名を与える
+    if "REIT" in market:
+        sector = "J-REIT市場"
+    elif "ETF" in market:
+        sector = "ETF"
 
     # 財務諸表
     try:
@@ -551,6 +556,7 @@ def main():
     ap.add_argument("--tickers", nargs="*", default=[], help="証券コード指定")
     ap.add_argument("--prime", action="store_true", help="東証プライム全銘柄")
     ap.add_argument("--standard", action="store_true", help="スタンダードも含める")
+    ap.add_argument("--funds", action="store_true", help="J-REITとETFも含める(利回り足切りなし)")
     ap.add_argument("--min-yield", type=float, default=None, help="この利回り未満は詳細分析を省略(%)")
     ap.add_argument("--limit", type=int, default=None, help="銘柄数上限(テスト用)")
     ap.add_argument("--refresh", action="store_true", help="キャッシュを使わず全銘柄を再分析")
@@ -575,6 +581,12 @@ def main():
     if args.standard:
         codes += [c for c, m in meta.items()
                   if "スタンダード" in m.get("market", "") and c.isdigit() and len(c) == 4]
+    fund_codes = set()
+    if args.funds:
+        fund_codes = {c for c, m in meta.items()
+                      if c.isdigit() and len(c) == 4
+                      and ("ETF" in m.get("market", "") or "REIT" in m.get("market", ""))}
+        codes += sorted(fund_codes)
     codes = list(dict.fromkeys(codes))  # 重複除去・順序維持
     if args.limit:
         codes = codes[: args.limit]
@@ -582,7 +594,7 @@ def main():
         print("銘柄が指定されていません。--model-pf / --tickers / --prime を使ってください。")
         sys.exit(1)
 
-    always_keep = set(args.tickers) | ((model_codes | held_codes) if args.model_pf else set())
+    always_keep = set(args.tickers) | ((model_codes | held_codes) if args.model_pf else set()) | fund_codes
     infos = {}
 
     # --- 一次スクリーニング: 概算利回りで足切り (並列・キャッシュつき) ---

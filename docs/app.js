@@ -273,6 +273,7 @@
         <div>
           <h3 class="stock-name"><span class="stock-code">${esc(s.code)}</span>${esc(s.name)}</h3>
           <span class="sector-chip">${esc(s.sector || "—")}</span>
+          ${DEFENSIVE.includes(normSector(s.sector)) ? '<span class="def-badge">🛡 ディフェンシブ</span>' : ""}
           ${s.in_model_pf ? '<span class="pf-badge">🦁 今月の学長PF</span>' : ""}
           ${s.pf_held ? '<span class="pf-badge pf-held">📦 学長PF（保持）</span>' : ""}
         </div>
@@ -382,7 +383,7 @@
       render(true);
     });
     // 詳細（グラフ）は開いた時にはじめて描画する（1300銘柄でも軽快に動かすため)
-    document.getElementById("cards").addEventListener("toggle", (e) => {
+    const lazyDetail = (e) => {
       const d = e.target;
       if (!d.matches("details[data-code]") || !d.open) return;
       const body = d.querySelector(".detail-body");
@@ -393,7 +394,9 @@
           body.dataset.rendered = "1";
         }
       }
-    }, true);
+    };
+    document.getElementById("cards").addEventListener("toggle", lazyDetail, true);
+    document.getElementById("mypf-view").addEventListener("toggle", lazyDetail, true);
   }
 
   // ==== 💼 マイポートフォリオ ====
@@ -489,6 +492,33 @@
       <tbody>${rows}</tbody></table>`;
   }
 
+  // 買い増し・新規候補の銘柄に付ける「業績チェック」要約と詳細展開
+  function bizCheckHtml(s) {
+    if (!s) return `<div class="biz-check mut">この銘柄はアプリのデータベースに未収載のため、業績チェックを表示できません。IR BANK等で確認してください。</div>`;
+    const keys = [
+      ["revenue_trend", "売上"], ["eps_trend", "EPS"], ["dividend_trend", "配当"],
+      ["payout", "配当性向"], ["op_cf", "営業CF"],
+    ];
+    const marks = keys.map(([k, label]) => {
+      const st = s.checks?.[k]?.status || "na";
+      return `<span class="chip ${st}">${STATUS_MARK[st] || "−"} ${label}</span>`;
+    }).join("");
+    const bad = keys.filter(([k]) => s.checks?.[k]?.status === "ng").map(([, l]) => l);
+    const warn = keys.filter(([k]) => s.checks?.[k]?.status === "warn").map(([, l]) => l);
+    let verdict;
+    if (bad.length) verdict = `<span class="v-ng">⚠️ ${bad.join("・")}に✕あり。「下がっている理由」が業績かもしれません。買い増しは慎重に。</span>`;
+    else if (warn.length) verdict = `<span class="v-warn">△が${warn.join("・")}にあります。詳細を確認してから判断を。</span>`;
+    else verdict = `<span class="v-ok">✅ 学長基準で業績の崩れは見当たりません。</span>`;
+    return `<div class="biz-check">
+      <div>スコア <strong>${s.score ?? "−"}</strong>/10点｜業績: ${marks}</div>
+      <div class="biz-verdict">${verdict}</div>
+      <details class="lazy-detail" data-code="${esc(s.code)}">
+        <summary>📋 くわしく見る（グラフ・全指標）</summary>
+        <div class="detail-body"></div>
+      </details>
+    </div>`;
+  }
+
   function guidanceHtml(calc) {
     const { rows, total, totalDiv } = calc;
     if (!total) return "";
@@ -499,9 +529,10 @@
     // 買い増しシグナル (ルール⑤)
     const sigs = rows.filter((r) => r.signal || r.hiSignal);
     if (sigs.length) {
-      items.push(`<div class="guide guide-buy"><h4>🔔 買い増しタイミングの銘柄があります</h4><ul>${sigs.map((r) =>
-        `<li><strong>${esc(r.name)}</strong>（${esc(r.code)}）: ${r.signal ? esc(r.signal.why) : ""}${r.signal && r.hiSignal ? "／" : ""}${r.hiSignal ? esc(r.hiSignal) : ""}</li>`).join("")}</ul>
-        <p class="guide-note">学長ルール：「当初買値から20%下がったら1回目、40%下がったら2回目の買い増し。ナンピンは2回まで」。買い増す前に、業績が崩れていないか（減配・赤字など）を必ずカードの詳細で確認してください。</p></div>`);
+      items.push(`<div class="guide guide-buy"><h4>🔔 買い増しタイミングの銘柄があります</h4>${sigs.map((r) =>
+        `<div class="sig-item"><div><strong>${esc(r.name)}</strong>（${esc(r.code)}）: ${r.signal ? esc(r.signal.why) : ""}${r.signal && r.hiSignal ? "／" : ""}${r.hiSignal ? esc(r.hiSignal) : ""}</div>
+         ${bizCheckHtml(r.s)}</div>`).join("")}
+        <p class="guide-note">学長ルール：「当初買値から20%下がったら1回目、40%下がったら2回目の買い増し。ナンピンは2回まで」。業績チェックに✕がある銘柄は「安いから買う」ではなく「業績が崩れたから安い」の可能性があります。</p></div>`);
     } else {
       items.push(`<div class="guide"><h4>🔕 いまは買い増しシグナルなし</h4><p>保有銘柄はどれも「買値から-20%」の水準まで下がっていません。学長ルールでは「ちょっと下がったぐらいでは買い増ししない」なので、次の候補探し（新規銘柄）が中心になります。</p></div>`);
     }
@@ -526,7 +557,8 @@
         .slice(0, 6);
       items.push(`<div class="guide guide-new"><h4>🌱 手薄なセクター: ${under.map(esc).join("、")}</h4>
         <p>学長モデルPFと比べて割合が低いセクターです。分散を強化するなら、このセクターの新規銘柄が候補になります：</p>
-        <ul>${cands.map((s) => `<li><strong>${esc(s.name)}</strong>（${esc(s.code)}・${esc(normSector(s.sector))}）利回り${s.yield}%・スコア${s.score} ${s.in_model_pf ? "🦁" : "🔍"}</li>`).join("")}</ul></div>`);
+        ${cands.map((s) => `<div class="sig-item"><div><strong>${esc(s.name)}</strong>（${esc(s.code)}・${esc(normSector(s.sector))}）利回り${s.yield}% ${s.in_model_pf ? "🦁今月の学長PF" : "🔍発掘候補"} ${DEFENSIVE.includes(normSector(s.sector)) ? "🛡" : ""}</div>
+        ${bizCheckHtml(s)}</div>`).join("")}</div>`);
     }
 
     // 配当3%集中ルール (ルール③)
@@ -676,13 +708,15 @@
     let cols = null;
     const out = [];
     for (const cells of lines) {
-      if (!cols) {
-        const ci = cells.findIndex((c) => /銘柄コード|証券コード|^コード$/.test(c));
-        const si = cells.findIndex((c) => /保有数量|保有株数|^数量$|^株数$/.test(c));
-        const pi = cells.findIndex((c) => /平均取得価額|平均取得単価|取得単価|参考単価/.test(c));
-        if (ci >= 0 && si >= 0 && pi >= 0) cols = { ci, si, pi };
+      // ヘッダー行はファイル途中にも現れうる（複数セクションのCSV対応）
+      const ci = cells.findIndex((c) => /銘柄コード|証券コード|^コード$/.test(c));
+      const si = cells.findIndex((c) => /保有数量|保有株数|^数量$|^株数$/.test(c));
+      const pi = cells.findIndex((c) => /平均取得価額|平均取得単価|取得単価|参考単価/.test(c));
+      if (ci >= 0 && si >= 0 && pi >= 0) {
+        cols = { ci, si, pi };
         continue;
       }
+      if (!cols) continue;
       const code = (cells[cols.ci] || "").replace(/\D/g, "").slice(0, 4);
       const shares = parseFloat((cells[cols.si] || "").replace(/[,株]/g, ""));
       const cost = parseFloat((cells[cols.pi] || "").replace(/[,円]/g, ""));
