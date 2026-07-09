@@ -324,3 +324,67 @@ footer {
 .irbank-guide-body { padding-top: 6px; }
 .irbank-guide-body ol { padding-left: 1.4em; margin: 6px 0; }
 .irbank-guide-body li { margin-bottom: 6px; }
+
+/* ==== マイポートフォリオ ==== */
+.privacy-note {
+  background: var(--green-light);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  margin: 4px 0 12px;
+}
+.pf-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.pf-summary .stat { background: var(--card); border: 1px solid var(--border); }
+#mypf-view h3 { font-size: 1rem; margin: 20px 0 8px; }
+.guide {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+}
+.guide h4 { margin: 0 0 6px; font-size: 0.92rem; }
+.guide ul { margin: 4px 0; padding-left: 1.3em; }
+.guide-buy { border-color: var(--green); background: var(--green-light); }
+.guide-warn { border-color: var(--yellow); background: var(--yellow-light); }
+.guide-new { border-color: var(--green); }
+.guide-note { font-size: 0.78rem; color: var(--gray); }
+.sec-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card); border-radius: 10px; }
+.sec-table th { font-size: 0.72rem; color: var(--gray); text-align: left; padding: 6px; }
+.sec-table td { padding: 5px 6px; border-top: 1px solid var(--gray-light); vertical-align: middle; }
+.sec-name { white-space: nowrap; font-weight: 600; width: 7em; }
+.bar-row { display: flex; align-items: center; gap: 4px; height: 13px; }
+.bar { display: inline-block; height: 9px; border-radius: 3px; min-width: 2px; }
+.bar-me { background: #e67e22; }
+.bar-model { background: var(--green); }
+.bar-val { font-size: 0.68rem; color: var(--gray); }
+.lg { font-size: 0.7rem; }
+.lg-me { color: #e67e22; }
+.lg-model { color: var(--green); }
+.sec-diff { text-align: right; font-weight: 700; width: 3.5em; }
+.sec-diff.over { color: var(--red); }
+.sec-diff.under { color: #2980b9; }
+.sec-over td { background: var(--yellow-light); }
+.pf-table-wrap { overflow-x: auto; }
+.pf-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: var(--card); }
+.pf-table th { font-size: 0.7rem; color: var(--gray); text-align: left; padding: 6px 4px; }
+.pf-table td { padding: 6px 4px; border-top: 1px solid var(--gray-light); }
+.pf-table .num { text-align: right; white-space: nowrap; }
+.pf-table .mut, .mut { color: var(--gray); font-size: 0.75rem; }
+.pos { color: var(--green); font-weight: 700; }
+.neg { color: var(--red); font-weight: 700; }
+.sig { font-size: 0.72rem; border-radius: 8px; padding: 2px 6px; white-space: nowrap; font-weight: 700; }
+.sig1 { background: var(--green-light); color: var(--green); }
+.sig2 { background: var(--red-light); color: var(--red); }
+.sigHi { background: var(--yellow-light); color: var(--yellow); }
+.del-btn { border: none; background: none; color: var(--gray); cursor: pointer; font-size: 0.9rem; }
+.pf-form { display: flex; gap: 6px; flex-wrap: wrap; }
+.pf-form input { padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; width: 130px; }
+.pf-form button, .pf-tools button {
+  padding: 9px 16px; border: none; border-radius: 8px; background: var(--green);
+  color: #fff; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+}
+.pf-tools button.danger { background: var(--red); }
+.pf-tools textarea { width: 100%; font-size: 0.72rem; border: 1px solid var(--border); border-radius: 8px; padding: 6px; margin: 6px 0; }
+#pf-csv { margin: 6px 0; }

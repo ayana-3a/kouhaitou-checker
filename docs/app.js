@@ -322,6 +322,14 @@
   let shownCount = PAGE_SIZE;
 
   function render(keepShown) {
+    const isMy = state.filter === "mypf";
+    document.getElementById("results").hidden = isMy;
+    document.getElementById("mypf-view").hidden = !isMy;
+    document.querySelector(".search-sort").style.display = isMy ? "none" : "";
+    if (isMy) {
+      renderMyPf();
+      return;
+    }
     if (!keepShown) shownCount = PAGE_SIZE;
     const list = applyFilters();
     const cards = document.getElementById("cards");
@@ -386,6 +394,301 @@
         }
       }
     }, true);
+  }
+
+  // ==== 💼 マイポートフォリオ ====
+  // 保有データは localStorage（この端末の中）にのみ保存。ネット送信は一切しない。
+  const PF_KEY = "khc_pf";
+  const DEFENSIVE = ["食料品", "医薬品", "電気・ガス", "陸運", "情報・通信"];
+
+  function loadPf() {
+    try { return JSON.parse(localStorage.getItem(PF_KEY)) || []; }
+    catch { return []; }
+  }
+  function savePf(pf) { localStorage.setItem(PF_KEY, JSON.stringify(pf)); }
+
+  function normSector(sec) {
+    return (sec || "その他").replace(/業$/, "");
+  }
+
+  function stockByCode(code) {
+    return DATA.stocks.find((s) => s.code === code) || null;
+  }
+
+  function high12(s) {
+    const ph = s && s.price_history;
+    if (!ph || !ph.closes || ph.closes.length < 3) return null;
+    return Math.max(...ph.closes.slice(-13));
+  }
+
+  function pfCalc() {
+    const pf = loadPf();
+    const rows = pf.map((h) => {
+      const s = stockByCode(h.code);
+      const price = s ? s.price : null;
+      const value = price != null ? price * h.shares : null;
+      const gain = price != null && h.cost > 0 ? (price / h.cost - 1) * 100 : null;
+      const dps = s && s.yield != null && s.price ? s.yield * s.price / 100 : null;
+      const annualDiv = dps != null ? dps * h.shares : null;
+      const hi = high12(s);
+      // 学長ルール⑤: 買値-20%で1回目、-40%で2回目の買い増し水準
+      let signal = null;
+      if (price != null && h.cost > 0) {
+        if (price <= h.cost * 0.6) signal = { level: 2, why: `買値から${((1 - price / h.cost) * 100).toFixed(0)}%下落（2回目の買い増し水準）` };
+        else if (price <= h.cost * 0.8) signal = { level: 1, why: `買値から${((1 - price / h.cost) * 100).toFixed(0)}%下落（1回目の買い増し水準）` };
+      }
+      let hiSignal = null;
+      if (price != null && hi && price <= hi * 0.8) {
+        hiSignal = `直近1年高値(${Math.round(hi).toLocaleString()}円)から${((1 - price / hi) * 100).toFixed(0)}%下落`;
+      }
+      return { ...h, s, price, value, gain, annualDiv, signal, hiSignal,
+        name: s ? s.name : h.code, sector: normSector(s ? s.sector : null) };
+    });
+    const total = rows.reduce((a, r) => a + (r.value || 0), 0);
+    const totalDiv = rows.reduce((a, r) => a + (r.annualDiv || 0), 0);
+    return { rows, total, totalDiv };
+  }
+
+  function modelSectorWeights() {
+    const m = {};
+    for (const s of DATA.model_pf.stocks) {
+      const k = normSector(s.sector);
+      m[k] = (m[k] || 0) + s.weight;
+    }
+    return m;
+  }
+
+  function mySectorWeights(rows, total) {
+    const m = {};
+    if (!total) return m;
+    for (const r of rows) {
+      if (r.value == null) continue;
+      m[r.sector] = (m[r.sector] || 0) + r.value / total * 100;
+    }
+    return m;
+  }
+
+  function sectorCompareHtml(mine, model) {
+    const keys = [...new Set([...Object.keys(model), ...Object.keys(mine)])]
+      .sort((a, b) => (model[b] || 0) - (model[a] || 0));
+    const rows = keys.map((k) => {
+      const mv = mine[k] || 0, gv = model[k] || 0;
+      const diff = mv - gv;
+      const over20 = mv > 20;
+      return `<tr${over20 ? ' class="sec-over"' : ""}>
+        <td class="sec-name">${esc(k)}</td>
+        <td class="sec-bars">
+          <div class="bar-row"><span class="bar bar-me" style="width:${Math.min(100, mv * 3)}%"></span><span class="bar-val">${mv.toFixed(1)}%</span></div>
+          <div class="bar-row"><span class="bar bar-model" style="width:${Math.min(100, gv * 3)}%"></span><span class="bar-val">${gv.toFixed(1)}%</span></div>
+        </td>
+        <td class="sec-diff ${diff > 3 ? "over" : diff < -3 ? "under" : ""}">${diff > 0 ? "+" : ""}${diff.toFixed(1)}</td>
+      </tr>`;
+    }).join("");
+    return `<table class="sec-table">
+      <thead><tr><th>セクター</th><th><span class="lg lg-me">■ わたし</span> <span class="lg lg-model">■ 学長モデルPF</span></th><th>差</th></tr></thead>
+      <tbody>${rows}</tbody></table>`;
+  }
+
+  function guidanceHtml(calc) {
+    const { rows, total, totalDiv } = calc;
+    if (!total) return "";
+    const mine = mySectorWeights(rows, total);
+    const model = modelSectorWeights();
+    const items = [];
+
+    // 買い増しシグナル (ルール⑤)
+    const sigs = rows.filter((r) => r.signal || r.hiSignal);
+    if (sigs.length) {
+      items.push(`<div class="guide guide-buy"><h4>🔔 買い増しタイミングの銘柄があります</h4><ul>${sigs.map((r) =>
+        `<li><strong>${esc(r.name)}</strong>（${esc(r.code)}）: ${r.signal ? esc(r.signal.why) : ""}${r.signal && r.hiSignal ? "／" : ""}${r.hiSignal ? esc(r.hiSignal) : ""}</li>`).join("")}</ul>
+        <p class="guide-note">学長ルール：「当初買値から20%下がったら1回目、40%下がったら2回目の買い増し。ナンピンは2回まで」。買い増す前に、業績が崩れていないか（減配・赤字など）を必ずカードの詳細で確認してください。</p></div>`);
+    } else {
+      items.push(`<div class="guide"><h4>🔕 いまは買い増しシグナルなし</h4><p>保有銘柄はどれも「買値から-20%」の水準まで下がっていません。学長ルールでは「ちょっと下がったぐらいでは買い増ししない」なので、次の候補探し（新規銘柄）が中心になります。</p></div>`);
+    }
+
+    // セクター20%ルール (ルール②)
+    const over = Object.entries(mine).filter(([, v]) => v > 20).map(([k]) => k);
+    if (over.length) {
+      items.push(`<div class="guide guide-warn"><h4>⚠️ 20%を超えているセクター: ${over.map(esc).join("、")}</h4><p>学長ルール「特定セクターは最大でも20%まで」。このセクターの銘柄は、買い増し・新規とも控えるのが学長流です。</p></div>`);
+    }
+
+    // 不足セクター → 新規候補の提案
+    const under = Object.keys(model)
+      .filter((k) => k !== "J-REIT市場" && (model[k] - (mine[k] || 0)) > 3)
+      .sort((a, b) => (model[b] - (mine[b] || 0)) - (model[a] - (mine[a] || 0)))
+      .slice(0, 4);
+    if (under.length) {
+      const heldCodes = new Set(loadPf().map((h) => h.code));
+      const cands = DATA.stocks
+        .filter((s) => (s.in_model_pf || ((s.score ?? 0) >= 8 && dataOk(s))) && !heldCodes.has(s.code)
+          && under.includes(normSector(s.sector)))
+        .sort((a, b) => (b.in_model_pf - a.in_model_pf) || (b.score ?? 0) - (a.score ?? 0))
+        .slice(0, 6);
+      items.push(`<div class="guide guide-new"><h4>🌱 手薄なセクター: ${under.map(esc).join("、")}</h4>
+        <p>学長モデルPFと比べて割合が低いセクターです。分散を強化するなら、このセクターの新規銘柄が候補になります：</p>
+        <ul>${cands.map((s) => `<li><strong>${esc(s.name)}</strong>（${esc(s.code)}・${esc(normSector(s.sector))}）利回り${s.yield}%・スコア${s.score} ${s.in_model_pf ? "🦁" : "🔍"}</li>`).join("")}</ul></div>`);
+    }
+
+    // 配当3%集中ルール (ルール③)
+    if (totalDiv > 0) {
+      const conc = rows.filter((r) => r.annualDiv != null && r.annualDiv / totalDiv > 0.03 * 3); // 9%超で強警告
+      const concMild = rows.filter((r) => r.annualDiv != null && r.annualDiv / totalDiv > 0.03 && !conc.includes(r));
+      if (conc.length || concMild.length) {
+        const fmt = (r) => `<li><strong>${esc(r.name)}</strong>: 配当全体の${(r.annualDiv / totalDiv * 100).toFixed(1)}%</li>`;
+        items.push(`<div class="guide guide-warn"><h4>⚠️ 配当が特定銘柄に集中しています</h4>
+          <ul>${[...conc, ...concMild].map(fmt).join("")}</ul>
+          <p class="guide-note">学長ルール「1銘柄からの配当はPF全体の3%まで」。銘柄数が少ないうちは超えるのが普通です。この銘柄の買い増しは控えて、他の銘柄を増やして薄めていくのが学長流です。</p></div>`);
+      }
+    }
+
+    // ディフェンシブ50%ルール (ルール④)
+    const defPct = DEFENSIVE.reduce((a, k) => a + (mine[k] || 0), 0);
+    items.push(`<div class="guide ${defPct < 50 ? "guide-warn" : ""}"><h4>${defPct < 50 ? "⚠️" : "✅"} ディフェンシブ比率: ${defPct.toFixed(1)}%</h4>
+      <p>ディフェンシブ（食料品・医薬品・電気ガス・陸運・通信）は「50%を切らないように」が学長ルール。${defPct < 50 ? "不景気に強い銘柄を優先して増やすのがおすすめです。" : "守備力は確保できています。"}</p></div>`);
+
+    return items.join("");
+  }
+
+  function renderMyPf() {
+    const view = document.getElementById("mypf-view");
+    const calc = pfCalc();
+    const { rows, total, totalDiv } = calc;
+    const mine = mySectorWeights(rows, total);
+    const model = modelSectorWeights();
+
+    const holdingsRows = rows.map((r, i) => `<tr>
+      <td><strong>${esc(r.name)}</strong><br><span class="mut">${esc(r.code)}・${esc(r.sector)}</span>
+        ${r.s && r.s.in_model_pf ? "🦁" : ""}${r.s && r.s.pf_held ? "📦" : ""}</td>
+      <td class="num">${r.shares.toLocaleString()}株<br><span class="mut">@${r.cost.toLocaleString()}円</span></td>
+      <td class="num">${r.price != null ? Math.round(r.price).toLocaleString() + "円" : "<span class='mut'>未収載</span>"}</td>
+      <td class="num ${r.gain > 0 ? "pos" : r.gain < 0 ? "neg" : ""}">${r.gain != null ? (r.gain > 0 ? "+" : "") + r.gain.toFixed(1) + "%" : "−"}</td>
+      <td class="num">${r.annualDiv != null ? Math.round(r.annualDiv).toLocaleString() + "円" : "−"}</td>
+      <td>${r.signal ? `<span class="sig sig${r.signal.level}">🔔 買い増し${r.signal.level}回目水準</span>` : r.hiSignal ? `<span class="sig sigHi">📉 高値-20%</span>` : ""}</td>
+      <td><button class="del-btn" data-i="${i}">✕</button></td>
+    </tr>`).join("");
+
+    view.innerHTML = `
+      <div class="privacy-note">🔒 ここに入力した保有データは<strong>この端末の中にだけ</strong>保存されます。インターネットには送信されません。</div>
+      ${rows.length ? `
+        <div class="pf-summary">
+          <div class="stat"><span class="stat-k">評価額合計</span><span class="stat-v">${Math.round(total).toLocaleString()}円</span></div>
+          <div class="stat"><span class="stat-k">年間配当(予想)</span><span class="stat-v">${Math.round(totalDiv).toLocaleString()}円</span></div>
+          <div class="stat"><span class="stat-k">PF利回り</span><span class="stat-v">${total ? (totalDiv / total * 100).toFixed(2) : "−"}%</span></div>
+          <div class="stat"><span class="stat-k">銘柄数</span><span class="stat-v">${rows.length}</span></div>
+        </div>
+        ${guidanceHtml(calc)}
+        <h3>📊 セクター割合の比較（学長モデルPF vs わたし）</h3>
+        ${sectorCompareHtml(mine, model)}
+        <h3>保有銘柄</h3>
+        <div class="pf-table-wrap"><table class="pf-table">
+          <thead><tr><th>銘柄</th><th>保有</th><th>現在値</th><th>損益</th><th>年間配当</th><th>シグナル</th><th></th></tr></thead>
+          <tbody>${holdingsRows}</tbody>
+        </table></div>
+      ` : `<div class="empty-msg">保有銘柄がまだ登録されていません。<br>下のフォームで追加するか、楽天証券のCSVを読み込んでください。</div>`}
+
+      <h3>➕ 銘柄を追加・更新</h3>
+      <div class="pf-form">
+        <input id="pf-code" placeholder="コード (例: 8130)" inputmode="numeric" maxlength="4">
+        <input id="pf-shares" placeholder="株数" inputmode="numeric" type="number">
+        <input id="pf-cost" placeholder="平均取得単価(円)" inputmode="decimal" type="number">
+        <button id="pf-add">追加</button>
+      </div>
+
+      <h3>📄 楽天証券のCSVを読み込む</h3>
+      <p class="mut">楽天証券にログイン →「マイメニュー」→「保有商品一覧（国内株式）」→「CSVで保存」でダウンロードしたファイルを選んでください。</p>
+      <input type="file" id="pf-csv" accept=".csv,text/csv">
+      <p id="pf-csv-msg" class="mut"></p>
+
+      <details class="pf-tools"><summary>⚙️ データの引っ越し（別の端末で使う）・全削除</summary>
+        <p class="mut">下の文字列をコピーして、別の端末のこの欄に貼り付けて「取り込み」を押すと保有データを移せます。</p>
+        <textarea id="pf-export" rows="3">${esc(JSON.stringify(loadPf()))}</textarea>
+        <div><button id="pf-import">この内容を取り込み</button> <button id="pf-clear" class="danger">全削除</button></div>
+      </details>
+      <p class="chart-note">※ 「買い増しシグナル」は学長ルール（買値-20%/-40%、直近1年高値-20%）の機械的な判定です。買い増し前に必ず業績（減配・赤字がないか）を確認してください。本アプリは投資助言ではありません。</p>
+    `;
+    setupPfEvents(view);
+  }
+
+  function setupPfEvents(view) {
+    view.querySelectorAll(".del-btn").forEach((b) => b.addEventListener("click", () => {
+      const pf = loadPf();
+      pf.splice(+b.dataset.i, 1);
+      savePf(pf);
+      renderMyPf();
+    }));
+    view.querySelector("#pf-add").addEventListener("click", () => {
+      const code = view.querySelector("#pf-code").value.trim();
+      const shares = +view.querySelector("#pf-shares").value;
+      const cost = +view.querySelector("#pf-cost").value;
+      if (!/^\d{4}$/.test(code) || !(shares > 0) || !(cost > 0)) {
+        alert("コード(4ケタ)・株数・取得単価をすべて入力してください");
+        return;
+      }
+      const pf = loadPf().filter((h) => h.code !== code);
+      pf.push({ code, shares, cost });
+      savePf(pf);
+      renderMyPf();
+    });
+    view.querySelector("#pf-csv").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const buf = await file.arrayBuffer();
+      let text;
+      try { text = new TextDecoder("shift-jis").decode(buf); } catch { text = ""; }
+      if (!text || text.includes("�")) text = new TextDecoder("utf-8").decode(buf);
+      const res = parseBrokerCsv(text);
+      const msg = view.querySelector("#pf-csv-msg");
+      if (!res.length) {
+        msg.textContent = "⚠️ 銘柄を読み取れませんでした。CSVの形式が想定と違う可能性があります。手入力するか、Claudeに形式を伝えてください。";
+        return;
+      }
+      const pf = loadPf();
+      for (const r of res) {
+        const i = pf.findIndex((h) => h.code === r.code);
+        if (i >= 0) pf[i] = r; else pf.push(r);
+      }
+      savePf(pf);
+      renderMyPf();
+      document.getElementById("mypf-view").querySelector("#pf-csv-msg").textContent =
+        `✅ ${res.length}銘柄を読み込みました（データは端末内にのみ保存）`;
+    });
+    view.querySelector("#pf-import").addEventListener("click", () => {
+      try {
+        const arr = JSON.parse(view.querySelector("#pf-export").value);
+        if (!Array.isArray(arr)) throw new Error();
+        savePf(arr.filter((h) => /^\d{4}$/.test(h.code) && h.shares > 0));
+        renderMyPf();
+      } catch {
+        alert("形式が正しくありません");
+      }
+    });
+    view.querySelector("#pf-clear").addEventListener("click", () => {
+      if (confirm("保有データをすべて削除しますか？")) {
+        savePf([]);
+        renderMyPf();
+      }
+    });
+  }
+
+  function parseBrokerCsv(text) {
+    // 楽天証券などのCSVから 銘柄コード・保有数量・平均取得価額 を推定して読む
+    const lines = text.split(/\r?\n/).map((l) => l.split(",").map((c) => c.replace(/^"|"$/g, "").trim()));
+    let cols = null;
+    const out = [];
+    for (const cells of lines) {
+      if (!cols) {
+        const ci = cells.findIndex((c) => /銘柄コード|証券コード|^コード$/.test(c));
+        const si = cells.findIndex((c) => /保有数量|保有株数|^数量$|^株数$/.test(c));
+        const pi = cells.findIndex((c) => /平均取得価額|平均取得単価|取得単価|参考単価/.test(c));
+        if (ci >= 0 && si >= 0 && pi >= 0) cols = { ci, si, pi };
+        continue;
+      }
+      const code = (cells[cols.ci] || "").replace(/\D/g, "").slice(0, 4);
+      const shares = parseFloat((cells[cols.si] || "").replace(/[,株]/g, ""));
+      const cost = parseFloat((cells[cols.pi] || "").replace(/[,円]/g, ""));
+      if (/^\d{4}$/.test(code) && shares > 0 && cost > 0) out.push({ code, shares, cost });
+    }
+    return out;
   }
 
   function boot() {
