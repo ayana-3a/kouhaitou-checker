@@ -292,11 +292,16 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset()):
     sector = m.get("sector") or ""
     market = m.get("market") or ""
     is_etf = "ETF" in market or "REIT" in market or code in ("1343",)
-    # REIT/ETFは33業種が「-」なので、わかりやすいセクター名を与える
+    # REIT/ETFは33業種が「-」なので、わかりやすいセクター名を与える。
+    # REIT指数に連動するETF(1343など)は「J-REIT市場」として扱う
+    # (学長モデルPFのJ-REIT枠と同じ意味を持つため)
     if "REIT" in market:
         sector = "J-REIT市場"
     elif "ETF" in market:
-        sector = "ETF"
+        if any(k in name for k in ("ＲＥＩＴ", "REIT", "リート")):
+            sector = "J-REIT市場"
+        else:
+            sector = "ETF"
 
     # 財務諸表
     try:
