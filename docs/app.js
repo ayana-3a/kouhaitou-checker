@@ -276,6 +276,7 @@
           ${DEFENSIVE.includes(normSector(s.sector)) ? '<span class="def-badge">🛡 ディフェンシブ</span>' : ""}
           ${s.in_model_pf ? '<span class="pf-badge">🦁 今月の学長PF</span>' : ""}
           ${s.pf_held ? '<span class="pf-badge pf-held">📦 学長PF（保持）</span>' : ""}
+          ${s.pf_featured ? '<span class="pf-badge pf-featured">⭐ 学長注目株</span>' : ""}
         </div>
         <div class="score-circle ${scoreClass(s.score, s)}">
           ${s.score == null ? "−" : s.score}<small>${dataOk(s) ? "/ 10点" : "参考値"}</small>
@@ -302,7 +303,7 @@
     if (state.filter === "discover")
       list = list.filter((s) => (s.score ?? 0) >= 8 && dataOk(s) && !s.in_model_pf && !s.pf_held);
     if (state.filter === "modelpf")
-      list = list.filter((s) => s.in_model_pf || s.pf_held);
+      list = list.filter((s) => s.in_model_pf || s.pf_held || s.pf_featured);
     const q = state.search.trim().toLowerCase();
     if (q) {
       list = list.filter(
@@ -552,9 +553,9 @@
     if (under.length) {
       const heldCodes = new Set(loadPf().map((h) => h.code));
       const cands = DATA.stocks
-        .filter((s) => (s.in_model_pf || ((s.score ?? 0) >= 8 && dataOk(s))) && !heldCodes.has(s.code)
+        .filter((s) => (s.in_model_pf || s.pf_featured || ((s.score ?? 0) >= 8 && dataOk(s))) && !heldCodes.has(s.code)
           && under.includes(normSector(s.sector)))
-        .sort((a, b) => (b.in_model_pf - a.in_model_pf) || (b.score ?? 0) - (a.score ?? 0))
+        .sort((a, b) => (b.in_model_pf - a.in_model_pf) || (!!b.pf_featured - !!a.pf_featured) || (b.score ?? 0) - (a.score ?? 0))
         .slice(0, 6);
       items.push(`<div class="guide guide-new"><h4>🌱 手薄なセクター: ${under.map(esc).join("、")}</h4>
         <p>学長モデルPFと比べて割合が低いセクターです。分散を強化するなら、このセクターの新規銘柄が候補になります：</p>
