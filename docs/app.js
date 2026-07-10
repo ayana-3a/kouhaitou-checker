@@ -323,6 +323,7 @@
   let shownCount = PAGE_SIZE;
 
   function render(keepShown) {
+    updateSignalBanner();
     const isMy = state.filter === "mypf";
     document.getElementById("results").hidden = isMy;
     document.getElementById("mypf-view").hidden = !isMy;
@@ -725,16 +726,50 @@
     return out;
   }
 
-  function boot() {
-    fetch("data.json?" + Date.now())
+  // 買い増しシグナルのアラートバナー（どのタブにいても表示）
+  function updateSignalBanner() {
+    const banner = document.getElementById("signal-banner");
+    if (!DATA || !loadPf().length) { banner.hidden = true; return; }
+    const sigs = pfCalc().rows.filter((r) => r.signal || r.hiSignal);
+    if (!sigs.length) {
+      banner.hidden = true;
+      if (navigator.clearAppBadge) navigator.clearAppBadge().catch(() => {});
+      return;
+    }
+    banner.hidden = false;
+    banner.innerHTML = `🔔 <strong>買い増しタイミングの銘柄が${sigs.length}件</strong>あります：
+      ${sigs.slice(0, 3).map((r) => esc(r.name)).join("、")}${sigs.length > 3 ? " ほか" : ""}
+      <span class="banner-go">タップして確認 ▶</span>`;
+    banner.onclick = () => {
+      document.querySelectorAll(".tab").forEach((b) =>
+        b.classList.toggle("active", b.dataset.filter === "mypf"));
+      state.filter = "mypf";
+      render();
+      window.scrollTo(0, 0);
+    };
+    if (navigator.setAppBadge) navigator.setAppBadge(sigs.length).catch(() => {});
+  }
+
+  let lastFetch = 0;
+
+  function loadData() {
+    return fetch("data.json?" + Date.now())
       .then((r) => {
         if (!r.ok) throw new Error("data.json not found");
         return r.json();
       })
       .then((data) => {
         DATA = data;
+        lastFetch = Date.now();
         document.getElementById("updated-at").textContent =
-          `データ更新: ${data.generated_at}｜学長モデルPF: ${data.model_pf.as_of}`;
+          `株価更新: ${data.prices_updated_at || data.generated_at}｜採点: ${data.generated_at}｜学長PF: ${data.model_pf.as_of}`;
+        updateSignalBanner();
+      });
+  }
+
+  function boot() {
+    loadData()
+      .then(() => {
         setupEvents();
         renderGlossary();
         render();
@@ -744,6 +779,12 @@
           "データがまだありません。screener/screen.py を実行してください。";
         console.error(err);
       });
+    // アプリに戻ってきた時、データが10分以上古ければ自動で取り直す
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && Date.now() - lastFetch > 10 * 60 * 1000) {
+        loadData().then(() => render(true)).catch(() => {});
+      }
+    });
   }
 
   // ---- PINロック (個人利用のための簡易ロック) ----

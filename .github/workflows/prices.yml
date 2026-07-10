@@ -1,0 +1,36 @@
+name: 株価更新（平日2回）
+
+on:
+  schedule:
+    # JST 12:15 (昼休み) = UTC 3:15 / JST 16:15 (大引け後) = UTC 7:15、月〜金
+    - cron: "15 3 * * 1-5"
+    - cron: "15 7 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: ライブラリをインストール
+        run: pip install yfinance pandas
+
+      - name: 株価を一括更新
+        run: python screener/update_prices.py
+
+      - name: 結果をコミット
+        run: |
+          git config user.name "price-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data.json
+          git diff --cached --quiet || git commit -m "株価更新 $(date +'%Y-%m-%d %H:%M')"
+          git push
