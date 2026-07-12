@@ -583,6 +583,141 @@
     return items.join("");
   }
 
+  // ==== 🧮 購入シミュレーション ====
+  let SIM = []; // [{code, amount}] 画面を離れるとリセットされる仮の買い物カゴ
+
+  function sectorValues(rows) {
+    const v = {};
+    for (const r of rows) {
+      if (r.value == null) continue;
+      v[r.sector] = (v[r.sector] || 0) + r.value;
+    }
+    return v;
+  }
+
+  function simulatorHtml(calc) {
+    const { rows, total } = calc;
+    if (!total) return "";
+    const model = modelSectorWeights();
+    const V = sectorValues(rows);
+    // シミュレーション適用後
+    const V2 = { ...V };
+    let simTotal = 0;
+    const simRows = SIM.map((it, i) => {
+      const s = stockByCode(it.code);
+      const sec = normSector(s ? s.sector : null);
+      V2[sec] = (V2[sec] || 0) + it.amount;
+      simTotal += it.amount;
+      const shares = s && s.price ? Math.round(it.amount / s.price) : null;
+      return `<li>${esc(s ? s.name : it.code)}（${esc(sec)}）に ${it.amount.toLocaleString()}円
+        ${shares != null ? `<span class="mut">（約${shares}株分・実際は100株単位）</span>` : ""}
+        <button class="sim-del" data-i="${i}">✕</button></li>`;
+    }).join("");
+    const T2 = total + simTotal;
+
+    let tableHtml = "";
+    if (SIM.length) {
+      const keys = [...new Set([...Object.keys(model), ...Object.keys(V2)])]
+        .sort((a, b) => (model[b] || 0) - (model[a] || 0));
+      const trs = keys.map((k) => {
+        const now = (V[k] || 0) / total * 100;
+        const after = (V2[k] || 0) / T2 * 100;
+        const gv = model[k] || 0;
+        const dNow = Math.abs(now - gv), dAfter = Math.abs(after - gv);
+        const better = dAfter < dNow - 0.05, worse = dAfter > dNow + 0.05;
+        return `<tr${after > 20 ? ' class="sec-over"' : ""}>
+          <td class="sec-name">${esc(k)}</td>
+          <td class="num">${now.toFixed(1)}%</td>
+          <td class="num"><strong>${after.toFixed(1)}%</strong></td>
+          <td class="num mut">${gv.toFixed(1)}%</td>
+          <td class="num ${better ? "pos" : worse ? "neg" : ""}">${better ? "✓ 近づく" : worse ? "離れる" : "−"}</td>
+        </tr>`;
+      }).join("");
+      tableHtml = `<table class="sec-table sim-table">
+        <thead><tr><th>セクター</th><th>現在</th><th>購入後</th><th>学長</th><th>判定</th></tr></thead>
+        <tbody>${trs}</tbody></table>
+        <p class="mut">購入合計: ${simTotal.toLocaleString()}円 → 評価額 ${Math.round(T2).toLocaleString()}円</p>`;
+    }
+
+    return `<h3>🧮 購入シミュレーション</h3>
+      <p class="mut">「この銘柄を◯円分買ったら」のセクターバランス変化を、買う前に確認できます。</p>
+      <div class="pf-form">
+        <input id="sim-code" placeholder="コード (例: 4206)" inputmode="numeric" maxlength="4">
+        <input id="sim-amount" placeholder="購入金額(円)" inputmode="numeric" type="number" step="10000">
+        <button id="sim-add">追加</button>
+        ${SIM.length ? '<button id="sim-clear" class="danger">クリア</button>' : ""}
+      </div>
+      ${SIM.length ? `<ul class="sim-list">${simRows}</ul>${tableHtml}` : ""}`;
+  }
+
+  function targetGuideHtml(calc) {
+    const { rows, total } = calc;
+    if (!total) return "";
+    const model = modelSectorWeights();
+    const V = sectorValues(rows);
+    // 学長モデルに存在しないセクター(ETFなど)の保有は買い足しでは調整不能
+    const excluded = Object.keys(V).filter((k) => !(model[k] > 0));
+    const Vm = Object.fromEntries(Object.entries(V).filter(([k]) => model[k] > 0));
+    const Tm = Object.values(Vm).reduce((a, b) => a + b, 0);
+    if (!Tm) return "";
+    // 売らずに買い足しだけで完全一致させるのに必要な最終評価額
+    let Tfinal = Tm;
+    for (const [k, v] of Object.entries(Vm)) {
+      Tfinal = Math.max(Tfinal, v * 100 / model[k]);
+    }
+    const needs = Object.keys(model)
+      .map((k) => ({ k, need: Math.max(0, model[k] / 100 * Tfinal - (Vm[k] || 0)) }))
+      .filter((x) => x.need >= 1000)
+      .sort((a, b) => b.need - a.need);
+    const totalNeed = needs.reduce((a, x) => a + x.need, 0);
+
+    const needRows = needs.map((x) =>
+      `<tr><td class="sec-name">${esc(x.k)}</td><td class="num">${Math.round(x.need).toLocaleString()}円</td></tr>`).join("");
+
+    return `<h3>🎯 学長バランスへの道しるべ</h3>
+      <div class="guide">
+        <p>いまの保有を<strong>売らずに、買い足しだけ</strong>で学長モデルPFと同じセクター割合にするには、
+        合計 <strong>${Math.round(totalNeed).toLocaleString()}円</strong> の買い足しが必要です（内訳↓）。</p>
+        <table class="sec-table need-table"><tbody>${needRows}</tbody></table>
+        ${excluded.length ? `<p class="guide-note">※ ${excluded.map(esc).join("、")}の保有分は学長モデルPFに無い区分のため、この計算から除いています。</p>` : ""}
+        <p class="guide-note">一度に揃える必要はありません。学長も「月に一度、候補を探して少しずつ買い増す」方式です。下の予算計算で「今月の予算ならどこに配分するか」を確認できます。</p>
+        <div class="pf-form">
+          <input id="budget-input" placeholder="今月の予算(円) 例: 100000" inputmode="numeric" type="number" step="10000">
+          <button id="budget-calc">配分を計算</button>
+        </div>
+        <div id="budget-result"></div>
+      </div>`;
+  }
+
+  function budgetAllocHtml(budget, calc) {
+    const { rows, total } = calc;
+    const model = modelSectorWeights();
+    const V = sectorValues(rows);
+    const Vm = Object.fromEntries(Object.entries(V).filter(([k]) => model[k] > 0));
+    const Tm = Object.values(Vm).reduce((a, b) => a + b, 0);
+    const T2 = Tm + budget;
+    const d = Object.keys(model).map((k) => ({ k, gap: Math.max(0, model[k] / 100 * T2 - (Vm[k] || 0)) }));
+    const gapSum = d.reduce((a, x) => a + x.gap, 0);
+    if (!gapSum) return "<p>この予算では配分先がありません（すでにバランスが取れています）。</p>";
+    const heldCodes = new Set(loadPf().map((h) => h.code));
+    const allocs = d.filter((x) => x.gap / gapSum * budget >= budget * 0.03)
+      .sort((a, b) => b.gap - a.gap)
+      .map((x) => {
+        const amt = x.gap / gapSum * budget;
+        const cands = DATA.stocks
+          .filter((s) => normSector(s.sector) === x.k && !heldCodes.has(s.code)
+            && (s.in_model_pf || s.pf_featured || ((s.score ?? 0) >= 8 && dataOk(s))))
+          .sort((a, b) => (b.in_model_pf - a.in_model_pf) || (b.score ?? 0) - (a.score ?? 0))
+          .slice(0, 2);
+        return `<tr><td class="sec-name">${esc(x.k)}</td>
+          <td class="num"><strong>${Math.round(amt / 1000) * 1000 >= 1000 ? (Math.round(amt / 1000) * 1000).toLocaleString() : Math.round(amt).toLocaleString()}円</strong></td>
+          <td class="mut">${cands.map((s) => `${esc(s.name)}(${esc(s.code)})${s.in_model_pf ? "🦁" : s.pf_featured ? "⭐" : "🔍"}`).join("、") || "候補は🔍タブで"}</td></tr>`;
+      }).join("");
+    return `<p>予算 <strong>${budget.toLocaleString()}円</strong> を学長バランスに最も近づく形で配分すると：</p>
+      <table class="sec-table"><thead><tr><th>セクター</th><th>金額</th><th>候補銘柄の例</th></tr></thead><tbody>${allocs}</tbody></table>
+      <p class="guide-note">※日本株は基本100株単位なので、金額はあくまで目安です。候補銘柄は参考情報であり、購入判断はご自身で。</p>`;
+  }
+
   function renderMyPf() {
     const view = document.getElementById("mypf-view");
     const calc = pfCalc();
@@ -613,6 +748,8 @@
         ${guidanceHtml(calc)}
         <h3>📊 セクター割合の比較（学長モデルPF vs わたし）</h3>
         ${sectorCompareHtml(mine, model)}
+        ${simulatorHtml(calc)}
+        ${targetGuideHtml(calc)}
         <h3>保有銘柄</h3>
         <div class="pf-table-wrap"><table class="pf-table">
           <thead><tr><th>銘柄</th><th>保有</th><th>現在値</th><th>損益</th><th>年間配当</th><th>シグナル</th><th></th></tr></thead>
@@ -663,6 +800,39 @@
       savePf(pf);
       renderMyPf();
     });
+    // 購入シミュレーション
+    const simAdd = view.querySelector("#sim-add");
+    if (simAdd) {
+      simAdd.addEventListener("click", () => {
+        const code = view.querySelector("#sim-code").value.trim();
+        const amount = +view.querySelector("#sim-amount").value;
+        if (!/^\d{4}$/.test(code) || !(amount > 0)) {
+          alert("コード(4ケタ)と購入金額を入力してください");
+          return;
+        }
+        if (!stockByCode(code)) {
+          alert("この銘柄コードはアプリのデータに見つかりません。コードを確認してください。");
+          return;
+        }
+        SIM.push({ code, amount });
+        renderMyPf();
+      });
+      view.querySelectorAll(".sim-del").forEach((b) => b.addEventListener("click", () => {
+        SIM.splice(+b.dataset.i, 1);
+        renderMyPf();
+      }));
+      const simClear = view.querySelector("#sim-clear");
+      if (simClear) simClear.addEventListener("click", () => { SIM = []; renderMyPf(); });
+    }
+    // 予算配分の計算
+    const budgetBtn = view.querySelector("#budget-calc");
+    if (budgetBtn) {
+      budgetBtn.addEventListener("click", () => {
+        const b = +view.querySelector("#budget-input").value;
+        if (!(b > 0)) { alert("予算を入力してください"); return; }
+        view.querySelector("#budget-result").innerHTML = budgetAllocHtml(b, pfCalc());
+      });
+    }
     view.querySelector("#pf-csv").addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (!file) return;

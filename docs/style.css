@@ -434,3 +434,14 @@ footer {
 .pf-tools button.danger { background: var(--red); }
 .pf-tools textarea { width: 100%; font-size: 0.72rem; border: 1px solid var(--border); border-radius: 8px; padding: 6px; margin: 6px 0; }
 #pf-csv { margin: 6px 0; }
+
+.sim-list { padding-left: 1.3em; font-size: 0.88rem; margin: 8px 0; }
+.sim-list li { margin-bottom: 4px; }
+.sim-del { border: none; background: none; color: var(--gray); cursor: pointer; }
+.sim-table td.num, .sim-table th { text-align: right; white-space: nowrap; }
+.sim-table td.sec-name, .sim-table th:first-child { text-align: left; }
+.need-table { max-width: 340px; }
+.need-table td.num { text-align: right; font-weight: 600; }
+#budget-result { margin-top: 8px; }
+#budget-result th { text-align: left; }
+#budget-result td.num { white-space: nowrap; }
