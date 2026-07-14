@@ -406,6 +406,12 @@
   const PF_KEY = "khc_pf";
   const DEFENSIVE = ["食料品", "医薬品", "電気・ガス", "陸運", "情報・通信"];
 
+  // 取得単価比の下落しきい値（学長ルール⑤の買い増し水準）。
+  // 「現在株価 ≤ 取得単価 ×(1−しきい値)」になった保有銘柄を抽出する。
+  // ここの数値だけ変えれば抽出条件を簡単に変更できる。
+  const COST_DROP_1 = 0.20; // 1回目の買い増し水準（取得単価比 −20%）
+  const COST_DROP_2 = 0.40; // 2回目の買い増し水準（取得単価比 −40%）
+
   function loadPf() {
     try { return JSON.parse(localStorage.getItem(PF_KEY)) || []; }
     catch { return []; }
@@ -436,11 +442,15 @@
       const dps = s && s.yield != null && s.price ? s.yield * s.price / 100 : null;
       const annualDiv = dps != null ? dps * h.shares : null;
       const hi = high12(s);
-      // 学長ルール⑤: 買値-20%で1回目、-40%で2回目の買い増し水準
+      // 学長ルール⑤: 取得単価-20%で1回目、-40%で2回目の買い増し水準
+      // dropPct = 取得単価からの下落率（0.23 なら -23%）
       let signal = null;
       if (price != null && h.cost > 0) {
-        if (price <= h.cost * 0.6) signal = { level: 2, why: `買値から${((1 - price / h.cost) * 100).toFixed(0)}%下落（2回目の買い増し水準）` };
-        else if (price <= h.cost * 0.8) signal = { level: 1, why: `買値から${((1 - price / h.cost) * 100).toFixed(0)}%下落（1回目の買い増し水準）` };
+        const dropPct = 1 - price / h.cost;
+        if (price <= h.cost * (1 - COST_DROP_2))
+          signal = { level: 2, dropPct, why: `取得単価から${(dropPct * 100).toFixed(0)}%下落（2回目の買い増し水準）` };
+        else if (price <= h.cost * (1 - COST_DROP_1))
+          signal = { level: 1, dropPct, why: `取得単価から${(dropPct * 100).toFixed(0)}%下落（1回目の買い増し水準）` };
       }
       let hiSignal = null;
       if (price != null && hi && price <= hi * 0.8) {
@@ -528,15 +538,31 @@
     const model = modelSectorWeights();
     const items = [];
 
-    // 買い増しシグナル (ルール⑤)
-    const sigs = rows.filter((r) => r.signal || r.hiSignal);
-    if (sigs.length) {
-      items.push(`<div class="guide guide-buy"><h4>🔔 買い増しタイミングの銘柄があります</h4>${sigs.map((r) =>
-        `<div class="sig-item"><div><strong>${esc(r.name)}</strong>（${esc(r.code)}）: ${r.signal ? esc(r.signal.why) : ""}${r.signal && r.hiSignal ? "／" : ""}${r.hiSignal ? esc(r.hiSignal) : ""}</div>
+    // ①取得単価比 −20% の抽出 (学長ルール⑤の買い増し水準・自分の買値が基準)
+    //   ②の「直近高値からの下落」とは別指標。ここは "買値" を基準に判定する。
+    const pct1 = (COST_DROP_1 * 100).toFixed(0);
+    const costDrops = rows.filter((r) => r.signal);
+    if (costDrops.length) {
+      items.push(`<div class="guide guide-buy"><h4>📉 取得単価比 −${pct1}% の銘柄（買い増し検討）</h4>
+        <p class="guide-note">あなたの平均取得単価より${pct1}%以上値下がりした保有銘柄です（学長ルール⑤の買い増し水準）。下の「直近高値からの下落」とは別に、<strong>自分の買値</strong>を基準に判定しています。</p>
+        ${costDrops.map((r) =>
+        `<div class="sig-item"><div><strong>${esc(r.name)}</strong>（${esc(r.code)}）
+          <span class="cost-drop-badge lv${r.signal.level}">取得単価比 ${(r.signal.dropPct * -100).toFixed(0)}%</span>
+          <span class="mut">${r.signal.level === 2 ? "2回目" : "1回目"}の買い増し水準</span></div>
          ${bizCheckHtml(r.s)}</div>`).join("")}
-        <p class="guide-note">学長ルール：「当初買値から20%下がったら1回目、40%下がったら2回目の買い増し。ナンピンは2回まで」。業績チェックに✕がある銘柄は「安いから買う」ではなく「業績が崩れたから安い」の可能性があります。</p></div>`);
+        <p class="guide-note">学長ルール：「取得単価から20%下がったら1回目、40%下がったら2回目の買い増し。ナンピンは2回まで」。業績チェックに✕がある銘柄は「安いから買う」ではなく「業績が崩れたから安い」の可能性があります。</p></div>`);
     } else {
-      items.push(`<div class="guide"><h4>🔕 いまは買い増しシグナルなし</h4><p>保有銘柄はどれも「買値から-20%」の水準まで下がっていません。学長ルールでは「ちょっと下がったぐらいでは買い増ししない」なので、次の候補探し（新規銘柄）が中心になります。</p></div>`);
+      items.push(`<div class="guide"><h4>🔕 取得単価比 −${pct1}% の銘柄はなし</h4><p>保有銘柄はどれも取得単価から${pct1}%以上は下がっていません。学長ルールでは「ちょっと下がったぐらいでは買い増ししない」ので、次の候補探し（新規銘柄）が中心になります。</p></div>`);
+    }
+
+    // ②直近1年高値からの下落 (別指標・押し目の目安)
+    const hiDrops = rows.filter((r) => r.hiSignal);
+    if (hiDrops.length) {
+      items.push(`<div class="guide"><h4>📉 直近1年高値から −20% の銘柄</h4>
+        <p class="guide-note">こちらは取得単価ではなく「直近1年の高値」を基準にした下落です（押し目の目安）。買値が基準の上の指標とは別物なので、両方に出る銘柄もあります。</p>
+        ${hiDrops.map((r) =>
+        `<div class="sig-item"><div><strong>${esc(r.name)}</strong>（${esc(r.code)}）: ${esc(r.hiSignal)}</div>
+         ${bizCheckHtml(r.s)}</div>`).join("")}</div>`);
     }
 
     // セクター20%ルール (ルール②)
@@ -732,7 +758,7 @@
       <td class="num">${r.price != null ? Math.round(r.price).toLocaleString() + "円" : "<span class='mut'>未収載</span>"}</td>
       <td class="num ${r.gain > 0 ? "pos" : r.gain < 0 ? "neg" : ""}">${r.gain != null ? (r.gain > 0 ? "+" : "") + r.gain.toFixed(1) + "%" : "−"}</td>
       <td class="num">${r.annualDiv != null ? Math.round(r.annualDiv).toLocaleString() + "円" : "−"}</td>
-      <td>${r.signal ? `<span class="sig sig${r.signal.level}">🔔 買い増し${r.signal.level}回目水準</span>` : r.hiSignal ? `<span class="sig sigHi">📉 高値-20%</span>` : ""}</td>
+      <td>${r.signal ? `<span class="sig sig${r.signal.level}">📉 取得単価比${(r.signal.dropPct * -100).toFixed(0)}%（買い増し${r.signal.level}回目）</span>` : ""}${r.hiSignal ? `<span class="sig sigHi">📉 高値-20%</span>` : ""}</td>
       <td><button class="del-btn" data-i="${i}">✕</button></td>
     </tr>`).join("");
 
