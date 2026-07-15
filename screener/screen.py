@@ -744,7 +744,10 @@ def main():
     results.sort(key=lambda r: (r["score"] or 0, r["yield"] or 0), reverse=True)
 
     out = {
-        "generated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        # GitHub ActionsランナーはUTCのため、日本時間を明示して記録する
+        "generated_at": datetime.datetime.now(
+            datetime.timezone(datetime.timedelta(hours=9), "JST")
+        ).strftime("%Y-%m-%d %H:%M"),
         "criteria": CRITERIA_DEFS,
         "thresholds": THRESHOLDS,
         "model_pf": model,

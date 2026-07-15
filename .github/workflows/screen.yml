@@ -43,5 +43,5 @@ jobs:
           git config user.name "screener-bot"
           git config user.email "actions@users.noreply.github.com"
           git add docs/data.json
-          git diff --cached --quiet || git commit -m "データ更新 $(date +'%Y-%m-%d')"
+          git diff --cached --quiet || git commit -m "データ更新 $(TZ=Asia/Tokyo date +'%Y-%m-%d')"
           git push

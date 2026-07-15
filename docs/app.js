@@ -950,7 +950,7 @@
   let lastFetch = 0;
 
   function loadData() {
-    return fetch("data.json?" + Date.now())
+    return fetch("data.json?" + Date.now(), { cache: "no-store" })
       .then((r) => {
         if (!r.ok) throw new Error("data.json not found");
         return r.json();

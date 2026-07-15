@@ -61,7 +61,9 @@ def main():
         s["price"] = round(p, 1)
         updated += 1
 
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    # GitHub ActionsランナーはUTCのため、日本時間を明示して記録する
+    jst = datetime.timezone(datetime.timedelta(hours=9), "JST")
+    now = datetime.datetime.now(jst).strftime("%Y-%m-%d %H:%M")
     d["prices_updated_at"] = now
     DATA.write_text(json.dumps(d, ensure_ascii=False, indent=1))
     print(f"完了: {updated}/{len(stocks)}銘柄の株価を更新 ({now})")
