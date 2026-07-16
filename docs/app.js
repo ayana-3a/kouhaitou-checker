@@ -965,6 +965,8 @@
         lastFetch = Date.now();
         document.getElementById("updated-at").textContent =
           `株価更新: ${data.prices_updated_at || data.generated_at}｜採点: ${data.generated_at}｜学長PF: ${data.model_pf.as_of}`;
+        document.getElementById("updated-at").title =
+          "株価は平日 朝9:48・昼12:23・夕方16:23に自動更新（GitHubの混雑で数時間遅れることがあります）";
         updateSignalBanner();
       });
   }
