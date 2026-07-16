@@ -38,6 +38,11 @@ jobs:
           EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
         run: python screener/edinet_enrich.py
 
+      - name: 事業内容の説明を付加（有報「事業の内容」＋ETF/REIT種別）
+        env:
+          EDINET_API_KEY: ${{ secrets.EDINET_API_KEY }}
+        run: python screener/business_enrich.py
+
       - name: 結果をコミット
         run: |
           git config user.name "screener-bot"

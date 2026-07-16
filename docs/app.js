@@ -238,7 +238,11 @@
         </tr>`;
       })
       .join("");
-    return `${statsRowHtml(s)}
+    const bizBlock = s.business
+      ? `<p class="biz-desc">${esc(s.business)}</p>`
+      : "";
+    return `${bizBlock}
+      ${statsRowHtml(s)}
       ${chartsHtml(s)}
       <table class="detail-table">${detailRows}</table>
       <div class="ext-links">
@@ -282,6 +286,7 @@
           ${s.score == null ? "−" : s.score}<small>${dataOk(s) ? "/ 10点" : "参考値"}</small>
         </div>
       </div>
+      ${s.business ? `<p class="biz-line">${esc(s.business)}</p>` : ""}
       <div class="yield-line">配当利回り
         <span class="yield-value">${s.yield == null ? "−" : s.yield + "%"}</span>
         ${s.price ? `<span style="color:var(--gray); font-size:0.8rem">（株価 ${s.price.toLocaleString()}円）</span>` : ""}
