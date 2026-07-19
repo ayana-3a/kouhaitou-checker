@@ -35,6 +35,8 @@ ROOT = ee.ROOT
 DOCS = ee.DOCS
 BIZ_CACHE = ee.CACHE / "biz"
 BIZ_CACHE.mkdir(parents=True, exist_ok=True)
+FOUNDING_CACHE = ee.CACHE / "founding"
+FOUNDING_CACHE.mkdir(parents=True, exist_ok=True)
 
 API = ee.API
 SLEEP = ee.SLEEP
@@ -83,6 +85,128 @@ def fetch_business_text(docid, key):
         return None
     cache_file.write_text(json.dumps(text, ensure_ascii=False))
     return text
+
+
+# ---------------------------------------------------------------------------
+# 有報「沿革」テキストブロックから設立/創業年を抽出（docID 単位でキャッシュ）
+#
+# 学長流の「おじいちゃん企業（長寿企業＝安定の参考情報）」判定用の参考データ。
+# スコア・バッジ・シグナルには一切影響させない純粋な参考情報。
+# ---------------------------------------------------------------------------
+HIST_ELEM = "jpcrp_cor:CompanyHistoryTextBlock"
+
+_Z2H = str.maketrans("０１２３４５６７８９", "0123456789")
+_ERA = {"明治": 1868, "大正": 1912, "昭和": 1926, "平成": 1989, "令和": 2019}
+_ERA_RE = re.compile(r"(明治|大正|昭和|平成|令和)(元|\d{1,2})年")
+# 「1948年」のほか表形式で使われる「1948．9」（全角ピリオド区切り）にも対応
+_YEAR_RE = re.compile(r"(\d{4})[年．]")
+
+
+def _to_seireki(m):
+    """和暦（明治35年 等）を西暦に変換。"""
+    base = _ERA[m.group(1)]
+    n = 1 if m.group(2) == "元" else int(m.group(2))
+    return f"{base + n - 1}年"
+
+
+def extract_founding(text):
+    """沿革テキスト → ("設立"|"創業", 西暦年) or None。
+
+    沿革は年代順に並ぶため、各「YYYY年」の直後の説明文（次の年号まで、最大60字）を
+    見て「設立/創立」「創業」を含む最古の年を採る。「会社設立」を基本としつつ、
+    より古い「創業」があればそちらを優先表示する（事業の歴史の長さが本質のため）。
+    他社設立の記述（例:「◯◯株式会社を設立」）は通常より新しい年に現れるため、
+    最古を採ることで自社の設立年が選ばれやすい。
+    """
+    if not text:
+        return None
+    t = text.translate(_Z2H)
+    t = _ERA_RE.sub(_to_seireki, t)  # 和暦→西暦に正規化
+    ms = [m for m in _YEAR_RE.finditer(t) if 1800 <= int(m.group(1)) <= 2100]
+    if not ms:
+        return None
+    # 表形式の沿革がHTML→テキスト化で「年月列→概要列」の順に潰れる場合がある
+    # （年号が連続で並び、説明文が最後にまとまる）。この場合は年と説明文の対応が
+    # 取れないため、「最古の年」を採用し、説明文冒頭のキーワードで種別を決める。
+    if len(ms) >= 5:
+        gaps = [ms[i + 1].start() - ms[i].end() for i in range(len(ms) - 1)]
+        if sum(1 for g in gaps if g <= 4) > len(gaps) * 0.6:
+            # 概要列の先頭（＝最初の行の説明＝設立/創業の記述）に最初に現れる
+            # キーワードで種別を決め、年は最古の年を採用する
+            oldest = min(int(m.group(1)) for m in ms)
+            _sous = [p for p in (t.find("創業"), t.find("創設")) if p >= 0]
+            p_sou = min(_sous) if _sous else -1
+            _ests = [p for p in (t.find("設立"), t.find("創立")) if p >= 0]
+            p_est = min(_ests) if _ests else -1
+            if p_sou < 0 and p_est < 0:
+                return None
+            kind = "創業" if (p_sou >= 0 and (p_est < 0 or p_sou <= p_est)) else "設立"
+            return (kind, oldest)
+    estab = None    # 設立/創立 の最古年
+    sougyou = None   # 創業 の最古年
+    for i, m in enumerate(ms):
+        y = int(m.group(1))
+        if i + 1 < len(ms):
+            # 内側の年は「次の年号まで」を1イベントとみなす（設立文が長い会社に対応）
+            seg = t[m.end():ms[i + 1].start()]
+        else:
+            # 最終イベントは後続の長文を巻き込まないよう120字で打ち切り
+            seg = t[m.end():m.end() + 120]
+        if ("設立" in seg or "創立" in seg) and (estab is None or y < estab):
+            estab = y
+        if ("創業" in seg or "創設" in seg) and (sougyou is None or y < sougyou):
+            sougyou = y
+    if estab is None and sougyou is None:
+        return None
+    # 創業がより古ければ創業を優先（学長的には事業の歴史の長さが本質）
+    if sougyou is not None and (estab is None or sougyou < estab):
+        return ("創業", sougyou)
+    if estab is not None:
+        return ("設立", estab)
+    return ("創業", sougyou)
+
+
+def fetch_founding(docid, key):
+    """有報「沿革」から設立/創業を抽出して返す（キャッシュつき）。
+
+    返り値: {"kind": "設立"|"創業", "year": int} または None。
+    """
+    cache_file = FOUNDING_CACHE / f"{docid}.json"
+    if cache_file.exists():
+        v = json.loads(cache_file.read_text())
+        return v if v else None
+    r = requests.get(
+        f"{API}/documents/{docid}",
+        params={"type": 5, "Subscription-Key": key},
+        timeout=60,
+    )
+    time.sleep(SLEEP)
+    if r.status_code != 200:
+        cache_file.write_text("null")
+        return None
+    hist = None
+    try:
+        with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+            names = [n for n in z.namelist()
+                     if "jpcrp030000-asr" in n and n.endswith(".csv")]
+            if not names:
+                cache_file.write_text("null")
+                return None
+            with z.open(names[0]) as f:
+                body = f.read().decode("utf-16", errors="replace")
+            reader = csv.reader(io.StringIO(body), delimiter="\t")
+            next(reader, None)
+            for row in reader:
+                if len(row) >= 9 and row[0] == HIST_ELEM:
+                    hist = row[8]
+                    break
+    except Exception:
+        cache_file.write_text("null")
+        return None
+    res = extract_founding(hist)
+    out = {"kind": res[0], "year": res[1]} if res else None
+    cache_file.write_text(json.dumps(out, ensure_ascii=False))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -276,10 +400,12 @@ def main():
     data = json.loads(Path(args.data).read_text())
     stocks = data["stocks"]
 
-    # ETF / J-REIT は名称・セクターから即生成
+    # ETF / J-REIT は名称・セクターから即生成（設立年は表示しないので付けない）
     etf_ok = 0
     for s in stocks:
         if s.get("is_etf"):
+            s.pop("founded_year", None)
+            s.pop("founded_kind", None)
             d = etf_description(s)
             if d:
                 s["business"] = d
@@ -299,10 +425,13 @@ def main():
     print(f"  有報が見つかった会社: {len(recent)}社")
 
     ok = miss = 0
+    found_ok = 0  # 設立/創業年が取れた通常銘柄数
     for i, s in enumerate(targets, 1):
         ent = recent.get(s["code"])
         if not ent:
             s.pop("business", None)
+            s.pop("founded_year", None)
+            s.pop("founded_kind", None)
             miss += 1
         else:
             _date, docid, _pe = ent
@@ -317,13 +446,27 @@ def main():
             else:
                 s.pop("business", None)
                 miss += 1
+            # 設立/創業年（参考情報・採点には影響しない）
+            try:
+                fnd = fetch_founding(docid, key)
+            except Exception as e:
+                print(f"  {s['code']}: 設立年エラー {e}", file=sys.stderr)
+                fnd = None
+            if fnd and fnd.get("year"):
+                s["founded_year"] = fnd["year"]
+                s["founded_kind"] = fnd["kind"]
+                found_ok += 1
+            else:
+                s.pop("founded_year", None)
+                s.pop("founded_kind", None)
         if i % 50 == 0:
-            print(f"  [{i}/{len(targets)}] 生成 {ok} / 説明なし {miss}")
+            print(f"  [{i}/{len(targets)}] 生成 {ok} / 説明なし {miss} / 設立年 {found_ok}")
 
     Path(args.data).write_text(json.dumps(data, ensure_ascii=False, indent=1))
     total = etf_ok + ok
     print(f"\n完了: 事業説明を {total}銘柄に付与 "
-          f"(通常 {ok}/{len(targets)}・ETF/REIT {etf_ok})、説明なし {miss} → {args.data}")
+          f"(通常 {ok}/{len(targets)}・ETF/REIT {etf_ok})、説明なし {miss}\n"
+          f"設立/創業年を {found_ok}/{len(targets)}銘柄に付与 → {args.data}")
 
 
 if __name__ == "__main__":

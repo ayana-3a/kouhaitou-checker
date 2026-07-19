@@ -228,6 +228,20 @@ main { max-width: 960px; margin: 0 auto; padding: 12px 12px 40px; }
   padding: 8px 11px;
 }
 
+/* 設立・創業年（参考情報。カード用は独立行、くわしく見る用は事業説明にインライン） */
+.founded-line { margin: 3px 0 0; }
+.founded {
+  display: inline-block;
+  font-size: 0.76rem;
+  color: var(--gray);
+  background: var(--green-light);
+  border-radius: 7px;
+  padding: 1px 8px;
+  white-space: nowrap;
+}
+.founded-wrap { margin-left: 6px; }
+.biz-desc .founded { vertical-align: middle; }
+
 .chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0; }
 .chip {
   font-size: 0.72rem;

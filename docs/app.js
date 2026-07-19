@@ -57,6 +57,21 @@
 
   const STATUS_MARK = { ok: "◯", warn: "△", ng: "✕" };
 
+  // 設立・創業からの年数表示。しきい値以上で「おじいちゃん企業（長寿＝安定の参考）」マークを付ける。
+  const ELDER_YEARS = 50; // この年数以上で 👴 を付与（変更可）
+  const CURRENT_YEAR = new Date().getFullYear();
+
+  // 「設立1936年（89年）」/「👴 創業1902年（124年）」形式の参考情報を返す。
+  // 取得できない銘柄・ETF/REITでは空文字（「不明」は出さない）。純粋な参考情報でスコアには無関係。
+  function foundingHtml(s) {
+    if (s.is_etf || !s.founded_year) return "";
+    const kind = s.founded_kind === "創業" ? "創業" : "設立";
+    const age = CURRENT_YEAR - s.founded_year;
+    if (age < 0) return "";
+    const elder = age >= ELDER_YEARS ? "👴 " : "";
+    return `<span class="founded" title="会社の歴史の長さ（参考情報・採点には影響しません）">${elder}${kind}${s.founded_year}年（${age}年）</span>`;
+  }
+
   let DATA = null;
   let state = { filter: "all", search: "", sort: "score" };
 
@@ -238,8 +253,9 @@
         </tr>`;
       })
       .join("");
-    const bizBlock = s.business
-      ? `<p class="biz-desc">${esc(s.business)}</p>`
+    const founded = foundingHtml(s);
+    const bizBlock = (s.business || founded)
+      ? `<p class="biz-desc">${esc(s.business || "")}${founded ? ` <span class="founded-wrap">${founded}</span>` : ""}</p>`
       : "";
     return `${bizBlock}
       ${statsRowHtml(s)}
@@ -287,6 +303,7 @@
         </div>
       </div>
       ${s.business ? `<p class="biz-line">${esc(s.business)}</p>` : ""}
+      ${foundingHtml(s) ? `<p class="founded-line">${foundingHtml(s)}</p>` : ""}
       <div class="yield-line">配当利回り
         <span class="yield-value">${s.yield == null ? "−" : s.yield + "%"}</span>
         ${s.price ? `<span style="color:var(--gray); font-size:0.8rem">（株価 ${s.price.toLocaleString()}円）</span>` : ""}
