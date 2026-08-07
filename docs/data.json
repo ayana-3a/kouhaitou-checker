@@ -63,9 +63,9 @@
   "payout_max": 80.0
  },
  "model_pf": {
-  "as_of": "2026-07 (第119回)",
+  "as_of": "2026-08 (第122回)",
   "tracking_since": "2025-01 (第65回・ユーザーの実践開始月)",
-  "portfolio_yield": 4.21,
+  "portfolio_yield": 4.25,
   "stocks": [
    {
     "code": "9986",
@@ -101,7 +101,7 @@
     "code": "9989",
     "name": "サンドラッグ",
     "sector": "小売",
-    "weight": 2
+    "weight": 3
    },
    {
     "code": "4008",
@@ -126,12 +126,6 @@
     "name": "長谷川香料",
     "sector": "化学",
     "weight": 2
-   },
-   {
-    "code": "8309",
-    "name": "三井住友トラストグループ",
-    "sector": "銀行",
-    "weight": 3
    },
    {
     "code": "8725",
@@ -196,6 +190,12 @@
    {
     "code": "3817",
     "name": "SRAホールディングス",
+    "sector": "情報・通信",
+    "weight": 2
+   },
+   {
+    "code": "3844",
+    "name": "コムチュア",
     "sector": "情報・通信",
     "weight": 2
    },
@@ -445,6 +445,13 @@
     "added": "2025-01以前",
     "removed": "2026-06",
     "reason": "業績不振のため新規リストから除外（保有分はナンピン基準に従うか放置）"
+   },
+   {
+    "code": "8309",
+    "name": "三井住友トラストグループ",
+    "added": "2025-01以前",
+    "removed": "2026-08",
+    "reason": "株価上昇で配当利回りが3%を切ったため新規リストから除外（保有分はホールド）"
    }
   ],
   "sold": [
@@ -676,6 +683,16 @@
     "issue": 119,
     "removed": [],
     "added": []
+   },
+   {
+    "month": "2026-08",
+    "issue": 122,
+    "removed": [
+     "三井住友トラストグループ"
+    ],
+    "added": [
+     "コムチュア"
+    ]
    }
   ],
   "featured": [],
@@ -44901,7 +44918,7 @@
    "roe": 16.3,
    "payout": 48.5,
    "score": 8.5,
-   "in_model_pf": false,
+   "in_model_pf": true,
    "pf_held": false,
    "pf_featured": false,
    "checks": {
@@ -139599,8 +139616,8 @@
    "roe": 8.9,
    "payout": 35.0,
    "score": 6.9,
-   "in_model_pf": true,
-   "pf_held": false,
+   "in_model_pf": false,
+   "pf_held": true,
    "pf_featured": false,
    "checks": {
     "yield": {
