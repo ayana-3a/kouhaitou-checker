@@ -126142,8 +126142,8 @@
    "sector": "サービス業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 959.0,
-   "yield": 3.44,
+   "price": 957.0,
+   "yield": 3.45,
    "pbr": 1.35,
    "per": 19.7,
    "roe": 7.0,
@@ -136194,8 +136194,8 @@
    "sector": "倉庫・運輸関連業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 1660.0,
-   "yield": 3.01,
+   "price": 1674.0,
+   "yield": 2.98,
    "pbr": 0.41,
    "per": 6.7,
    "roe": 6.9,
@@ -139306,8 +139306,8 @@
    "sector": "金属製品",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 660.0,
-   "yield": 3.03,
+   "price": 657.0,
+   "yield": 3.04,
    "pbr": 0.3,
    "per": 93.8,
    "roe": 2.1,
@@ -140808,5 +140808,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-08-10 17:56"
+ "prices_updated_at": "2026-08-11 11:56"
 }
