@@ -73,6 +73,10 @@
   }
 
   let DATA = null;
+  // 東証全銘柄の「コード→[銘柄名, 33業種]」の軽量マスタ（docs/names.json）。
+  // data.json には採点対象の銘柄しか入らない（利回り足切り・データ取得失敗で
+  // 落ちる銘柄がある）ため、保有銘柄が「コードだけ」表示になるのを防ぐ。
+  let NAMES = {};
   let state = { filter: "all", search: "", sort: "score" };
 
   // 10項目中8項目以上を評価できた銘柄だけを「採点信頼できる」とみなす。
@@ -448,6 +452,13 @@
     return DATA.stocks.find((s) => s.code === code) || null;
   }
 
+  // 採点データが無い銘柄でも、名前とセクターだけは全銘柄マスタから引く。
+  // 返り値: { name, sector } （マスタにも無ければコードとその他）
+  function nameByCode(code) {
+    const n = NAMES[code];
+    return { name: n ? n[0] : code, sector: normSector(n ? n[1] : null) };
+  }
+
   function high12(s) {
     const ph = s && s.price_history;
     if (!ph || !ph.closes || ph.closes.length < 3) return null;
@@ -459,7 +470,11 @@
     const rows = pf.map((h) => {
       const s = stockByCode(h.code);
       const price = s ? s.price : null;
-      const value = price != null ? price * h.shares : null;
+      // 株価が無い銘柄（アプリの採点対象外）は、評価額を「取得単価×株数」で概算する。
+      // 0円として集計から落とすとセクター割合や合計額が実態とズレるため。
+      // valueEst=true の行は画面上で「概算」と明示する。
+      const valueEst = price == null && h.cost > 0;
+      const value = price != null ? price * h.shares : (valueEst ? h.cost * h.shares : null);
       const gain = price != null && h.cost > 0 ? (price / h.cost - 1) * 100 : null;
       const dps = s && s.yield != null && s.price ? s.yield * s.price / 100 : null;
       const annualDiv = dps != null ? dps * h.shares : null;
@@ -478,12 +493,17 @@
       if (price != null && hi && price <= hi * 0.8) {
         hiSignal = `直近1年高値(${Math.round(hi).toLocaleString()}円)から${((1 - price / hi) * 100).toFixed(0)}%下落`;
       }
-      return { ...h, s, price, value, gain, annualDiv, signal, hiSignal,
-        name: s ? s.name : h.code, sector: normSector(s ? s.sector : null) };
+      const meta = s ? { name: s.name, sector: normSector(s.sector) } : nameByCode(h.code);
+      return { ...h, s, price, value, valueEst, gain, annualDiv, signal, hiSignal,
+        name: meta.name, sector: meta.sector };
     });
     const total = rows.reduce((a, r) => a + (r.value || 0), 0);
     const totalDiv = rows.reduce((a, r) => a + (r.annualDiv || 0), 0);
-    return { rows, total, totalDiv };
+    // PF利回りは「配当データがある銘柄の評価額」を分母にする。
+    // 採点対象外の銘柄まで分母に入れると、利回りが実態より低く見えてしまう。
+    const divBase = rows.reduce((a, r) => a + (r.annualDiv != null ? (r.value || 0) : 0), 0);
+    const estRows = rows.filter((r) => r.valueEst);
+    return { rows, total, totalDiv, divBase, estRows };
   }
 
   function modelSectorWeights() {
@@ -769,15 +789,20 @@
   function renderMyPf() {
     const view = document.getElementById("mypf-view");
     const calc = pfCalc();
-    const { rows, total, totalDiv } = calc;
+    const { rows, total, totalDiv, divBase, estRows } = calc;
     const mine = mySectorWeights(rows, total);
     const model = modelSectorWeights();
+    // 採点対象外（株価データなし）の銘柄がある場合の注記
+    const estNote = estRows.length ? `<p class="chart-note">※ ${estRows.map((r) => esc(r.name)).join("、")}
+      はアプリの採点対象に入っていないため株価・配当データがありません。評価額は<strong>取得単価×株数で概算</strong>し、
+      合計とセクター割合には含めています（年間配当・PF利回りの計算からは除いています）。</p>` : "";
 
     const holdingsRows = rows.map((r, i) => `<tr>
       <td><strong>${esc(r.name)}</strong><br><span class="mut">${esc(r.code)}・${esc(r.sector)}</span>
         ${r.s && r.s.in_model_pf ? "🦁" : ""}${r.s && r.s.pf_held ? "📦" : ""}</td>
       <td class="num">${r.shares.toLocaleString()}株<br><span class="mut">@${r.cost.toLocaleString()}円</span></td>
-      <td class="num">${r.price != null ? Math.round(r.price).toLocaleString() + "円" : "<span class='mut'>未収載</span>"}</td>
+      <td class="num">${r.price != null ? Math.round(r.price).toLocaleString() + "円"
+        : "<span class='mut' title='この銘柄はアプリの採点対象に入っていないため、株価・配当データがありません'>未収載<br>(採点対象外)</span>"}</td>
       <td class="num ${r.gain > 0 ? "pos" : r.gain < 0 ? "neg" : ""}">${r.gain != null ? (r.gain > 0 ? "+" : "") + r.gain.toFixed(1) + "%" : "−"}</td>
       <td class="num">${r.annualDiv != null ? Math.round(r.annualDiv).toLocaleString() + "円" : "−"}</td>
       <td>${r.signal ? `<span class="sig sig${r.signal.level}">📉 取得単価比${(r.signal.dropPct * -100).toFixed(0)}%（買い増し${r.signal.level}回目）</span>` : ""}${r.hiSignal ? `<span class="sig sigHi">📉 高値-20%</span>` : ""}</td>
@@ -790,9 +815,10 @@
         <div class="pf-summary">
           <div class="stat"><span class="stat-k">評価額合計</span><span class="stat-v">${Math.round(total).toLocaleString()}円</span></div>
           <div class="stat"><span class="stat-k">年間配当(予想)</span><span class="stat-v">${Math.round(totalDiv).toLocaleString()}円</span></div>
-          <div class="stat"><span class="stat-k">PF利回り</span><span class="stat-v">${total ? (totalDiv / total * 100).toFixed(2) : "−"}%</span></div>
+          <div class="stat"><span class="stat-k">PF利回り</span><span class="stat-v">${divBase ? (totalDiv / divBase * 100).toFixed(2) : "−"}%</span></div>
           <div class="stat"><span class="stat-k">銘柄数</span><span class="stat-v">${rows.length}</span></div>
         </div>
+        ${estNote}
         ${guidanceHtml(calc)}
         <h3>📊 セクター割合の比較（学長モデルPF vs わたし）</h3>
         ${sectorCompareHtml(mine, model)}
@@ -922,9 +948,49 @@
     });
   }
 
+  // CSVを1行=セル配列に分解する（RFC4180準拠の簡易パーサ）。
+  // 楽天証券のCSVは全フィールドが引用符付きで、金額は "1,843.72" のように
+  // 桁区切りカンマを含む。単純な split(",") では 1 と 843.72 に割れてしまい、
+  // 取得単価が「@1円」になる（＝損益が+160500%などの異常値になる）ため、
+  // 引用符の中のカンマ・改行はセルの区切りとして扱わないこと。
+  function splitCsv(text) {
+    const rows = [];
+    let row = [], cell = "", inQuotes = false;
+    // BOM除去
+    if (text.charCodeAt(0) === 0xfeff) text = text.slice(1);
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { cell += '"'; i++; }  // "" はエスケープされた "
+          else inQuotes = false;
+        } else cell += c;
+        continue;
+      }
+      if (c === '"') { inQuotes = true; continue; }
+      if (c === ",") { row.push(cell); cell = ""; continue; }
+      if (c === "\r") continue;
+      if (c === "\n") { row.push(cell); rows.push(row); row = []; cell = ""; continue; }
+      cell += c;
+    }
+    row.push(cell);
+    rows.push(row);
+    return rows.map((r) => r.map((c) => c.trim()));
+  }
+
+  // "1,843.72" / "1,843.72円" → 1843.72 （桁区切りカンマ・単位・全角数字に対応）
+  function parseNum(v) {
+    if (v == null) return NaN;
+    const s = String(v)
+      .replace(/[０-９．－]/g, (c) => "0123456789.-"["０１２３４５６７８９．－".indexOf(c)])
+      .replace(/[,\s，円株口]/g, "");
+    if (!/^-?\d*\.?\d+$/.test(s)) return NaN;
+    return parseFloat(s);
+  }
+
   function parseBrokerCsv(text) {
     // 楽天証券などのCSVから 銘柄コード・保有数量・平均取得価額 を推定して読む
-    const lines = text.split(/\r?\n/).map((l) => l.split(",").map((c) => c.replace(/^"|"$/g, "").trim()));
+    const lines = splitCsv(text);
     let cols = null;
     const out = [];
     for (const cells of lines) {
@@ -938,9 +1004,19 @@
       }
       if (!cols) continue;
       const code = (cells[cols.ci] || "").replace(/\D/g, "").slice(0, 4);
-      const shares = parseFloat((cells[cols.si] || "").replace(/[,株]/g, ""));
-      const cost = parseFloat((cells[cols.pi] || "").replace(/[,円]/g, ""));
-      if (/^\d{4}$/.test(code) && shares > 0 && cost > 0) out.push({ code, shares, cost });
+      const shares = parseNum(cells[cols.si]);
+      const cost = parseNum(cells[cols.pi]);
+      if (!/^\d{4}$/.test(code) || !(shares > 0) || !(cost > 0)) continue;
+      // 同じ銘柄が複数の口座区分（NISA成長投資枠・特定口座など）に分かれて
+      // 出てくることがある。上書きせず、株数を合算し取得単価は加重平均にする。
+      const prev = out.find((o) => o.code === code);
+      if (prev) {
+        const total = prev.shares + shares;
+        prev.cost = Math.round((prev.cost * prev.shares + cost * shares) / total * 100) / 100;
+        prev.shares = total;
+      } else {
+        out.push({ code, shares, cost });
+      }
     }
     return out;
   }
@@ -971,6 +1047,15 @@
 
   let lastFetch = 0;
 
+  // 全銘柄名マスタ。取れなくてもアプリは動く（名前がコード表示に戻るだけ）ので
+  // 失敗しても握りつぶす。更新頻度が低いので通常のキャッシュに任せる。
+  function loadNames() {
+    return fetch("names.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (j && j.names) NAMES = j.names; })
+      .catch(() => {});
+  }
+
   function loadData() {
     return fetch("data.json?" + Date.now(), { cache: "no-store" })
       .then((r) => {
@@ -989,7 +1074,7 @@
   }
 
   function boot() {
-    loadData()
+    Promise.all([loadData(), loadNames()])
       .then(() => {
         setupEvents();
         renderGlossary();

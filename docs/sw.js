@@ -1,6 +1,6 @@
 /* Service Worker: オフラインでも前回のデータで表示できるようにする */
-const CACHE = "kouhaitou-v3";
-const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest"];
+const CACHE = "kouhaitou-v4";
+const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "names.json"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)));
