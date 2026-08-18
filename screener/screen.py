@@ -88,6 +88,15 @@ def yield_check(div_yield):
 #     「20年以上減配なし」と説明されており、この-3.2%は集計上の見かけの減配。
 #     コムチュア(3844) 2019年31.5円→2020年30.5円 も同様。
 # 5%未満の減少は集計ノイズとみなし、減配としては数えない（5%以上の減少は減配のまま）。
+#
+# ただし「前年比」だけで見ると、毎年4%ずつのような小さな減配を積み重ねて
+# 数年で累積5%超になるケースがすり抜けてしまう。そのため前年比に加えて
+# 「過去のピーク比」でも判定する（累積判定）。
+#   - 前年比: 前年から5%以上落ちた年
+#   - ピーク比: それまでの最高額から5%以上下振れした「最初の年」
+# ピーク比は“下振れした状態が続いている間”は重複して数えない（新たに割り込んだ年だけ）。
+# これにより、支払時期ズレによる一時的な凹み（翌年に回復してピークを更新する）は
+# 引き続き許容しつつ、じわじわ下がり続ける実質的な減配は捕捉できる。
 DIV_CUT_TOL = 0.95
 
 
@@ -97,7 +106,17 @@ def dividend_trend_check(div_values):
     if not div_values or len(div_values) < 3:
         return {"status": None, "value": None, "text": "配当履歴が短い"}
     n = len(div_values)
-    cuts = sum(1 for a, b in zip(div_values, div_values[1:]) if b < a * DIV_CUT_TOL)
+    cuts = 0
+    peak = div_values[0]
+    was_below_peak = False
+    for a, b in zip(div_values, div_values[1:]):
+        below_peak = b < peak * DIV_CUT_TOL
+        # 前年比の減配、または「新たに」ピーク比5%超まで下振れした年をカウント
+        # (同じ年が両方に該当しても二重には数えない)
+        if b < a * DIV_CUT_TOL or (below_peak and not was_below_peak):
+            cuts += 1
+        was_below_peak = below_peak
+        peak = max(peak, b)
     raises = sum(1 for a, b in zip(div_values, div_values[1:]) if b > a * 1.001)
     if cuts == 0 and raises >= 1:
         return {"status": "ok", "value": None, "text": f"{n}年減配なし・増配{raises}回"}
