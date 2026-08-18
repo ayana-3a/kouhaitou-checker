@@ -160,6 +160,57 @@ main { max-width: 960px; margin: 0 auto; padding: 12px 12px 40px; }
   background: #fff9c4;
   color: #9a6700;
 }
+.pf-badge.pf-note {
+  background: #fdecef;
+  color: #b3364d;
+}
+/* 🦁 学長メモ: マガジンで学長が語った選定理由。既存の⭐バッジと同じ丸みで揃える */
+.manager-note {
+  margin: 8px 0 2px;
+  border: 1px solid #f2c6d0;
+  background: #fff8f9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.manager-note > summary {
+  cursor: pointer;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8c2f45;
+  line-height: 1.45;
+}
+.manager-note > summary::-webkit-details-marker { display: none; }
+.mn-badge {
+  display: inline-block;
+  background: #b3364d;
+  color: #fff;
+  border-radius: 8px;
+  padding: 1px 8px;
+  margin-right: 6px;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.mn-body { padding: 0 12px 10px; font-size: 0.82rem; line-height: 1.65; color: #444; }
+.mn-src { color: #8c2f45; font-weight: 700; margin: 2px 0 6px; font-size: 0.76rem; }
+.mn-points { margin: 0 0 8px; padding-left: 1.1em; }
+.mn-points li { margin-bottom: 4px; }
+.mn-gap, .mn-caution {
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin-bottom: 7px;
+}
+.mn-gap h5, .mn-caution h5 {
+  margin: 0 0 3px;
+  font-size: 0.78rem;
+  color: #8c2f45;
+}
+.mn-gap p, .mn-caution p { margin: 0; }
+.mn-caution { background: #fff4e5; }
+.mn-caution h5 { color: #b26a00; }
+.mn-foot { margin: 6px 0 0; font-size: 0.72rem; color: var(--gray); }
+.stale-note { background: #eef4ff; color: #2c4f8c; }
 .def-badge {
   display: inline-block;
   font-size: 0.72rem;

@@ -51,6 +51,7 @@ THRESHOLDS = {
 
 CRITERIA_DEFS = [
     {"id": "yield", "name": "配当利回り", "desc": "税引前3.75%以上（3.5%以上で△）"},
+    # ↓ 以下は財務諸表が必要な項目（利回りだけは株価から常に計算できる）
     {"id": "op_margin", "name": "営業利益率", "desc": "10%以上（ビジネスの競争力）"},
     {"id": "equity_ratio", "name": "自己資本比率", "desc": "50%以上（財務の安定性）"},
     {"id": "current_ratio", "name": "流動比率", "desc": "200%以上（短期の資金繰り）"},
@@ -63,9 +64,117 @@ CRITERIA_DEFS = [
 ]
 
 
+# 財務諸表がないと判定できない8項目。利回りは株価だけで計算できるので別扱い。
+FIN_CHECK_IDS = [c["id"] for c in CRITERIA_DEFS if c["id"] not in ("yield", "payout")]
+
+
+def yield_check(div_yield):
+    """配当利回り(%)から checks["yield"] の中身を作る。
+    update_prices.py からも呼ぶ（株価更新時に判定を作り直すため）。"""
+    if div_yield is None or not (0 <= div_yield <= 20):
+        return {"status": None, "value": None, "text": "データなし"}
+    if div_yield >= THRESHOLDS["yield_ok"]:
+        st = "ok"
+    elif div_yield >= THRESHOLDS["yield_warn"]:
+        st = "warn"
+    else:
+        st = "ng"
+    return {"status": st, "value": round(div_yield, 2), "text": f"{div_yield:.2f}%"}
+
+
+# 配当は「権利確定日ベースの暦年合計」で集計している（会計年度ではない）。
+# そのため支払時期が年をまたぐと、実際には減配していなくても数%の凹みが出る。
+# 例: マルゼン(5982) 2020年31円→2021年30円。マガジン第121回の本文では
+#     「20年以上減配なし」と説明されており、この-3.2%は集計上の見かけの減配。
+#     コムチュア(3844) 2019年31.5円→2020年30.5円 も同様。
+# 5%未満の減少は集計ノイズとみなし、減配としては数えない（5%以上の減少は減配のまま）。
+DIV_CUT_TOL = 0.95
+
+
+def dividend_trend_check(div_values):
+    """1株配当の推移（⑦非減配・増配傾向）の判定。
+    dividend_history からいつでも作り直せるように独立した関数にしている。"""
+    if not div_values or len(div_values) < 3:
+        return {"status": None, "value": None, "text": "配当履歴が短い"}
+    n = len(div_values)
+    cuts = sum(1 for a, b in zip(div_values, div_values[1:]) if b < a * DIV_CUT_TOL)
+    raises = sum(1 for a, b in zip(div_values, div_values[1:]) if b > a * 1.001)
+    if cuts == 0 and raises >= 1:
+        return {"status": "ok", "value": None, "text": f"{n}年減配なし・増配{raises}回"}
+    if cuts == 0:
+        return {"status": "warn", "value": None, "text": f"{n}年減配なし(横ばい)"}
+    if cuts == 1 and div_values[-1] >= max(div_values) * 0.9:
+        return {"status": "warn", "value": None, "text": f"減配{cuts}回あり・現在は回復"}
+    return {"status": "ng", "value": None, "text": f"減配{cuts}回あり"}
+
+
+def compute_score(checks):
+    """◯=1点 △=0.5点。評価できない項目は分母から除外して10点満点に換算。"""
+    evaluable = [c for c in checks.values() if c.get("status") is not None]
+    if not evaluable:
+        return None
+    raw = sum(1.0 if c["status"] == "ok" else 0.5 if c["status"] == "warn" else 0.0
+              for c in evaluable)
+    return round(raw / len(evaluable) * 10, 1)
+
+
+def na_count(checks):
+    return sum(1 for c in checks.values() if c.get("status") is None)
+
+
+def fin_evaluated(stock):
+    """財務由来の項目のうち、実際に判定できた個数。データ品質の指標。"""
+    ch = stock.get("checks") or {}
+    return sum(1 for cid in FIN_CHECK_IDS if (ch.get(cid) or {}).get("status") is not None)
+
+
+def merge_keep_best(new, prev):
+    """今回の取得で財務データが取れなかったときに、前回の良いデータを引き継ぐ。
+
+    yfinanceはレート制限にかかると income_stmt などを「空のDataFrame」で返す。
+    例外にならないため、そのまま保存すると採点が「利回りと配当性向だけ」に退化し、
+    na_count=8 になってフロントの発掘候補・基準クリアから消えてしまう
+    （2026/07〜08に実際に発生。判定できる銘柄が1241→80まで落ちた）。
+    財務項目の取得数が前回を下回るときは、株価まわりだけ新しくして財務は前回値を使う。"""
+    if not prev or fin_evaluated(new) >= fin_evaluated(prev):
+        return new
+    merged = dict(prev)
+    # 今回ちゃんと取れた「市場データ」だけ上書きする
+    for f in ("price", "name", "sector", "market", "is_etf",
+              "in_model_pf", "pf_held", "pf_featured"):
+        if new.get(f) is not None:
+            merged[f] = new[f]
+    if new.get("yield") is not None:
+        merged["yield"] = new["yield"]
+    if new.get("price_history"):
+        merged["price_history"] = new["price_history"]
+    merged["checks"] = dict(prev.get("checks") or {})
+    merged["checks"]["yield"] = yield_check(merged.get("yield"))
+    merged["score"] = compute_score(merged["checks"])
+    merged["na_count"] = na_count(merged["checks"])
+    merged["v"] = 2
+    merged["checked_at"] = new.get("checked_at")
+    # 財務データがいつ時点のものかを残す（フロントで注記を出せるように）
+    merged["financials_as_of"] = prev.get("financials_as_of") or prev.get("checked_at")
+    return merged
+
+
 def load_model_pf():
     with open(ROOT / "screener" / "model_portfolio.json", encoding="utf-8") as f:
         return json.load(f)
+
+
+def load_manager_notes():
+    """学長メモ（マガジンでの言及内容）。knowledge/学長基準.md の記録が出典。"""
+    p = ROOT / "screener" / "manager_notes.json"
+    if not p.exists():
+        return {}
+    try:
+        with open(p, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[warn] 学長メモの読み込みに失敗: {e}", file=sys.stderr)
+        return {}
 
 
 def fetch_jpx_list():
@@ -305,18 +414,23 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset(),
             sector = "ETF"
 
     # 財務諸表
-    try:
-        inc = t.income_stmt
-    except Exception:
-        inc = None
-    try:
-        bs = t.balance_sheet
-    except Exception:
-        bs = None
-    try:
-        cf = t.cashflow
-    except Exception:
-        cf = None
+    # レート制限時、yfinanceは例外ではなく「空のDataFrame」を返すことがある。
+    # 空も失敗とみなして間隔を空けて再試行する（採点の退化を防ぐ）。
+    def _stmt(getter, tries=3):
+        for i in range(tries):
+            try:
+                df = getter()
+                if df is not None and not df.empty:
+                    return df
+            except Exception:
+                pass
+            if i < tries - 1:
+                time.sleep(1.5 * (i + 1))
+        return None
+
+    inc = _stmt(lambda: t.income_stmt)
+    bs = _stmt(lambda: t.balance_sheet)
+    cf = _stmt(lambda: t.cashflow)
 
     revenue = _row(inc, ["Total Revenue", "Operating Revenue"])
     op_income = _row(inc, ["Operating Income", "Total Operating Income As Reported"])
@@ -426,14 +540,7 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset(),
         checks[cid] = {"status": status, "value": value, "text": text}
 
     # 1 配当利回り
-    if div_yield is None:
-        put("yield", None, None, "データなし")
-    elif div_yield >= TH["yield_ok"]:
-        put("yield", "ok", round(div_yield, 2), f"{div_yield:.2f}%")
-    elif div_yield >= TH["yield_warn"]:
-        put("yield", "warn", round(div_yield, 2), f"{div_yield:.2f}%")
-    else:
-        put("yield", "ng", round(div_yield, 2), f"{div_yield:.2f}%")
+    checks["yield"] = yield_check(div_yield)
 
     # 2 営業利益率
     if op_margin is None:
@@ -477,19 +584,7 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset(),
         put("eps_trend", st, None, {"ok": "増加傾向", "warn": "横ばい", "ng": "減少傾向"}.get(st, "データなし"))
 
     # 7 配当トレンド (非減配・増配)
-    if len(div_values) >= 3:
-        cuts = sum(1 for a, b in zip(div_values, div_values[1:]) if b < a * 0.999)
-        raises = sum(1 for a, b in zip(div_values, div_values[1:]) if b > a * 1.001)
-        if cuts == 0 and raises >= 1:
-            put("dividend_trend", "ok", None, f"{len(div_values)}年減配なし・増配{raises}回")
-        elif cuts == 0:
-            put("dividend_trend", "warn", None, f"{len(div_values)}年減配なし(横ばい)")
-        elif cuts == 1 and div_values[-1] >= max(div_values) * 0.9:
-            put("dividend_trend", "warn", None, f"減配{cuts}回あり・現在は回復")
-        else:
-            put("dividend_trend", "ng", None, f"減配{cuts}回あり")
-    else:
-        put("dividend_trend", None, None, "配当履歴が短い")
+    checks["dividend_trend"] = dividend_trend_check(div_values)
 
     # 8 配当性向
     if payout is None or payout <= 0:
@@ -517,9 +612,7 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset(),
     put("cash", st, None, {"ok": "増加傾向", "warn": "横ばい", "ng": "減少傾向"}.get(st, "データなし"))
 
     # スコア: ◯=1点 △=0.5点、評価不能は分母から除外して10点満点に換算
-    evaluable = [c for c in checks.values() if c["status"] is not None]
-    raw = sum(1.0 if c["status"] == "ok" else 0.5 if c["status"] == "warn" else 0.0 for c in evaluable)
-    score = round(raw / len(evaluable) * 10, 1) if evaluable else None
+    score = compute_score(checks)
 
     div_history = [{"year": y, "value": round(v, 2)} for y, v in divs]
 
@@ -548,8 +641,33 @@ def eval_stock(code, meta, model_codes, info=None, held_codes=frozenset(),
         "series": series,
         "op_cf_streak": op_cf_streak,
         "op_cf_years_available": op_cf_years_available,
-        "na_count": len(checks) - len(evaluable),
+        "na_count": na_count(checks),
     }
+
+
+def rejudge(path):
+    """通信せず、保存済みの dividend_history / yield から判定とスコアを作り直す。
+    判定ルールを変えたときに、全銘柄を取り直さずに反映させるために使う。"""
+    d = json.loads(path.read_text())
+    changed = 0
+    for s in d.get("stocks", []):
+        ch = s.get("checks")
+        if not ch:
+            continue
+        before = (ch.get("dividend_trend", {}).get("status"),
+                  ch.get("yield", {}).get("status"))
+        dv = [h["value"] for h in (s.get("dividend_history") or [])]
+        if dv:
+            ch["dividend_trend"] = dividend_trend_check(dv)
+        ch["yield"] = yield_check(s.get("yield"))
+        s["score"] = compute_score(ch)
+        s["na_count"] = na_count(ch)
+        if before != (ch["dividend_trend"].get("status"), ch["yield"].get("status")):
+            changed += 1
+    d["stocks"].sort(key=lambda r: (r.get("score") or 0, r.get("yield") or 0), reverse=True)
+    d["manager_notes"] = load_manager_notes()
+    path.write_text(json.dumps(d, ensure_ascii=False, indent=1))
+    print(f"再判定完了: {len(d.get('stocks', []))}銘柄中 {changed}銘柄の判定が変わりました → {path}")
 
 
 def prime_universe(meta):
@@ -567,8 +685,16 @@ def main():
     ap.add_argument("--min-yield", type=float, default=None, help="この利回り未満は詳細分析を省略(%)")
     ap.add_argument("--limit", type=int, default=None, help="銘柄数上限(テスト用)")
     ap.add_argument("--refresh", action="store_true", help="キャッシュを使わず全銘柄を再分析")
+    ap.add_argument("--repair", action="store_true",
+                    help="既存data.jsonのうち財務データが欠けている銘柄だけ再取得（他の銘柄は温存）")
+    ap.add_argument("--rejudge", action="store_true",
+                    help="通信せず、保存済みデータから判定とスコアだけ作り直す")
     ap.add_argument("--out", default=str(DOCS / "data.json"))
     args = ap.parse_args()
+
+    if args.rejudge:
+        rejudge(Path(args.out))
+        return
 
     meta = jpx_meta()
     model = load_model_pf()
@@ -579,9 +705,29 @@ def main():
     # 「注目株」= 直近の月次PF以降に紹介コラムで紹介された銘柄(次のPFで未採用なら外す)
     featured_codes = frozenset(s["code"] for s in model.get("featured", []))
 
+    # 既存の出力（前回の分析結果）。修復モードと「財務データを退化させない」判定に使う。
+    prev_path = Path(args.out)
+    prev_stocks, prev_errors = {}, []
+    if prev_path.exists():
+        try:
+            _pd = json.loads(prev_path.read_text())
+            prev_stocks = {s["code"]: s for s in _pd.get("stocks", [])}
+            prev_errors = [e["code"] for e in _pd.get("errors", []) if e.get("code")]
+        except Exception as e:
+            print(f"[warn] 既存data.jsonの読み込みに失敗: {e}", file=sys.stderr)
+
     codes = []
     if args.tickers:
         codes += [c.strip() for c in args.tickers]
+    if args.repair:
+        # 財務項目が1つでも欠けている銘柄＋前回まるごと取得失敗した銘柄を対象にする
+        rc = [c for c, s in prev_stocks.items() if fin_evaluated(s) < len(FIN_CHECK_IDS)]
+        rc += [c for c in prev_errors if c not in prev_stocks]
+        rc = list(dict.fromkeys(rc))
+        print(f"修復モード: 既存{len(prev_stocks)}銘柄のうち "
+              f"{len([c for c in rc if c in prev_stocks])}銘柄で財務データが欠落、"
+              f"{len([c for c in rc if c not in prev_stocks])}銘柄が未収載。計{len(rc)}銘柄を再取得します。")
+        codes += rc
     if args.model_pf:
         codes += [s["code"] for s in model["stocks"]]
         codes += sorted(held_codes)
@@ -605,6 +751,8 @@ def main():
         sys.exit(1)
 
     always_keep = set(args.tickers) | ((model_codes | held_codes | featured_codes) if args.model_pf else set()) | fund_codes
+    if args.repair:
+        always_keep |= set(codes)  # 修復対象は利回り足切りで落とさない
     infos = {}
 
     # --- 一次スクリーニング: 概算利回りで足切り (並列・キャッシュつき) ---
@@ -676,19 +824,17 @@ def main():
 
     # --- 差分更新: 3日以内に分析済みの銘柄は前回の結果を再利用 ---
     results = []
-    prev_path = Path(args.out)
-    if prev_path.exists() and not args.refresh:
-        try:
-            prev = {s["code"]: s for s in json.loads(prev_path.read_text())["stocks"]}
-        except Exception:
-            prev = {}
+    prev = prev_stocks
+    if prev and not args.refresh and not args.repair:
         cutoff = (datetime.date.today() - datetime.timedelta(days=3)).isoformat()
         reused = []
         rest = []
         for c in codes:
             p = prev.get(c)
-            # v2形式(グラフ用時系列つき)で3日以内に分析済みのものだけ再利用
-            if p and p.get("v") == 2 and p.get("checked_at", "") >= cutoff:
+            # v2形式(グラフ用時系列つき)で3日以内に分析済みのものだけ再利用。
+            # ただし財務データが欠けている結果は再利用せず取り直す（退化の固定化を防ぐ）
+            if (p and p.get("v") == 2 and p.get("checked_at", "") >= cutoff
+                    and fin_evaluated(p) >= len(FIN_CHECK_IDS)):
                 p["in_model_pf"] = c in model_codes
                 p["pf_held"] = c in held_codes
                 p["pf_featured"] = c in featured_codes
@@ -700,8 +846,23 @@ def main():
             results.extend(reused)
         codes = rest
 
+    # 修復モードでは、対象外の銘柄は前回の結果をそのまま持ち越す（消さない）
+    if args.repair:
+        target = set(codes)
+        carried = 0
+        for c, p in prev.items():
+            if c in target:
+                continue
+            p["in_model_pf"] = c in model_codes
+            p["pf_held"] = c in held_codes
+            p["pf_featured"] = c in featured_codes
+            results.append(p)
+            carried += 1
+        print(f"{carried}銘柄は対象外のため前回結果を維持")
+
     print(f"{len(codes)}銘柄を詳細分析します...")
     errors = []
+    degraded = []  # 財務が取れず前回値を引き継いだ銘柄
     lock = threading.Lock()
     done = [0]
 
@@ -722,11 +883,20 @@ def main():
                 with lock:
                     done[0] += 1
                     # レート制限等でほぼ何も取れていない場合は「未分析」扱い
-                    # (結果に含めず、次回の実行で再試行される)
+                    # (前回の結果があれば温存し、なければ次回の実行で再試行)
                     if r["price"] is None and r["yield"] is None:
                         errors.append({"code": code, "error": "データ取得失敗"})
-                        print(f"  [{done[0]}/{len(codes)}] {code}: 取得失敗(次回再試行)")
+                        if prev.get(code):
+                            results.append(prev[code])
+                            print(f"  [{done[0]}/{len(codes)}] {code}: 取得失敗(前回値を維持)")
+                        else:
+                            print(f"  [{done[0]}/{len(codes)}] {code}: 取得失敗(次回再試行)")
                         continue
+                    # 財務が取れなかった場合は前回の良いデータを引き継ぐ（退化防止）
+                    before = fin_evaluated(r)
+                    r = merge_keep_best(r, prev.get(code))
+                    if fin_evaluated(r) > before:
+                        degraded.append(code)
                     # 詳細分析後の正確な利回りで最終足切り
                     if (args.min_yield is not None and code not in always_keep
                             and (r["yield"] is None or r["yield"] < args.min_yield)):
@@ -741,8 +911,14 @@ def main():
                     errors.append({"error": str(e)})
                     print(f"  [{done[0]}/{len(codes)}] エラー {e}", file=sys.stderr)
 
+    # 同一コードが二重に入らないようにする（修復モードの持ち越しと新規取得の衝突対策）
+    dedup = {}
+    for r in results:
+        dedup[r["code"]] = r
+    results = list(dedup.values())
     results.sort(key=lambda r: (r["score"] or 0, r["yield"] or 0), reverse=True)
 
+    full = sum(1 for r in results if fin_evaluated(r) >= len(FIN_CHECK_IDS))
     out = {
         # GitHub ActionsランナーはUTCのため、日本時間を明示して記録する
         "generated_at": datetime.datetime.now(
@@ -751,6 +927,13 @@ def main():
         "criteria": CRITERIA_DEFS,
         "thresholds": THRESHOLDS,
         "model_pf": model,
+        # 学長がマガジンで語った内容のメモ（機械採点では拾えない選定理由）
+        "manager_notes": load_manager_notes(),
+        "data_quality": {
+            "total": len(results),
+            "full_financials": full,
+            "missing_financials": len(results) - full,
+        },
         "stocks": results,
         "errors": errors,
     }
@@ -759,6 +942,9 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
     print(f"\n完了: {len(results)}銘柄 → {out_path}")
+    print(f"財務データ完備: {full}銘柄 / 欠落: {len(results) - full}銘柄")
+    if degraded:
+        print(f"※ {len(degraded)}銘柄は今回財務が取得できず、前回のデータを引き継ぎました")
 
 
 if __name__ == "__main__":

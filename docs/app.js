@@ -284,6 +284,31 @@
       </details>`;
   }
 
+  // ---- 🦁 学長メモ ----
+  // マガジンで学長が語った内容（screener/manager_notes.json）。
+  // 機械採点の10項目では拾えない「なぜ学長がこの銘柄を選んだのか」を補う。
+  function noteFor(code) {
+    const n = DATA.manager_notes;
+    return n && !String(code).startsWith("_") ? n[code] : null;
+  }
+
+  function noteHtml(s) {
+    const n = noteFor(s.code);
+    if (!n) return "";
+    const li = (arr) =>
+      (arr || []).map((p) => `<li>${esc(p)}</li>`).join("");
+    return `<details class="manager-note">
+      <summary><span class="mn-badge">🦁 学長メモ</span>${esc(n.headline || "")}</summary>
+      <div class="mn-body">
+        <p class="mn-src">出典: ${esc(n.source || "")}</p>
+        ${n.points && n.points.length ? `<ul class="mn-points">${li(n.points)}</ul>` : ""}
+        ${n.gap ? `<div class="mn-gap"><h5>アプリの採点との違い</h5><p>${esc(n.gap)}</p></div>` : ""}
+        ${n.caution ? `<div class="mn-caution"><h5>⚠️ 注意点</h5><p>${esc(n.caution)}</p></div>` : ""}
+        <p class="mn-foot">学長マガジンの要点メモ（knowledge/学長基準.md）にもとづく整理です。マガジン本文ではありません。投資判断はご自身で。</p>
+      </div>
+    </details>`;
+  }
+
   function cardHtml(s) {
     const checksOrder = DATA.criteria.map((c) => c.id);
     const chips = checksOrder.map((id) => chipHtml(id, s.checks[id])).join("");
@@ -301,6 +326,7 @@
           ${s.in_model_pf ? '<span class="pf-badge">🦁 今月の学長PF</span>' : ""}
           ${s.pf_held ? '<span class="pf-badge pf-held">📦 学長PF（保持）</span>' : ""}
           ${s.pf_featured ? '<span class="pf-badge pf-featured">⭐ 学長注目株</span>' : ""}
+          ${noteFor(s.code) ? '<span class="pf-badge pf-note">🦁 学長メモ</span>' : ""}
         </div>
         <div class="score-circle ${scoreClass(s.score, s)}">
           ${s.score == null ? "−" : s.score}<small>${dataOk(s) ? "/ 10点" : "参考値"}</small>
@@ -314,7 +340,9 @@
       </div>
       ${etfNote}
       ${!s.is_etf && !dataOk(s) ? '<div class="etf-note">⚠️ この銘柄は財務データが十分に取得できないため、スコアは参考値です（発掘候補には含めていません）。IR BANKで直接確認してください。</div>' : ""}
+      ${s.financials_as_of ? `<div class="etf-note stale-note">ℹ️ 今回は財務データを取得できなかったため、${esc(s.financials_as_of)}時点の財務データで採点しています（株価・利回りは最新）。</div>` : ""}
       <div class="chips">${chips}</div>
+      ${noteHtml(s)}
       <details data-code="${esc(s.code)}">
         <summary>くわしく見る（グラフ・全指標）</summary>
         <div class="detail-body"></div>
