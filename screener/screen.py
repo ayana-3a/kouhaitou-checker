@@ -29,6 +29,9 @@ import pandas as pd
 import requests
 import yfinance as yf
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from signals import build_signals_csv  # noqa: E402
+
 warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -803,6 +806,7 @@ def rejudge(path):
     d["stocks"].sort(key=lambda r: (r.get("score") or 0, r.get("yield") or 0), reverse=True)
     d["manager_notes"] = load_manager_notes()
     path.write_text(json.dumps(d, ensure_ascii=False, indent=1))
+    build_signals_csv(path)
     print(f"再判定完了: {len(d.get('stocks', []))}銘柄中 {changed}銘柄の判定が変わりました → {path}")
 
 
@@ -1100,6 +1104,8 @@ def main():
     out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
+    # 買い増しシグナル用の軽量CSV（スプレッドシートのIMPORTDATA用）
+    build_signals_csv(out_path)
     print(f"\n完了: {len(results)}銘柄 → {out_path}")
     print(f"財務データ完備: {full}銘柄 / 欠落: {len(results) - full}銘柄")
     if degraded:

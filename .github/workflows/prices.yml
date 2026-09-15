@@ -33,6 +33,6 @@ jobs:
         run: |
           git config user.name "price-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/data.json
+          git add docs/data.json docs/signals.csv
           git diff --cached --quiet || git commit -m "株価更新 $(TZ=Asia/Tokyo date +'%Y-%m-%d %H:%M')"
           git push

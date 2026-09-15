@@ -19,6 +19,7 @@ import yfinance as yf
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from screen import compute_score, na_count, yield_check  # noqa: E402
+from signals import build_signals_csv  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
@@ -86,6 +87,8 @@ def main():
     now = datetime.datetime.now(jst).strftime("%Y-%m-%d %H:%M")
     d["prices_updated_at"] = now
     DATA.write_text(json.dumps(d, ensure_ascii=False, indent=1))
+    # 買い増しシグナル用の軽量CSV（スプレッドシートのIMPORTDATA用）
+    build_signals_csv(DATA)
     print(f"完了: {updated}/{len(stocks)}銘柄の株価を更新 ({now})")
     print(f"  うち{rescored}銘柄は配当利回りの判定(◯△✕)が変わりました")
     if updated < len(stocks) * 0.5:
