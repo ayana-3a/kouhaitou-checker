@@ -17,6 +17,7 @@ import io
 import json
 import math
 import os
+import re
 import sys
 import threading
 import time
@@ -35,7 +36,14 @@ DOCS = ROOT / "docs"
 CACHE = ROOT / "screener" / "cache"
 CACHE.mkdir(parents=True, exist_ok=True)
 
-JPX_LIST_URL = "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls"
+# JPX「東証上場銘柄一覧」。2026年9月にファイルの拡張子が .xls → .xlsx に変わり、
+# 旧URLが404になった。取得に失敗すると銘柄名が yfinance の英語名になり、セクターも
+# 空になってしまう（2026-09-12の週次実行で実際に発生）ので、候補URLを順に試す。
+JPX_LIST_URLS = [
+    "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xlsx",
+    "https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls",
+]
+JPX_LIST_URL = JPX_LIST_URLS[0]  # 後方互換（他スクリプトから参照される場合がある）
 
 # ---- 判定基準 (knowledge/学長基準.md 参照) ----
 THRESHOLDS = {
@@ -196,27 +204,129 @@ def load_manager_notes():
         return {}
 
 
+def jpx_cache_files():
+    """キャッシュ済みの銘柄一覧Excel（新しい順）。拡張子は .xlsx / .xls のどちらもあり得る。"""
+    files = [CACHE / "data_j.xlsx", CACHE / "data_j.xls"]
+    files = [f for f in files if f.exists()]
+    files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+    return files
+
+
 def fetch_jpx_list():
     """JPX公式の東証上場銘柄一覧(Excel)を取得。コード→和名/市場/33業種。"""
-    cache_file = CACHE / "data_j.xls"
-    if not cache_file.exists() or (
-        time.time() - cache_file.stat().st_mtime > 7 * 86400
-    ):
-        r = requests.get(JPX_LIST_URL, timeout=60)
-        r.raise_for_status()
-        cache_file.write_bytes(r.content)
-    df = pd.read_excel(cache_file, dtype=str)
+    fresh = [f for f in jpx_cache_files()
+             if time.time() - f.stat().st_mtime <= 7 * 86400]
+    if fresh:
+        return _read_jpx_excel(fresh[0])
+
+    errors = []
+    for url in JPX_LIST_URLS:
+        suffix = ".xlsx" if url.lower().endswith(".xlsx") else ".xls"
+        cache_file = CACHE / f"data_j{suffix}"
+        try:
+            r = requests.get(url, timeout=60)
+            r.raise_for_status()
+            cache_file.write_bytes(r.content)
+            return _read_jpx_excel(cache_file)
+        except Exception as e:
+            errors.append(f"{url}: {e}")
+            print(f"[warn] JPX銘柄一覧の取得に失敗 {url}: {e}", file=sys.stderr)
+
+    # 取得は全滅。期限切れでもキャッシュがあれば使う（英語名になるよりはマシ）
+    stale = jpx_cache_files()
+    if stale:
+        print(f"[warn] 期限切れのキャッシュ {stale[0].name} を使います", file=sys.stderr)
+        return _read_jpx_excel(stale[0])
+    raise RuntimeError("JPX銘柄一覧を取得できません / " + " / ".join(errors))
+
+
+def _read_jpx_excel(path):
+    # .xlsx は openpyxl、.xls は xlrd が必要。拡張子からpandasが自動で選ぶ。
+    df = pd.read_excel(path, dtype=str)
     df.columns = [str(c).strip() for c in df.columns]
     return df
 
 
-def jpx_meta():
+# ひらがな・カタカナ・漢字・全角英数を1文字でも含めば「日本語の銘柄名」とみなす。
+# yfinance由来の英語名 ("Tachikawa Corporation" など) と区別するために使う。
+_JP_CHARS = re.compile(
+    "["
+    "぀-ヿ"   # ひらがな・カタカナ
+    "㐀-鿿"   # 漢字
+    "々〆〜・"  # 々 〆 〜 ・
+    "！-￮"   # 全角英数・全角記号・半角カナ
+    "]"
+)
+
+
+def is_japanese_name(s):
+    return bool(s) and bool(_JP_CHARS.search(str(s)))
+
+
+def load_names_master():
+    """docs/names.json（build_names.py が作る全銘柄の「コード→[銘柄名, 33業種]」）"""
+    p = DOCS / "names.json"
+    if not p.exists():
+        return {}
+    try:
+        d = json.loads(p.read_text(encoding="utf-8")) or {}
+        return d.get("names") or {}
+    except Exception as e:
+        print(f"[warn] names.json の読み込みに失敗: {e}", file=sys.stderr)
+        return {}
+
+
+def _market_from_sector(sector):
+    """names.json には市場・商品区分が入っていないので、セクター名から
+    「市場区分相当」を復元する。eval_stock は market に "REIT"/"ETF" が
+    含まれるかどうかしか見ていないため、これで is_etf 判定の整合が取れる。"""
+    if sector == "J-REIT市場":
+        # J-REIT本体もREIT連動ETFもここに来る。"REIT" を含めれば
+        # eval_stock 側で sector が "J-REIT市場" に確定する（1343も同じ扱い）。
+        return "REIT・ETF（推定）"
+    if sector == "ETF":
+        return "ETF（推定）"
+    return ""
+
+
+def fallback_meta(prev_stocks=None):
+    """JPXの一覧が取れないときの代替メタ情報。
+
+    docs/names.json（全銘柄の和名・33業種）を土台に、前回の docs/data.json が
+    持っている実際の市場区分・セクターで上書きする。2026-09-12の週次実行では
+    これが無かったために、data.jsonの全銘柄が英語名・セクター空になった。"""
+    meta = {}
+    for code, v in load_names_master().items():
+        if not isinstance(v, (list, tuple)) or not v:
+            continue
+        name = str(v[0] or "").strip()
+        sector = str(v[1] or "").strip() if len(v) > 1 else ""
+        if not name:
+            continue
+        meta[code] = {"name": name, "sector": sector,
+                      "market": _market_from_sector(sector)}
+    # 前回のdata.jsonは本物の市場・商品区分を持っているので、そちらを優先する
+    for code, s in (prev_stocks or {}).items():
+        e = meta.setdefault(code, {"name": "", "market": "", "sector": ""})
+        if is_japanese_name(s.get("name")):
+            e["name"] = s["name"]
+        if s.get("sector"):
+            e["sector"] = s["sector"]
+        if s.get("market"):
+            e["market"] = s["market"]
+    return meta
+
+
+def jpx_meta(prev_stocks=None):
     """{code: {name, market, sector}}"""
     try:
         df = fetch_jpx_list()
     except Exception as e:
         print(f"[warn] JPX銘柄一覧の取得に失敗: {e}", file=sys.stderr)
-        return {}
+        fb = fallback_meta(prev_stocks)
+        print(f"[warn] docs/names.json と前回のdata.jsonから{len(fb)}銘柄を補完します"
+              f"（銘柄名が英語になるのを防ぐため）", file=sys.stderr)
+        return fb
     meta = {}
     for _, row in df.iterrows():
         code = str(row.get("コード", "")).strip()
@@ -227,6 +337,13 @@ def jpx_meta():
             "market": str(row.get("市場・商品区分", "")).strip(),
             "sector": str(row.get("33業種区分", "")).strip(),
         }
+    # 取得はできたが中身が壊れている（列名変更など）ときも補完する
+    if len(meta) < 1000:
+        print(f"[warn] JPX銘柄一覧の行数が異常です({len(meta)}件)。"
+              f"names.json / 前回data.json で補完します", file=sys.stderr)
+        for code, e in fallback_meta(prev_stocks).items():
+            if not (meta.get(code) or {}).get("name"):
+                meta[code] = e
     return meta
 
 
@@ -715,16 +832,8 @@ def main():
         rejudge(Path(args.out))
         return
 
-    meta = jpx_meta()
-    model = load_model_pf()
-    model_codes = {s["code"] for s in model["stocks"]}
-    # 「保持」銘柄 = 2025年1月以降に一度PF入りしたが現在の新規リストから外れた銘柄
-    # (学長の方針: 除外≠売却。買った分はホールド)
-    held_codes = frozenset(s["code"] for s in model.get("held", []))
-    # 「注目株」= 直近の月次PF以降に紹介コラムで紹介された銘柄(次のPFで未採用なら外す)
-    featured_codes = frozenset(s["code"] for s in model.get("featured", []))
-
-    # 既存の出力（前回の分析結果）。修復モードと「財務データを退化させない」判定に使う。
+    # 既存の出力（前回の分析結果）。修復モードと「財務データを退化させない」判定、
+    # そしてJPXの一覧が取れなかったときの銘柄名・セクターの引き継ぎに使う。
     prev_path = Path(args.out)
     prev_stocks, prev_errors = {}, []
     if prev_path.exists():
@@ -734,6 +843,37 @@ def main():
             prev_errors = [e["code"] for e in _pd.get("errors", []) if e.get("code")]
         except Exception as e:
             print(f"[warn] 既存data.jsonの読み込みに失敗: {e}", file=sys.stderr)
+
+    meta = jpx_meta(prev_stocks)
+    # JPXから取れた場合でも、名前が空の銘柄は前回の日本語名を使う。
+    # （英語名で上書きしてしまうと、アプリの表示が英語に化ける）
+    restored = 0
+    for code, s in prev_stocks.items():
+        if not is_japanese_name(s.get("name")):
+            continue
+        e = meta.get(code)
+        if e is None:
+            meta[code] = {"name": s["name"], "sector": s.get("sector") or "",
+                          "market": s.get("market") or ""}
+            restored += 1
+        elif not is_japanese_name(e.get("name")):
+            e["name"] = s["name"]
+            if not e.get("sector"):
+                e["sector"] = s.get("sector") or ""
+            if not e.get("market"):
+                e["market"] = s.get("market") or ""
+            restored += 1
+    if restored:
+        print(f"[warn] {restored}銘柄の銘柄名を前回のdata.jsonから引き継ぎました",
+              file=sys.stderr)
+
+    model = load_model_pf()
+    model_codes = {s["code"] for s in model["stocks"]}
+    # 「保持」銘柄 = 2025年1月以降に一度PF入りしたが現在の新規リストから外れた銘柄
+    # (学長の方針: 除外≠売却。買った分はホールド)
+    held_codes = frozenset(s["code"] for s in model.get("held", []))
+    # 「注目株」= 直近の月次PF以降に紹介コラムで紹介された銘柄(次のPFで未採用なら外す)
+    featured_codes = frozenset(s["code"] for s in model.get("featured", []))
 
     codes = []
     if args.tickers:

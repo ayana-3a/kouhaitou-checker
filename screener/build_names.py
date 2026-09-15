@@ -38,11 +38,14 @@ def sector_of(name: str, market: str, sector: str, code: str) -> str:
 def main():
     # screen.py の fetch_jpx_list() が置くキャッシュを再利用する。
     # 無ければ screen.py を一度動かすか、JPXの一覧を手で置く。
-    xls = CACHE / "data_j.xls"
-    if not xls.exists():
-        print(f"[error] {xls} がありません。先に screener/screen.py を実行してください。",
-              file=sys.stderr)
+    # 2026年9月にJPX側の拡張子が .xls → .xlsx に変わったので両方を見る
+    cands = [p for p in (CACHE / "data_j.xlsx", CACHE / "data_j.xls") if p.exists()]
+    if not cands:
+        print(f"[error] {CACHE}/data_j.xlsx(.xls) がありません。"
+              f"先に screener/screen.py を実行してください。", file=sys.stderr)
         sys.exit(1)
+    cands.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    xls = cands[0]
 
     df = pd.read_excel(xls, dtype=str)
     df.columns = [str(c).strip() for c in df.columns]
@@ -61,7 +64,7 @@ def main():
 
     out = {
         "generated_at": datetime.date.today().isoformat(),
-        "source": "JPX 東証上場銘柄一覧 (data_j.xls)",
+        "source": f"JPX 東証上場銘柄一覧 ({xls.name})",
         "names": dict(sorted(names.items())),
     }
     path = DOCS / "names.json"
