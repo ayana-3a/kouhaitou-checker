@@ -968,8 +968,8 @@
    "sector": "J-REIT市場",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 1892.0,
-   "yield": 4.91,
+   "price": 1896.5,
+   "yield": 4.9,
    "pbr": null,
    "per": 19.4,
    "roe": null,
@@ -981,8 +981,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.91,
-     "text": "4.91%"
+     "value": 4.9,
+     "text": "4.90%"
     },
     "op_margin": {
      "status": null,
@@ -1269,8 +1269,8 @@
    "sector": "金属製品",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2700.0,
-   "yield": 5.18,
+   "price": 2713.0,
+   "yield": 5.16,
    "pbr": 0.92,
    "per": 16.3,
    "roe": 5.7,
@@ -1282,8 +1282,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.18,
-     "text": "5.18%"
+     "value": 5.16,
+     "text": "5.16%"
     },
     "op_margin": {
      "status": "ok",
@@ -1736,8 +1736,8 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4770.0,
-   "yield": 5.04,
+   "price": 4795.0,
+   "yield": 5.01,
    "pbr": 1.72,
    "per": 10.6,
    "roe": 16.7,
@@ -1749,8 +1749,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.04,
-     "text": "5.04%"
+     "value": 5.01,
+     "text": "5.01%"
     },
     "op_margin": {
      "status": "ok",
@@ -2196,8 +2196,8 @@
    "sector": "倉庫・運輸関連業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4963.0,
-   "yield": 4.23,
+   "price": 4969.0,
+   "yield": 4.22,
    "pbr": 1.22,
    "per": 15.5,
    "roe": 7.9,
@@ -2209,8 +2209,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.23,
-     "text": "4.23%"
+     "value": 4.22,
+     "text": "4.22%"
     },
     "op_margin": {
      "status": "ok",
@@ -2656,7 +2656,7 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1348.0,
+   "price": 1349.0,
    "yield": 3.87,
    "pbr": 2.09,
    "per": 12.3,
@@ -3576,7 +3576,7 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1850.0,
+   "price": 1849.0,
    "yield": 3.78,
    "pbr": 2.09,
    "per": 13.6,
@@ -4036,8 +4036,8 @@
    "sector": "卸売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3015.0,
-   "yield": 4.66,
+   "price": 3030.0,
+   "yield": 4.64,
    "pbr": 1.35,
    "per": 13.3,
    "roe": 19.4,
@@ -4049,8 +4049,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.66,
-     "text": "4.66%"
+     "value": 4.64,
+     "text": "4.64%"
     },
     "op_margin": {
      "status": "ok",
@@ -4489,465 +4489,6 @@
    "founded_kind": "設立"
   },
   {
-   "code": "4540",
-   "v": 2,
-   "checked_at": "2026-09-11",
-   "name": "ツムラ",
-   "sector": "医薬品",
-   "market": "プライム（内国株式）",
-   "is_etf": false,
-   "price": 3854.0,
-   "yield": 4.1,
-   "pbr": 0.85,
-   "per": 9.9,
-   "roe": 8.7,
-   "payout": 39.1,
-   "score": 9.0,
-   "in_model_pf": true,
-   "pf_held": false,
-   "pf_featured": false,
-   "checks": {
-    "yield": {
-     "status": "ok",
-     "value": 4.1,
-     "text": "4.10%"
-    },
-    "op_margin": {
-     "status": "ok",
-     "value": 18.3,
-     "text": "18.3%"
-    },
-    "equity_ratio": {
-     "status": "ok",
-     "value": 54.3,
-     "text": "54.3%"
-    },
-    "current_ratio": {
-     "status": "ok",
-     "value": 419.0,
-     "text": "419%"
-    },
-    "revenue_trend": {
-     "status": "ok",
-     "value": null,
-     "text": "増加傾向"
-    },
-    "eps_trend": {
-     "status": "ok",
-     "value": null,
-     "text": "増加傾向"
-    },
-    "dividend_trend": {
-     "status": "ok",
-     "value": null,
-     "text": "12年減配なし・増配3回"
-    },
-    "payout": {
-     "status": "ok",
-     "value": 39.1,
-     "text": "39.1%"
-    },
-    "op_cf": {
-     "status": "warn",
-     "value": null,
-     "text": "黒字"
-    },
-    "cash": {
-     "status": "warn",
-     "value": null,
-     "text": "横ばい"
-    }
-   },
-   "dividend_history": [
-    {
-     "year": 2014,
-     "value": 64.0
-    },
-    {
-     "year": 2015,
-     "value": 64.0
-    },
-    {
-     "year": 2016,
-     "value": 64.0
-    },
-    {
-     "year": 2017,
-     "value": 64.0
-    },
-    {
-     "year": 2018,
-     "value": 64.0
-    },
-    {
-     "year": 2019,
-     "value": 64.0
-    },
-    {
-     "year": 2020,
-     "value": 64.0
-    },
-    {
-     "year": 2021,
-     "value": 64.0
-    },
-    {
-     "year": 2022,
-     "value": 64.0
-    },
-    {
-     "year": 2023,
-     "value": 67.0
-    },
-    {
-     "year": 2024,
-     "value": 118.0
-    },
-    {
-     "year": 2025,
-     "value": 136.0
-    }
-   ],
-   "price_history": {
-    "start": "2016-10",
-    "closes": [
-     2986,
-     3095,
-     3220,
-     3270,
-     3330,
-     3490,
-     3605,
-     4045,
-     4560,
-     4295,
-     4145,
-     4050,
-     4210,
-     3880,
-     3745,
-     3690,
-     3590,
-     3655,
-     3980,
-     3965,
-     3580,
-     3625,
-     3795,
-     3920,
-     3520,
-     3515,
-     3055,
-     3165,
-     3515,
-     3365,
-     3415,
-     3025,
-     3005,
-     3010,
-     2915,
-     2890,
-     2998,
-     3265,
-     3210,
-     3000,
-     2516,
-     2752,
-     2984,
-     2996,
-     2820,
-     2631,
-     3010,
-     3275,
-     3065,
-     3045,
-     3100,
-     3405,
-     3345,
-     3955,
-     3640,
-     3450,
-     3495,
-     3445,
-     3785,
-     3580,
-     3540,
-     3235,
-     3275,
-     3245,
-     3190,
-     3200,
-     3195,
-     2939,
-     3045,
-     3115,
-     3195,
-     3085,
-     3105,
-     2999,
-     2898,
-     2770,
-     2591,
-     2630,
-     2752,
-     2761,
-     2662,
-     2646,
-     2748,
-     2780,
-     2697,
-     2795,
-     2656,
-     2674,
-     2760,
-     3803,
-     3800,
-     3950,
-     4105,
-     4005,
-     4027,
-     4512,
-     5007,
-     4821,
-     4708,
-     4580,
-     4293,
-     4315,
-     4288,
-     3413,
-     3476,
-     3737,
-     3541,
-     3621,
-     3575,
-     3909,
-     4077,
-     4083,
-     4190,
-     3746,
-     3651,
-     3810,
-     3719,
-     3817,
-     3782,
-     3717
-    ]
-   },
-   "yield_history": [
-    {
-     "year": 2016,
-     "value": 2.06
-    },
-    {
-     "year": 2017,
-     "value": 1.65
-    },
-    {
-     "year": 2018,
-     "value": 1.75
-    },
-    {
-     "year": 2019,
-     "value": 2.03
-    },
-    {
-     "year": 2020,
-     "value": 2.18
-    },
-    {
-     "year": 2021,
-     "value": 1.82
-    },
-    {
-     "year": 2022,
-     "value": 2.06
-    },
-    {
-     "year": 2023,
-     "value": 2.47
-    },
-    {
-     "year": 2024,
-     "value": 2.94
-    },
-    {
-     "year": 2025,
-     "value": 3.49
-    }
-   ],
-   "series": {
-    "years": [
-     2023,
-     2024,
-     2025,
-     2026
-    ],
-    "revenue_oku": [
-     1400.4,
-     1508.5,
-     1810.9,
-     1926.2
-    ],
-    "op_margin": [
-     14.9,
-     13.3,
-     22.2,
-     18.3
-    ],
-    "eps": [
-     215.6,
-     219.8,
-     427.1,
-     376.3
-    ],
-    "equity_ratio": [
-     63.5,
-     63.2,
-     64.7,
-     54.3
-    ],
-    "roe": [
-     6.5,
-     6.2,
-     10.8,
-     8.7
-    ],
-    "op_cf_oku": [
-     164.5,
-     56.1,
-     338.2,
-     247.2
-    ]
-   },
-   "op_cf_streak": 4,
-   "op_cf_years_available": 4,
-   "na_count": 0,
-   "edinet": {
-    "years": [
-     2017,
-     2018,
-     2019,
-     2020,
-     2021,
-     2022,
-     2023,
-     2024,
-     2025,
-     2026
-    ],
-    "revenue_oku": [
-     1149.54,
-     1178.79,
-     1209.06,
-     1232.48,
-     1308.83,
-     1295.46,
-     1400.43,
-     1508.45,
-     1810.93,
-     1926.15
-    ],
-    "ordinary_income_oku": [
-     163.99,
-     179.14,
-     197.02,
-     196.49,
-     208.66,
-     259.04,
-     234.53,
-     234.93,
-     424.46,
-     400.36
-    ],
-    "net_income_oku": [
-     115.7,
-     128.38,
-     129.87,
-     129.43,
-     137.8,
-     150.25,
-     149.4,
-     137.25,
-     259.6,
-     244.0
-    ],
-    "eps": [
-     179.46,
-     200.55,
-     190.87,
-     179.96,
-     200.4,
-     246.21,
-     215.63,
-     219.83,
-     427.15,
-     376.28
-    ],
-    "equity_ratio": [
-     69.7,
-     66.2,
-     70.2,
-     65.8,
-     68.3,
-     68.3,
-     63.5,
-     63.2,
-     64.7,
-     54.3
-    ],
-    "roe": [
-     8.12,
-     8.33,
-     7.38,
-     6.76,
-     7.25,
-     8.23,
-     6.7,
-     6.39,
-     11.35,
-     9.04
-    ],
-    "op_cf_oku": [
-     210.65,
-     210.66,
-     54.5,
-     181.91,
-     161.02,
-     213.14,
-     164.52,
-     56.08,
-     338.23,
-     247.18
-    ],
-    "dividend": [
-     64.0,
-     64.0,
-     64.0,
-     64.0,
-     64.0,
-     64.0,
-     64.0,
-     85.0,
-     136.0,
-     147.0
-    ],
-    "payout": [
-     38.49,
-     36.05,
-     37.68,
-     37.82,
-     35.53,
-     32.59,
-     32.74,
-     47.07,
-     39.77,
-     45.02
-    ]
-   },
-   "founded_year": 1893,
-   "founded_kind": "設立"
-  },
-  {
    "code": "3834",
    "v": 2,
    "checked_at": "2026-09-11",
@@ -4955,8 +4496,8 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 609.0,
-   "yield": 4.1,
+   "price": 611.0,
+   "yield": 4.09,
    "pbr": 1.21,
    "per": 12.1,
    "roe": 9.9,
@@ -4968,8 +4509,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.1,
-     "text": "4.10%"
+     "value": 4.09,
+     "text": "4.09%"
     },
     "op_margin": {
      "status": "ok",
@@ -5408,6 +4949,465 @@
    "founded_kind": "設立"
   },
   {
+   "code": "4540",
+   "v": 2,
+   "checked_at": "2026-09-11",
+   "name": "ツムラ",
+   "sector": "医薬品",
+   "market": "プライム（内国株式）",
+   "is_etf": false,
+   "price": 3886.0,
+   "yield": 4.07,
+   "pbr": 0.85,
+   "per": 9.9,
+   "roe": 8.7,
+   "payout": 39.1,
+   "score": 9.0,
+   "in_model_pf": true,
+   "pf_held": false,
+   "pf_featured": false,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.07,
+     "text": "4.07%"
+    },
+    "op_margin": {
+     "status": "ok",
+     "value": 18.3,
+     "text": "18.3%"
+    },
+    "equity_ratio": {
+     "status": "ok",
+     "value": 54.3,
+     "text": "54.3%"
+    },
+    "current_ratio": {
+     "status": "ok",
+     "value": 419.0,
+     "text": "419%"
+    },
+    "revenue_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "eps_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "増加傾向"
+    },
+    "dividend_trend": {
+     "status": "ok",
+     "value": null,
+     "text": "12年減配なし・増配3回"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 39.1,
+     "text": "39.1%"
+    },
+    "op_cf": {
+     "status": "warn",
+     "value": null,
+     "text": "黒字"
+    },
+    "cash": {
+     "status": "warn",
+     "value": null,
+     "text": "横ばい"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2014,
+     "value": 64.0
+    },
+    {
+     "year": 2015,
+     "value": 64.0
+    },
+    {
+     "year": 2016,
+     "value": 64.0
+    },
+    {
+     "year": 2017,
+     "value": 64.0
+    },
+    {
+     "year": 2018,
+     "value": 64.0
+    },
+    {
+     "year": 2019,
+     "value": 64.0
+    },
+    {
+     "year": 2020,
+     "value": 64.0
+    },
+    {
+     "year": 2021,
+     "value": 64.0
+    },
+    {
+     "year": 2022,
+     "value": 64.0
+    },
+    {
+     "year": 2023,
+     "value": 67.0
+    },
+    {
+     "year": 2024,
+     "value": 118.0
+    },
+    {
+     "year": 2025,
+     "value": 136.0
+    }
+   ],
+   "price_history": {
+    "start": "2016-10",
+    "closes": [
+     2986,
+     3095,
+     3220,
+     3270,
+     3330,
+     3490,
+     3605,
+     4045,
+     4560,
+     4295,
+     4145,
+     4050,
+     4210,
+     3880,
+     3745,
+     3690,
+     3590,
+     3655,
+     3980,
+     3965,
+     3580,
+     3625,
+     3795,
+     3920,
+     3520,
+     3515,
+     3055,
+     3165,
+     3515,
+     3365,
+     3415,
+     3025,
+     3005,
+     3010,
+     2915,
+     2890,
+     2998,
+     3265,
+     3210,
+     3000,
+     2516,
+     2752,
+     2984,
+     2996,
+     2820,
+     2631,
+     3010,
+     3275,
+     3065,
+     3045,
+     3100,
+     3405,
+     3345,
+     3955,
+     3640,
+     3450,
+     3495,
+     3445,
+     3785,
+     3580,
+     3540,
+     3235,
+     3275,
+     3245,
+     3190,
+     3200,
+     3195,
+     2939,
+     3045,
+     3115,
+     3195,
+     3085,
+     3105,
+     2999,
+     2898,
+     2770,
+     2591,
+     2630,
+     2752,
+     2761,
+     2662,
+     2646,
+     2748,
+     2780,
+     2697,
+     2795,
+     2656,
+     2674,
+     2760,
+     3803,
+     3800,
+     3950,
+     4105,
+     4005,
+     4027,
+     4512,
+     5007,
+     4821,
+     4708,
+     4580,
+     4293,
+     4315,
+     4288,
+     3413,
+     3476,
+     3737,
+     3541,
+     3621,
+     3575,
+     3909,
+     4077,
+     4083,
+     4190,
+     3746,
+     3651,
+     3810,
+     3719,
+     3817,
+     3782,
+     3717
+    ]
+   },
+   "yield_history": [
+    {
+     "year": 2016,
+     "value": 2.06
+    },
+    {
+     "year": 2017,
+     "value": 1.65
+    },
+    {
+     "year": 2018,
+     "value": 1.75
+    },
+    {
+     "year": 2019,
+     "value": 2.03
+    },
+    {
+     "year": 2020,
+     "value": 2.18
+    },
+    {
+     "year": 2021,
+     "value": 1.82
+    },
+    {
+     "year": 2022,
+     "value": 2.06
+    },
+    {
+     "year": 2023,
+     "value": 2.47
+    },
+    {
+     "year": 2024,
+     "value": 2.94
+    },
+    {
+     "year": 2025,
+     "value": 3.49
+    }
+   ],
+   "series": {
+    "years": [
+     2023,
+     2024,
+     2025,
+     2026
+    ],
+    "revenue_oku": [
+     1400.4,
+     1508.5,
+     1810.9,
+     1926.2
+    ],
+    "op_margin": [
+     14.9,
+     13.3,
+     22.2,
+     18.3
+    ],
+    "eps": [
+     215.6,
+     219.8,
+     427.1,
+     376.3
+    ],
+    "equity_ratio": [
+     63.5,
+     63.2,
+     64.7,
+     54.3
+    ],
+    "roe": [
+     6.5,
+     6.2,
+     10.8,
+     8.7
+    ],
+    "op_cf_oku": [
+     164.5,
+     56.1,
+     338.2,
+     247.2
+    ]
+   },
+   "op_cf_streak": 4,
+   "op_cf_years_available": 4,
+   "na_count": 0,
+   "edinet": {
+    "years": [
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024,
+     2025,
+     2026
+    ],
+    "revenue_oku": [
+     1149.54,
+     1178.79,
+     1209.06,
+     1232.48,
+     1308.83,
+     1295.46,
+     1400.43,
+     1508.45,
+     1810.93,
+     1926.15
+    ],
+    "ordinary_income_oku": [
+     163.99,
+     179.14,
+     197.02,
+     196.49,
+     208.66,
+     259.04,
+     234.53,
+     234.93,
+     424.46,
+     400.36
+    ],
+    "net_income_oku": [
+     115.7,
+     128.38,
+     129.87,
+     129.43,
+     137.8,
+     150.25,
+     149.4,
+     137.25,
+     259.6,
+     244.0
+    ],
+    "eps": [
+     179.46,
+     200.55,
+     190.87,
+     179.96,
+     200.4,
+     246.21,
+     215.63,
+     219.83,
+     427.15,
+     376.28
+    ],
+    "equity_ratio": [
+     69.7,
+     66.2,
+     70.2,
+     65.8,
+     68.3,
+     68.3,
+     63.5,
+     63.2,
+     64.7,
+     54.3
+    ],
+    "roe": [
+     8.12,
+     8.33,
+     7.38,
+     6.76,
+     7.25,
+     8.23,
+     6.7,
+     6.39,
+     11.35,
+     9.04
+    ],
+    "op_cf_oku": [
+     210.65,
+     210.66,
+     54.5,
+     181.91,
+     161.02,
+     213.14,
+     164.52,
+     56.08,
+     338.23,
+     247.18
+    ],
+    "dividend": [
+     64.0,
+     64.0,
+     64.0,
+     64.0,
+     64.0,
+     64.0,
+     64.0,
+     85.0,
+     136.0,
+     147.0
+    ],
+    "payout": [
+     38.49,
+     36.05,
+     37.68,
+     37.82,
+     35.53,
+     32.59,
+     32.74,
+     47.07,
+     39.77,
+     45.02
+    ]
+   },
+   "founded_year": 1893,
+   "founded_kind": "設立"
+  },
+  {
    "code": "4290",
    "v": 2,
    "checked_at": "2026-09-11",
@@ -5415,8 +5415,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 705.0,
-   "yield": 3.97,
+   "price": 709.0,
+   "yield": 3.95,
    "pbr": 1.71,
    "per": 14.3,
    "roe": 12.2,
@@ -5428,8 +5428,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 3.97,
-     "text": "3.97%"
+     "value": 3.95,
+     "text": "3.95%"
     },
     "op_margin": {
      "status": "ok",
@@ -5875,8 +5875,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2295.0,
-   "yield": 3.84,
+   "price": 2301.0,
+   "yield": 3.83,
    "pbr": 1.26,
    "per": 13.0,
    "roe": 9.8,
@@ -5888,8 +5888,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 3.84,
-     "text": "3.84%"
+     "value": 3.83,
+     "text": "3.83%"
     },
     "op_margin": {
      "status": "ok",
@@ -6342,8 +6342,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 839.0,
-   "yield": 3.56,
+   "price": 841.0,
+   "yield": 3.55,
    "pbr": 2.08,
    "per": 12.7,
    "roe": 17.1,
@@ -6355,8 +6355,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.56,
-     "text": "3.56%"
+     "value": 3.55,
+     "text": "3.55%"
     },
     "op_margin": {
      "status": "ok",
@@ -6809,8 +6809,8 @@
    "sector": "機械",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 7350.0,
-   "yield": 2.97,
+   "price": 7380.0,
+   "yield": 2.96,
    "pbr": 1.77,
    "per": 11.9,
    "roe": 15.1,
@@ -6822,8 +6822,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.97,
-     "text": "2.97%"
+     "value": 2.96,
+     "text": "2.96%"
     },
     "op_margin": {
      "status": "ok",
@@ -7269,8 +7269,8 @@
    "sector": "卸売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3210.0,
-   "yield": 4.82,
+   "price": 3230.0,
+   "yield": 4.79,
    "pbr": 1.54,
    "per": 12.7,
    "roe": 12.0,
@@ -7282,8 +7282,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.82,
-     "text": "4.82%"
+     "value": 4.79,
+     "text": "4.79%"
     },
     "op_margin": {
      "status": "warn",
@@ -7729,7 +7729,7 @@
    "sector": "機械",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1468.0,
+   "price": 1469.0,
    "yield": 4.43,
    "pbr": 1.24,
    "per": 14.4,
@@ -8189,8 +8189,8 @@
    "sector": "建設業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3385.0,
-   "yield": 4.32,
+   "price": 3403.0,
+   "yield": 4.3,
    "pbr": 0.97,
    "per": 8.6,
    "roe": 10.8,
@@ -8202,8 +8202,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.32,
-     "text": "4.32%"
+     "value": 4.3,
+     "text": "4.30%"
     },
     "op_margin": {
      "status": "warn",
@@ -8649,7 +8649,7 @@
    "sector": "情報・通信業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 4515.0,
+   "price": 4510.0,
    "yield": 4.21,
    "pbr": 1.54,
    "per": 13.2,
@@ -9109,7 +9109,7 @@
    "sector": "精密機器",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2909.0,
+   "price": 2910.0,
    "yield": 4.12,
    "pbr": 0.85,
    "per": null,
@@ -9569,8 +9569,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 874.0,
-   "yield": 4.11,
+   "price": 879.0,
+   "yield": 4.09,
    "pbr": 2.35,
    "per": 13.2,
    "roe": 19.5,
@@ -9582,8 +9582,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.11,
-     "text": "4.11%"
+     "value": 4.09,
+     "text": "4.09%"
     },
     "op_margin": {
      "status": "ok",
@@ -10029,8 +10029,8 @@
    "sector": "建設業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1293.5,
-   "yield": 3.6,
+   "price": 1299.5,
+   "yield": 3.58,
    "pbr": 2.33,
    "per": 16.3,
    "roe": 14.3,
@@ -10042,8 +10042,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.6,
-     "text": "3.60%"
+     "value": 3.58,
+     "text": "3.58%"
     },
     "op_margin": {
      "status": "ok",
@@ -10489,7 +10489,7 @@
    "sector": "金属製品",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 4125.0,
+   "price": 4130.0,
    "yield": 3.03,
    "pbr": 1.26,
    "per": 12.6,
@@ -10956,8 +10956,8 @@
    "sector": "化学",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3505.0,
-   "yield": 2.86,
+   "price": 3495.0,
+   "yield": 2.87,
    "pbr": 0.98,
    "per": 18.0,
    "roe": 5.6,
@@ -10969,8 +10969,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.86,
-     "text": "2.86%"
+     "value": 2.87,
+     "text": "2.87%"
     },
     "op_margin": {
      "status": "ok",
@@ -11416,8 +11416,8 @@
    "sector": "不動産業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 918.7,
-   "yield": 4.8,
+   "price": 924.0,
+   "yield": 4.77,
    "pbr": 0.96,
    "per": 9.4,
    "roe": 10.3,
@@ -11429,8 +11429,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.8,
-     "text": "4.80%"
+     "value": 4.77,
+     "text": "4.77%"
     },
     "op_margin": {
      "status": "ok",
@@ -12336,8 +12336,8 @@
    "sector": "その他製品",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2371.0,
-   "yield": 4.44,
+   "price": 2376.0,
+   "yield": 4.43,
    "pbr": 1.07,
    "per": 9.8,
    "roe": 11.0,
@@ -12349,8 +12349,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.44,
-     "text": "4.44%"
+     "value": 4.43,
+     "text": "4.43%"
     },
     "op_margin": {
      "status": "warn",
@@ -12796,8 +12796,8 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3285.0,
-   "yield": 4.26,
+   "price": 3295.0,
+   "yield": 4.25,
    "pbr": 1.0,
    "per": 12.3,
    "roe": 8.3,
@@ -12809,8 +12809,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.26,
-     "text": "4.26%"
+     "value": 4.25,
+     "text": "4.25%"
     },
     "op_margin": {
      "status": "ok",
@@ -13256,8 +13256,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1195.0,
-   "yield": 4.02,
+   "price": 1197.0,
+   "yield": 4.01,
    "pbr": 3.87,
    "per": 13.3,
    "roe": 25.3,
@@ -13269,8 +13269,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.02,
-     "text": "4.02%"
+     "value": 4.01,
+     "text": "4.01%"
     },
     "op_margin": {
      "status": "ok",
@@ -14176,8 +14176,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1046.0,
-   "yield": 3.62,
+   "price": 1051.0,
+   "yield": 3.6,
    "pbr": 6.96,
    "per": 16.9,
    "roe": 37.6,
@@ -14189,8 +14189,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.62,
-     "text": "3.62%"
+     "value": 3.6,
+     "text": "3.60%"
     },
     "op_margin": {
      "status": "ok",
@@ -14636,8 +14636,8 @@
    "sector": "ガラス・土石製品",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 1384.0,
-   "yield": 3.6,
+   "price": 1400.0,
+   "yield": 3.56,
    "pbr": 0.72,
    "per": 12.0,
    "roe": 6.0,
@@ -14649,8 +14649,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.6,
-     "text": "3.60%"
+     "value": 3.56,
+     "text": "3.56%"
     },
     "op_margin": {
      "status": "warn",
@@ -15096,8 +15096,8 @@
    "sector": "電気機器",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3145.0,
-   "yield": 3.56,
+   "price": 3160.0,
+   "yield": 3.54,
    "pbr": 1.38,
    "per": 12.0,
    "roe": 10.3,
@@ -15109,8 +15109,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.56,
-     "text": "3.56%"
+     "value": 3.54,
+     "text": "3.54%"
     },
     "op_margin": {
      "status": "ok",
@@ -15563,8 +15563,8 @@
    "sector": "化学",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4240.0,
-   "yield": 3.4,
+   "price": 4258.0,
+   "yield": 3.39,
    "pbr": 1.35,
    "per": 14.9,
    "roe": 9.7,
@@ -15576,8 +15576,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.4,
-     "text": "3.40%"
+     "value": 3.39,
+     "text": "3.39%"
     },
     "op_margin": {
      "status": "ok",
@@ -16023,7 +16023,7 @@
    "sector": "情報・通信業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1532.0,
+   "price": 1531.0,
    "yield": 3.39,
    "pbr": 2.68,
    "per": 12.1,
@@ -16483,8 +16483,8 @@
    "sector": "サービス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2620.0,
-   "yield": 4.96,
+   "price": 2630.0,
+   "yield": 4.94,
    "pbr": 3.63,
    "per": 15.0,
    "roe": 22.6,
@@ -16496,8 +16496,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.96,
-     "text": "4.96%"
+     "value": 4.94,
+     "text": "4.94%"
     },
     "op_margin": {
      "status": "ok",
@@ -16950,8 +16950,8 @@
    "sector": "不動産業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1748.5,
-   "yield": 3.83,
+   "price": 1763.5,
+   "yield": 3.8,
    "pbr": 1.4,
    "per": 11.1,
    "roe": 12.5,
@@ -16963,8 +16963,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 3.83,
-     "text": "3.83%"
+     "value": 3.8,
+     "text": "3.80%"
     },
     "op_margin": {
      "status": "ok",
@@ -17410,7 +17410,7 @@
    "sector": "小売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3709.0,
+   "price": 3706.0,
    "yield": 3.55,
    "pbr": 1.5,
    "per": 13.7,
@@ -17870,8 +17870,8 @@
    "sector": "ゴム製品",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3772.0,
-   "yield": 3.44,
+   "price": 3789.0,
+   "yield": 3.42,
    "pbr": 1.24,
    "per": 19.2,
    "roe": 8.9,
@@ -17883,8 +17883,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.44,
-     "text": "3.44%"
+     "value": 3.42,
+     "text": "3.42%"
     },
     "op_margin": {
      "status": "warn",
@@ -18330,8 +18330,8 @@
    "sector": "化学",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1202.0,
-   "yield": 3.32,
+   "price": 1208.0,
+   "yield": 3.3,
    "pbr": 0.76,
    "per": 14.0,
    "roe": 5.5,
@@ -18343,8 +18343,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.32,
-     "text": "3.32%"
+     "value": 3.3,
+     "text": "3.30%"
     },
     "op_margin": {
      "status": "ng",
@@ -18790,7 +18790,7 @@
    "sector": "卸売業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 2498.0,
+   "price": 2500.0,
    "yield": 4.01,
    "pbr": 1.21,
    "per": 18.9,
@@ -19250,7 +19250,7 @@
    "sector": "小売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1321.0,
+   "price": 1322.0,
    "yield": 3.78,
    "pbr": 0.81,
    "per": 14.8,
@@ -19710,8 +19710,8 @@
    "sector": "卸売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1778.0,
-   "yield": 3.27,
+   "price": 1787.0,
+   "yield": 3.25,
    "pbr": 1.14,
    "per": 13.4,
    "roe": 8.6,
@@ -19723,8 +19723,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.27,
-     "text": "3.27%"
+     "value": 3.25,
+     "text": "3.25%"
     },
     "op_margin": {
      "status": "ng",
@@ -20048,8 +20048,8 @@
    "sector": "小売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3405.0,
-   "yield": 3.24,
+   "price": 3415.0,
+   "yield": 3.23,
    "pbr": 1.37,
    "per": 19.2,
    "roe": 6.8,
@@ -20061,8 +20061,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.24,
-     "text": "3.24%"
+     "value": 3.23,
+     "text": "3.23%"
     },
     "op_margin": {
      "status": "ng",
@@ -20968,8 +20968,8 @@
    "sector": "銀行業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1785.0,
-   "yield": 2.68,
+   "price": 1789.5,
+   "yield": 2.67,
    "pbr": 1.33,
    "per": 13.3,
    "roe": 8.9,
@@ -20981,8 +20981,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.68,
-     "text": "2.68%"
+     "value": 2.67,
+     "text": "2.67%"
     },
     "op_margin": {
      "status": null,
@@ -21644,8 +21644,8 @@
    "sector": "サービス業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 1726.0,
-   "yield": 4.29,
+   "price": 1734.0,
+   "yield": 4.27,
    "pbr": 1.33,
    "per": 38.8,
    "roe": 5.1,
@@ -21657,8 +21657,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.29,
-     "text": "4.29%"
+     "value": 4.27,
+     "text": "4.27%"
     },
     "op_margin": {
      "status": "warn",
@@ -22104,8 +22104,8 @@
    "sector": "その他金融業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1397.5,
-   "yield": 3.73,
+   "price": 1404.5,
+   "yield": 3.71,
    "pbr": 0.99,
    "per": 14.5,
    "roe": 8.1,
@@ -22117,8 +22117,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.73,
-     "text": "3.73%"
+     "value": 3.71,
+     "text": "3.71%"
     },
     "op_margin": {
      "status": "ok",
@@ -22442,8 +22442,8 @@
    "sector": "食料品",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 1916.0,
-   "yield": 3.65,
+   "price": 1922.0,
+   "yield": 3.64,
    "pbr": 1.37,
    "per": 20.2,
    "roe": 6.6,
@@ -22455,8 +22455,8 @@
    "checks": {
     "yield": {
      "status": "warn",
-     "value": 3.65,
-     "text": "3.65%"
+     "value": 3.64,
+     "text": "3.64%"
     },
     "op_margin": {
      "status": "ng",
@@ -22902,8 +22902,8 @@
    "sector": "建設業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2622.5,
-   "yield": 3.06,
+   "price": 2633.0,
+   "yield": 3.05,
    "pbr": 1.51,
    "per": 16.9,
    "roe": 9.1,
@@ -22915,8 +22915,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.06,
-     "text": "3.06%"
+     "value": 3.05,
+     "text": "3.05%"
     },
     "op_margin": {
      "status": "ng",
@@ -23239,8 +23239,8 @@
    "sector": "食料品",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 5070.0,
-   "yield": 3.04,
+   "price": 5060.0,
+   "yield": 3.05,
    "pbr": 0.97,
    "per": 14.0,
    "roe": 6.9,
@@ -23252,8 +23252,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 3.04,
-     "text": "3.04%"
+     "value": 3.05,
+     "text": "3.05%"
     },
     "op_margin": {
      "status": "ng",
@@ -23568,8 +23568,8 @@
    "sector": "保険業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 5241.0,
-   "yield": 2.67,
+   "price": 5260.0,
+   "yield": 2.66,
    "pbr": 1.1,
    "per": 9.4,
    "roe": 16.5,
@@ -23581,8 +23581,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.67,
-     "text": "2.67%"
+     "value": 2.66,
+     "text": "2.66%"
     },
     "op_margin": {
      "status": null,
@@ -24028,8 +24028,8 @@
    "sector": "その他製品",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 709.0,
-   "yield": 5.08,
+   "price": 711.0,
+   "yield": 5.07,
    "pbr": 0.5,
    "per": 0.5,
    "roe": 4.5,
@@ -24041,8 +24041,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.08,
-     "text": "5.08%"
+     "value": 5.07,
+     "text": "5.07%"
     },
     "op_margin": {
      "status": "warn",
@@ -24366,8 +24366,8 @@
    "sector": "倉庫・運輸関連業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2366.0,
-   "yield": 4.65,
+   "price": 2381.0,
+   "yield": 4.62,
    "pbr": 2.69,
    "per": 17.1,
    "roe": 15.5,
@@ -24379,8 +24379,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.65,
-     "text": "4.65%"
+     "value": 4.62,
+     "text": "4.62%"
     },
     "op_margin": {
      "status": "warn",
@@ -24826,8 +24826,8 @@
    "sector": "化学",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2634.0,
-   "yield": 3.8,
+   "price": 2644.0,
+   "yield": 3.79,
    "pbr": 0.94,
    "per": 19.5,
    "roe": 5.0,
@@ -24839,8 +24839,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 3.8,
-     "text": "3.80%"
+     "value": 3.79,
+     "text": "3.79%"
     },
     "op_margin": {
      "status": "warn",
@@ -25164,7 +25164,7 @@
    "sector": "電気・ガス業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4244.0,
+   "price": 4247.0,
    "yield": 2.59,
    "pbr": 0.51,
    "per": 12.7,
@@ -25509,8 +25509,8 @@
    "sector": "サービス業",
    "market": "スタンダード（内国株式）",
    "is_etf": false,
-   "price": 4425.0,
-   "yield": 1.68,
+   "price": 4440.0,
+   "yield": 1.67,
    "pbr": 3.68,
    "per": 29.4,
    "roe": 12.1,
@@ -25522,8 +25522,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 1.68,
-     "text": "1.68%"
+     "value": 1.67,
+     "text": "1.67%"
     },
     "op_margin": {
      "status": "warn",
@@ -25854,8 +25854,8 @@
    "sector": "その他金融業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 3735.0,
-   "yield": 5.36,
+   "price": 3740.0,
+   "yield": 5.35,
    "pbr": 0.56,
    "per": 9.7,
    "roe": 5.2,
@@ -25867,8 +25867,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.36,
-     "text": "5.36%"
+     "value": 5.35,
+     "text": "5.35%"
     },
     "op_margin": {
      "status": "ok",
@@ -26192,7 +26192,7 @@
    "sector": "倉庫・運輸関連業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4210.0,
+   "price": 4215.0,
    "yield": 2.45,
    "pbr": 1.0,
    "per": 17.8,
@@ -26530,8 +26530,8 @@
    "sector": "卸売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4963.0,
-   "yield": 2.52,
+   "price": 4979.0,
+   "yield": 2.51,
    "pbr": 1.9,
    "per": 23.8,
    "roe": 8.5,
@@ -26543,8 +26543,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.52,
-     "text": "2.52%"
+     "value": 2.51,
+     "text": "2.51%"
     },
     "op_margin": {
      "status": "ng",
@@ -26862,5 +26862,5 @@
   }
  ],
  "errors": [],
- "prices_updated_at": "2026-09-17 14:30"
+ "prices_updated_at": "2026-09-17 17:46"
 }
