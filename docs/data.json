@@ -6142,95 +6142,6 @@
    "business": "債券の指数に連動する上場投資信託（ETF）。"
   },
   {
-   "code": "8596",
-   "v": 2,
-   "checked_at": "2026-10-03",
-   "name": "九州リースサービス",
-   "sector": "その他金融業",
-   "market": "スタンダード（内国株式）",
-   "is_etf": false,
-   "price": 1513.0,
-   "yield": 4.1,
-   "pbr": 0.74,
-   "per": 8.6,
-   "roe": 9.7,
-   "payout": 33.4,
-   "score": 10.0,
-   "in_model_pf": false,
-   "pf_held": false,
-   "pf_featured": false,
-   "checks": {
-    "yield": {
-     "status": "ok",
-     "value": 4.1,
-     "text": "4.10%"
-    },
-    "op_margin": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "equity_ratio": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "current_ratio": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "revenue_trend": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "eps_trend": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "dividend_trend": {
-     "status": null,
-     "value": null,
-     "text": "配当履歴が短い"
-    },
-    "payout": {
-     "status": "ok",
-     "value": 33.4,
-     "text": "33.4%"
-    },
-    "op_cf": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "cash": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    }
-   },
-   "dividend_history": [],
-   "price_history": null,
-   "yield_history": [],
-   "series": {
-    "years": [],
-    "revenue_oku": [],
-    "op_margin": [],
-    "eps": [],
-    "equity_ratio": [],
-    "roe": [],
-    "op_cf_oku": []
-   },
-   "op_cf_streak": 0,
-   "op_cf_years_available": 0,
-   "na_count": 8,
-   "business": "機械設備等のリース及び割賦販売(リース・割賦)、金銭の貸付、債権の買取及び信用保証等(ファイナンス)、不動産の賃貸及び販売、匿名組合等に対する出資等(不動産)…",
-   "founded_year": 1980,
-   "founded_kind": "設立"
-  },
-  {
    "code": "2839",
    "v": 2,
    "checked_at": "2026-10-03",
@@ -6238,8 +6149,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 4792.0,
-   "yield": 4.09,
+   "price": 4773.0,
+   "yield": 4.11,
    "pbr": null,
    "per": null,
    "roe": null,
@@ -6251,8 +6162,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 4.09,
-     "text": "4.09%"
+     "value": 4.11,
+     "text": "4.11%"
     },
     "op_margin": {
      "status": null,
@@ -6412,6 +6323,95 @@
    "op_cf_years_available": 0,
    "na_count": 8,
    "business": "債券の指数に連動する上場投資信託（ETF）。"
+  },
+  {
+   "code": "8596",
+   "v": 2,
+   "checked_at": "2026-10-03",
+   "name": "九州リースサービス",
+   "sector": "その他金融業",
+   "market": "スタンダード（内国株式）",
+   "is_etf": false,
+   "price": 1513.0,
+   "yield": 4.1,
+   "pbr": 0.74,
+   "per": 8.6,
+   "roe": 9.7,
+   "payout": 33.4,
+   "score": 10.0,
+   "in_model_pf": false,
+   "pf_held": false,
+   "pf_featured": false,
+   "checks": {
+    "yield": {
+     "status": "ok",
+     "value": 4.1,
+     "text": "4.10%"
+    },
+    "op_margin": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "equity_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "current_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "revenue_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "eps_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "dividend_trend": {
+     "status": null,
+     "value": null,
+     "text": "配当履歴が短い"
+    },
+    "payout": {
+     "status": "ok",
+     "value": 33.4,
+     "text": "33.4%"
+    },
+    "op_cf": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "cash": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    }
+   },
+   "dividend_history": [],
+   "price_history": null,
+   "yield_history": [],
+   "series": {
+    "years": [],
+    "revenue_oku": [],
+    "op_margin": [],
+    "eps": [],
+    "equity_ratio": [],
+    "roe": [],
+    "op_cf_oku": []
+   },
+   "op_cf_streak": 0,
+   "op_cf_years_available": 0,
+   "na_count": 8,
+   "business": "機械設備等のリース及び割賦販売(リース・割賦)、金銭の貸付、債権の買取及び信用保証等(ファイナンス)、不動産の賃貸及び販売、匿名組合等に対する出資等(不動産)…",
+   "founded_year": 1980,
+   "founded_kind": "設立"
   },
   {
    "code": "8425",
@@ -499216,5 +499216,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-10-06 15:55"
+ "prices_updated_at": "2026-10-06 19:35"
 }
