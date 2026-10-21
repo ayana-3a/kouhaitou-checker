@@ -451458,8 +451458,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 614.0,
-   "yield": 2.06,
+   "price": 617.5,
+   "yield": 2.05,
    "pbr": null,
    "per": null,
    "roe": null,
@@ -451471,8 +451471,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.06,
-     "text": "2.06%"
+     "value": 2.05,
+     "text": "2.05%"
     },
     "op_margin": {
      "status": null,
@@ -462778,8 +462778,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 17505.0,
-   "yield": 2.68,
+   "price": 17590.0,
+   "yield": 2.67,
    "pbr": 146.43,
    "per": null,
    "roe": null,
@@ -462791,8 +462791,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.68,
-     "text": "2.68%"
+     "value": 2.67,
+     "text": "2.67%"
     },
     "op_margin": {
      "status": null,
@@ -501510,5 +501510,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-10-21 17:46"
+ "prices_updated_at": "2026-10-21 22:03"
 }
