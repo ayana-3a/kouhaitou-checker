@@ -7875,8 +7875,8 @@
    "sector": "建設業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 2500.0,
-   "yield": 5.15,
+   "price": 2493.0,
+   "yield": 5.16,
    "pbr": 0.97,
    "per": 11.8,
    "roe": 8.0,
@@ -7888,8 +7888,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.15,
-     "text": "5.15%"
+     "value": 5.16,
+     "text": "5.16%"
     },
     "op_margin": {
      "status": "warn",
@@ -501510,5 +501510,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-10-26 18:13"
+ "prices_updated_at": "2026-10-26 23:26"
 }
