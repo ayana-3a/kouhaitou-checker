@@ -419029,8 +419029,8 @@
    "sector": "卸売業",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 1341.0,
-   "yield": 5.15,
+   "price": 1337.0,
+   "yield": 5.17,
    "pbr": 0.35,
    "per": null,
    "roe": -2.4,
@@ -419042,8 +419042,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.15,
-     "text": "5.15%"
+     "value": 5.17,
+     "text": "5.17%"
     },
     "op_margin": {
      "status": "ng",
@@ -471965,8 +471965,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 17425.0,
-   "yield": 2.69,
+   "price": 17615.0,
+   "yield": 2.66,
    "pbr": 145.18,
    "per": null,
    "roe": null,
@@ -471978,8 +471978,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.69,
-     "text": "2.69%"
+     "value": 2.66,
+     "text": "2.66%"
     },
     "op_margin": {
      "status": null,
@@ -504425,7 +504425,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 657.0,
+   "price": 645.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -510412,5 +510412,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-05 16:29"
+ "prices_updated_at": "2026-11-05 20:17"
 }
