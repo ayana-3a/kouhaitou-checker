@@ -489,7 +489,15 @@ footer {
 .bar { display: inline-block; height: 9px; border-radius: 3px; min-width: 2px; }
 .bar-me { background: #e67e22; }
 .bar-model { background: var(--green); }
-.bar-val { font-size: 0.68rem; color: var(--gray); }
+.bar-val { font-size: 0.68rem; color: var(--gray); white-space: nowrap; }
+.bar-yen { margin-left: 4px; }
+.seg { display: inline-flex; border: 1px solid var(--green); border-radius: 8px; overflow: hidden; margin: 0 0 6px; }
+.seg-btn {
+  border: none; background: var(--card); color: var(--green); font-weight: 700;
+  font-size: 0.8rem; padding: 6px 12px; cursor: pointer; font-family: inherit;
+}
+.seg-btn + .seg-btn { border-left: 1px solid var(--green); }
+.seg-btn.active { background: var(--green); color: #fff; }
 .lg { font-size: 0.7rem; }
 .lg-me { color: #e67e22; }
 .lg-model { color: var(--green); }

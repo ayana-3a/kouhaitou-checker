@@ -1,5 +1,5 @@
 /* Service Worker: オフラインでも前回のデータで表示できるようにする */
-const CACHE = "kouhaitou-v4";
+const CACHE = "kouhaitou-v5";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "names.json"];
 
 self.addEventListener("install", (e) => {

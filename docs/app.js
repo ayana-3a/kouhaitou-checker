@@ -553,25 +553,100 @@
     return m;
   }
 
-  function sectorCompareHtml(mine, model) {
+  // ---- セクター比較の「評価額で見る／配当金で見る」切り替え ----
+  // 切り替えはセクター比較の表だけに効く（20%ルール警告・シミュレーター等は評価額ベースのまま）。
+  const SEC_MODE_KEY = "khc_sec_mode";
+  function loadSecMode() {
+    try { return localStorage.getItem(SEC_MODE_KEY) === "div" ? "div" : "value"; }
+    catch { return "value"; }
+  }
+  function saveSecMode(mode) {
+    try { localStorage.setItem(SEC_MODE_KEY, mode); } catch { /* 保存できなくても表示は続ける */ }
+  }
+
+  // わたし：セクターごとの年間配当 ÷ 年間配当の合計（配当データが無い銘柄は分母・分子から除外）
+  function myDivSectorWeights(rows) {
+    const yen = {};
+    const excluded = [];
+    for (const r of rows) {
+      if (r.annualDiv == null) { excluded.push(r.name); continue; }
+      yen[r.sector] = (yen[r.sector] || 0) + r.annualDiv;
+    }
+    const sum = Object.values(yen).reduce((a, v) => a + v, 0);
+    const pct = {};
+    if (sum > 0) for (const k in yen) pct[k] = yen[k] / sum * 100;
+    return { pct, yen, sum, excluded };
+  }
+
+  // 学長モデルPF：各銘柄の組入比率(weight) × 配当利回り をセクターごとに合計し、全体で100%に正規化
+  function modelDivSectorWeights() {
+    const raw = {};
+    const excluded = [];
+    for (const m of DATA.model_pf.stocks) {
+      const s = stockByCode(m.code);
+      if (!s || s.yield == null || !(m.weight > 0)) { excluded.push(m.name || m.code); continue; }
+      const k = normSector(m.sector);
+      raw[k] = (raw[k] || 0) + m.weight * s.yield;
+    }
+    const sum = Object.values(raw).reduce((a, v) => a + v, 0);
+    const pct = {};
+    if (sum > 0) for (const k in raw) pct[k] = raw[k] / sum * 100;
+    return { pct, excluded };
+  }
+
+  // yen を渡すと「わたし」側の各行に年間配当の金額を添える（配当モード用）
+  function sectorCompareHtml(mine, model, yen) {
     const keys = [...new Set([...Object.keys(model), ...Object.keys(mine)])]
       .sort((a, b) => (model[b] || 0) - (model[a] || 0));
     const rows = keys.map((k) => {
       const mv = mine[k] || 0, gv = model[k] || 0;
       const diff = mv - gv;
       const over20 = mv > 20;
+      const yenTxt = yen && yen[k] > 0 ? `<span class="bar-yen">${Math.round(yen[k]).toLocaleString()}円</span>` : "";
       return `<tr${over20 ? ' class="sec-over"' : ""}>
         <td class="sec-name">${esc(k)}</td>
         <td class="sec-bars">
-          <div class="bar-row"><span class="bar bar-me" style="width:${Math.min(100, mv * 3)}%"></span><span class="bar-val">${mv.toFixed(1)}%</span></div>
+          <div class="bar-row"><span class="bar bar-me" style="width:${Math.min(100, mv * 3)}%"></span><span class="bar-val">${mv.toFixed(1)}%${yenTxt}</span></div>
           <div class="bar-row"><span class="bar bar-model" style="width:${Math.min(100, gv * 3)}%"></span><span class="bar-val">${gv.toFixed(1)}%</span></div>
         </td>
         <td class="sec-diff ${diff > 3 ? "over" : diff < -3 ? "under" : ""}">${diff > 0 ? "+" : ""}${diff.toFixed(1)}</td>
       </tr>`;
     }).join("");
+    const unit = yen ? "（年間配当の割合）" : "";
     return `<table class="sec-table">
-      <thead><tr><th>セクター</th><th><span class="lg lg-me">■ わたし</span> <span class="lg lg-model">■ 学長モデルPF</span></th><th>差</th></tr></thead>
+      <thead><tr><th>セクター</th><th><span class="lg lg-me">■ わたし${unit}</span> <span class="lg lg-model">■ 学長モデルPF${unit}</span></th><th>差</th></tr></thead>
       <tbody>${rows}</tbody></table>`;
+  }
+
+  // 見出し＋切り替えボタン＋説明＋表（＋除外銘柄の注記）をまとめて作る
+  function sectorBlockHtml(calc, mode) {
+    const seg = `<div class="seg" role="group" aria-label="セクター割合の見かた">
+        <button type="button" class="seg-btn${mode === "value" ? " active" : ""}" data-mode="value" aria-pressed="${mode === "value"}">評価額で見る</button>
+        <button type="button" class="seg-btn${mode === "div" ? " active" : ""}" data-mode="div" aria-pressed="${mode === "div"}">配当金で見る</button>
+      </div>`;
+    if (mode !== "div") {
+      return `<h3>📊 セクター割合の比較（学長モデルPF vs わたし）</h3>
+        ${seg}
+        <p class="chart-note">評価額（株価×株数）の割合です。学長モデルPFは各銘柄の組入比率（金額）をセクターごとに合計したものです。</p>
+        ${sectorCompareHtml(mySectorWeights(calc.rows, calc.total), modelSectorWeights())}`;
+    }
+    const me = myDivSectorWeights(calc.rows);
+    const md = modelDivSectorWeights();
+    const notes = [];
+    if (me.excluded.length) notes.push(`<p class="chart-note">※ ${me.excluded.map(esc).join("、")}
+      は配当データが無いため、「わたし」の年間配当の割合からは除いています。</p>`);
+    if (md.excluded.length) notes.push(`<p class="chart-note">※ 学長モデルPFのうち ${md.excluded.map(esc).join("、")}
+      は配当利回りが取れないため、計算から除いています。</p>`);
+    const body = me.sum > 0
+      ? sectorCompareHtml(me.pct, md.pct, me.yen)
+      : `<p class="mut">配当データのある保有銘柄が無いため、年間配当の割合を計算できません。</p>`;
+    return `<h3>📊 セクター割合の比較・年間配当ベース（学長モデルPF vs わたし）</h3>
+      ${seg}
+      <p class="chart-note"><strong>年間配当（予想）の割合</strong>です。わたし＝セクターごとの年間配当÷年間配当の合計（金額は年間配当）。
+      学長モデルPF＝各銘柄の組入比率×配当利回りで年間配当の割合に換算しています。
+      ※ 20%ルールの警告・購入シミュレーター・買い足し案は、これまでどおり評価額ベースです。</p>
+      ${body}
+      ${notes.join("")}`;
   }
 
   // 買い増し・新規候補の銘柄に付ける「業績チェック」要約と詳細展開
@@ -818,8 +893,6 @@
     const view = document.getElementById("mypf-view");
     const calc = pfCalc();
     const { rows, total, totalDiv, divBase, estRows } = calc;
-    const mine = mySectorWeights(rows, total);
-    const model = modelSectorWeights();
     // 採点対象外（株価データなし）の銘柄がある場合の注記
     const estNote = estRows.length ? `<p class="chart-note">※ ${estRows.map((r) => esc(r.name)).join("、")}
       はアプリの採点対象に入っていないため株価・配当データがありません。評価額は<strong>取得単価×株数で概算</strong>し、
@@ -848,8 +921,7 @@
         </div>
         ${estNote}
         ${guidanceHtml(calc)}
-        <h3>📊 セクター割合の比較（学長モデルPF vs わたし）</h3>
-        ${sectorCompareHtml(mine, model)}
+        <div id="sec-compare">${sectorBlockHtml(calc, loadSecMode())}</div>
         ${simulatorHtml(calc)}
         ${targetGuideHtml(calc)}
         <h3>保有銘柄</h3>
@@ -883,6 +955,14 @@
   }
 
   function setupPfEvents(view) {
+    // セクター比較の「評価額／配当金」切り替え（表の部分だけ描き直す）
+    const secBox = view.querySelector("#sec-compare");
+    if (secBox) secBox.addEventListener("click", (e) => {
+      const btn = e.target.closest(".seg-btn");
+      if (!btn) return;
+      saveSecMode(btn.dataset.mode);
+      secBox.innerHTML = sectorBlockHtml(pfCalc(), loadSecMode());
+    });
     view.querySelectorAll(".del-btn").forEach((b) => b.addEventListener("click", () => {
       const pf = loadPf();
       pf.splice(+b.dataset.i, 1);
