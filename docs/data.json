@@ -527037,6 +527037,151 @@
    "founded_kind": "設立"
   },
   {
+   "code": "2011",
+   "v": 2,
+   "checked_at": "2026-11-07",
+   "name": "ＳＭＢＣ　Ｐｒｉｍｅ　日本高配当株式ＥＴＦ",
+   "sector": "ETF",
+   "market": "ETF・ETN",
+   "is_etf": true,
+   "price": 821.1,
+   "yield": 2.63,
+   "pbr": null,
+   "per": 12.7,
+   "roe": null,
+   "payout": null,
+   "score": 0.0,
+   "in_model_pf": false,
+   "pf_held": false,
+   "pf_featured": false,
+   "checks": {
+    "yield": {
+     "status": "ng",
+     "value": 2.63,
+     "text": "2.63%"
+    },
+    "op_margin": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "equity_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "current_ratio": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "revenue_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "eps_trend": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "dividend_trend": {
+     "status": null,
+     "value": null,
+     "text": "配当履歴が短い"
+    },
+    "payout": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "op_cf": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    },
+    "cash": {
+     "status": null,
+     "value": null,
+     "text": "データなし"
+    }
+   },
+   "dividend_history": [
+    {
+     "year": 2024,
+     "value": 15.19
+    },
+    {
+     "year": 2025,
+     "value": 22.2
+    }
+   ],
+   "price_history": {
+    "start": "2023-12",
+    "closes": [
+     501,
+     533,
+     550,
+     574,
+     576,
+     571,
+     581,
+     590,
+     571,
+     565,
+     568,
+     569,
+     588,
+     585,
+     577,
+     591,
+     583,
+     600,
+     603,
+     634,
+     673,
+     686,
+     689,
+     724,
+     771,
+     769,
+     851,
+     777,
+     794,
+     805,
+     805,
+     847,
+     869,
+     870,
+     844,
+     830
+    ]
+   },
+   "yield_history": [
+    {
+     "year": 2024,
+     "value": 2.67
+    },
+    {
+     "year": 2025,
+     "value": 3.45
+    }
+   ],
+   "series": {
+    "years": [],
+    "revenue_oku": [],
+    "op_margin": [],
+    "eps": [],
+    "equity_ratio": [],
+    "roe": [],
+    "op_cf_oku": []
+   },
+   "op_cf_streak": 0,
+   "op_cf_years_available": 0,
+   "na_count": 9,
+   "business": "高配当株の指数に連動する上場投資信託（ETF）。"
+  },
+  {
    "code": "1349",
    "v": 2,
    "checked_at": "2026-11-07",
@@ -527044,8 +527189,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 17685.0,
-   "yield": 2.65,
+   "price": 17860.0,
+   "yield": 2.62,
    "pbr": 148.8,
    "per": null,
    "roe": null,
@@ -527057,8 +527202,8 @@
    "checks": {
     "yield": {
      "status": "ng",
-     "value": 2.65,
-     "text": "2.65%"
+     "value": 2.62,
+     "text": "2.62%"
     },
     "op_margin": {
      "status": null,
@@ -527336,151 +527481,6 @@
    "op_cf_years_available": 0,
    "na_count": 8,
    "business": "債券の指数に連動する上場投資信託（ETF）。"
-  },
-  {
-   "code": "2011",
-   "v": 2,
-   "checked_at": "2026-11-07",
-   "name": "ＳＭＢＣ　Ｐｒｉｍｅ　日本高配当株式ＥＴＦ",
-   "sector": "ETF",
-   "market": "ETF・ETN",
-   "is_etf": true,
-   "price": 821.1,
-   "yield": 2.63,
-   "pbr": null,
-   "per": 12.7,
-   "roe": null,
-   "payout": null,
-   "score": 0.0,
-   "in_model_pf": false,
-   "pf_held": false,
-   "pf_featured": false,
-   "checks": {
-    "yield": {
-     "status": "ng",
-     "value": 2.63,
-     "text": "2.63%"
-    },
-    "op_margin": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "equity_ratio": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "current_ratio": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "revenue_trend": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "eps_trend": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "dividend_trend": {
-     "status": null,
-     "value": null,
-     "text": "配当履歴が短い"
-    },
-    "payout": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "op_cf": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    },
-    "cash": {
-     "status": null,
-     "value": null,
-     "text": "データなし"
-    }
-   },
-   "dividend_history": [
-    {
-     "year": 2024,
-     "value": 15.19
-    },
-    {
-     "year": 2025,
-     "value": 22.2
-    }
-   ],
-   "price_history": {
-    "start": "2023-12",
-    "closes": [
-     501,
-     533,
-     550,
-     574,
-     576,
-     571,
-     581,
-     590,
-     571,
-     565,
-     568,
-     569,
-     588,
-     585,
-     577,
-     591,
-     583,
-     600,
-     603,
-     634,
-     673,
-     686,
-     689,
-     724,
-     771,
-     769,
-     851,
-     777,
-     794,
-     805,
-     805,
-     847,
-     869,
-     870,
-     844,
-     830
-    ]
-   },
-   "yield_history": [
-    {
-     "year": 2024,
-     "value": 2.67
-    },
-    {
-     "year": 2025,
-     "value": 3.45
-    }
-   ],
-   "series": {
-    "years": [],
-    "revenue_oku": [],
-    "op_margin": [],
-    "eps": [],
-    "equity_ratio": [],
-    "roe": [],
-    "op_cf_oku": []
-   },
-   "op_cf_streak": 0,
-   "op_cf_years_available": 0,
-   "na_count": 9,
-   "business": "高配当株の指数に連動する上場投資信託（ETF）。"
   },
   {
    "code": "1478",
@@ -558633,7 +558633,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 38690.0,
+   "price": 38110.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -559949,7 +559949,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 14675.0,
+   "price": 14785.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -560160,7 +560160,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 685.0,
+   "price": 662.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -560582,7 +560582,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 2155.5,
+   "price": 2164.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -566147,5 +566147,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-12 16:48"
+ "prices_updated_at": "2026-11-12 20:34"
 }
