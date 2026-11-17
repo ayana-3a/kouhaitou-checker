@@ -63744,8 +63744,8 @@
    "sector": "J-REIT市場",
    "market": "REIT・ベンチャーファンド・カントリーファンド・インフラファンド",
    "is_etf": true,
-   "price": 102000.0,
-   "yield": 5.84,
+   "price": 103400.0,
+   "yield": 5.76,
    "pbr": 0.97,
    "per": 18.6,
    "roe": 5.5,
@@ -63757,8 +63757,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.84,
-     "text": "5.84%"
+     "value": 5.76,
+     "text": "5.76%"
     },
     "op_margin": {
      "status": "ok",
@@ -381422,5 +381422,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-17 17:34"
+ "prices_updated_at": "2026-11-17 21:10"
 }
