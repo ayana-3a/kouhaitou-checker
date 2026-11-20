@@ -42107,8 +42107,8 @@
    "sector": "化学",
    "market": "プライム（内国株式）",
    "is_etf": false,
-   "price": 4565.0,
-   "yield": 5.08,
+   "price": 4580.0,
+   "yield": 5.06,
    "pbr": 2.9,
    "per": 19.3,
    "roe": 14.9,
@@ -42120,8 +42120,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.08,
-     "text": "5.08%"
+     "value": 5.06,
+     "text": "5.06%"
     },
     "op_margin": {
      "status": "ok",
@@ -381469,5 +381469,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-20 16:50"
+ "prices_updated_at": "2026-11-20 20:57"
 }
