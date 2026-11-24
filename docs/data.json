@@ -3180,8 +3180,8 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 5244.0,
-   "yield": 5.91,
+   "price": 5236.0,
+   "yield": 5.92,
    "pbr": null,
    "per": null,
    "roe": null,
@@ -3193,8 +3193,8 @@
    "checks": {
     "yield": {
      "status": "ok",
-     "value": 5.91,
-     "text": "5.91%"
+     "value": 5.92,
+     "text": "5.92%"
     },
     "op_margin": {
      "status": null,
@@ -474694,5 +474694,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-24 19:29"
+ "prices_updated_at": "2026-11-24 23:02"
 }
