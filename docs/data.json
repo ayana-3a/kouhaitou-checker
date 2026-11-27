@@ -468366,7 +468366,7 @@
    "sector": "ETF",
    "market": "ETF・ETN",
    "is_etf": true,
-   "price": 13485.0,
+   "price": 13350.0,
    "yield": null,
    "pbr": null,
    "per": null,
@@ -474694,5 +474694,5 @@
    "error": "データ取得失敗"
   }
  ],
- "prices_updated_at": "2026-11-27 18:10"
+ "prices_updated_at": "2026-11-27 21:52"
 }
